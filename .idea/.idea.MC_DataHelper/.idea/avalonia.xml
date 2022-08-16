@@ -4,6 +4,7 @@
     <option name="projectPerEditor">
       <map>
         <entry key="MC_DataHelper/App.axaml" value="MC_DataHelper/MC_DataHelper.csproj" />
+        <entry key="MC_DataHelper/Views/BiomeCsvImportWindow.axaml" value="MC_DataHelper/MC_DataHelper.csproj" />
         <entry key="MC_DataHelper/Views/MainWindow.axaml" value="MC_DataHelper/MC_DataHelper.csproj" />
       </map>
     </option>

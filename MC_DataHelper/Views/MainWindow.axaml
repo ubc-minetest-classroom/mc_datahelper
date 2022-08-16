@@ -9,7 +9,8 @@
         Title="MC_DataHelper"
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
-        ExtendClientAreaToDecorationsHint="True">
+        ExtendClientAreaToDecorationsHint="True"
+        WindowStartupLocation="CenterScreen">
 
 
     <Design.DataContext>
