@@ -11,10 +11,11 @@ namespace MC_DataHelper.ViewModels
 
         public bool IsProjectOpen
         {
-            get { return true; }
+            get;
+            set;
         }
         
-        public ObservableCollection<string> TreeViewItems { get; }
+        public ObservableCollection<string> TreeViewItems { get; } = new();
 
 
         //File menu commands
@@ -33,6 +34,21 @@ namespace MC_DataHelper.ViewModels
         public ReactiveCommand<Unit, Unit> BiomeCsvWindowCommand { get; }
 
 
+        // Initialize everything
+        public MainWindowViewModel()
+        {
+            NewProjectCommand = ReactiveCommand.Create(() => { });
+            OpenProjectCommand = ReactiveCommand.Create(() => { });
+            SaveProjectCommand = ReactiveCommand.Create(() => { });
+            SaveProjectAsCommand = ReactiveCommand.Create(() => { });
+            ExitCommand = ReactiveCommand.Create(() => { });
+            UndoCommand = ReactiveCommand.Create(() => { });
+            RedoCommand = ReactiveCommand.Create(() => { });
+            CopyCommand = ReactiveCommand.Create(() => { });
+            PasteCommand = ReactiveCommand.Create(() => { });
+            BiomeCsvWindowCommand = ReactiveCommand.Create(() => { });
+        }
       
+        
     }
 }
