@@ -44,7 +44,7 @@
                     <MenuItem Header="Copy" Command="{Binding CopyCommand}" IsEnabled="{Binding editCommandsEnabled}" />
                     <MenuItem Header="Paste" Command="{Binding PasteCommand}" IsEnabled="{Binding editCommandsEnabled}" />
                     <Separator />
-                    <MenuItem Header="Load Biomes from CSV" Command="{Binding BiomeCSVWindowCommand}"></MenuItem>
+                    <MenuItem Header="Load Biomes from CSV" Command="{Binding BiomeCsvWindowCommand}"></MenuItem>
                     <MenuItem Header="Import Existing Data"></MenuItem>
 
                 </MenuItem>
