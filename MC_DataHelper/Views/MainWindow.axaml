@@ -56,7 +56,15 @@
             </TreeView>
 
             <TabControl>
-                <TabItem Header="Overview" />
+                <TabItem Header="Overview">
+                    <StackPanel>
+                        <TextBox Watermark="Mod Name"> </TextBox>
+                        <TextBox Watermark="Description"> </TextBox>
+                        <TextBox Watermark="Author"> </TextBox>
+                        <TextBox Watermark="Dependencies"> </TextBox>
+                        <TextBox Watermark="Optional Dependencies"> </TextBox>
+                    </StackPanel>
+                </TabItem>
                 <TabItem Header="Biomes" />
                 <TabItem Header="Items" />
                 <TabItem Header="Nodes" />

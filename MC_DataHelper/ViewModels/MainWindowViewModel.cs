@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using MC_DataHelper.Models;
 using ReactiveUI;
 
 namespace MC_DataHelper.ViewModels
@@ -10,7 +11,7 @@ namespace MC_DataHelper.ViewModels
     {
         public bool IsProjectOpen { get; set; } = true;
 
-        public ObservableCollection<string> TreeViewItems { get; } = new();
+        public ObservableCollection<DataDefinition> TreeViewItems { get; } = new();
 
 
         //File menu commands
@@ -35,7 +36,7 @@ namespace MC_DataHelper.ViewModels
         // Initialize everything
         public MainWindowViewModel()
         {
-            NewProjectCommand = ReactiveCommand.Create(() => { });
+            NewProjectCommand = ReactiveCommand.Create(NewProject);
             OpenProjectCommand = ReactiveCommand.Create(() => { });
             SaveProjectCommand = ReactiveCommand.Create(() => { });
             SaveProjectAsCommand = ReactiveCommand.Create(() => { });
@@ -49,6 +50,10 @@ namespace MC_DataHelper.ViewModels
             {
                 var result = await ShowBiomeCsvDialog.Handle(Unit.Default);
             });
+        }
+
+        private void NewProject()
+        {
         }
     }
 }
