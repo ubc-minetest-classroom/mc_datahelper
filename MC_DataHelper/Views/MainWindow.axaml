@@ -7,7 +7,6 @@
         x:Class="MC_DataHelper.Views.MainWindow"
         Icon="/Assets/teleporter-logo.ico"
         Title="MC_DataHelper"
-
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
         ExtendClientAreaToDecorationsHint="True">
@@ -24,9 +23,49 @@
                     BackgroundSource="Digger"
                     TintColor="Black"
                     TintOpacity="1"
-                    MaterialOpacity="0.65" />
+                    MaterialOpacity="0.75" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
+
+        <DockPanel VerticalAlignment="Top">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_New" />
+                    <MenuItem Header="_Open" />
+                    <MenuItem Header="_Save" />
+                    <MenuItem Header="_Save As" />
+                    <Separator />
+                    <MenuItem Header="_Exit" />
+                </MenuItem>
+                <MenuItem Header="_Edit">
+                    <MenuItem Header="Undo" />
+                    <MenuItem Header="Copy" />
+                    <MenuItem Header="Paste" />
+                    <Separator />
+                    <MenuItem Header="Load Biomes from CSV"></MenuItem>
+                    <MenuItem Header="Import Existing Data"></MenuItem>
+
+                </MenuItem>
+            </Menu>
+
+            <TreeView DockPanel.Dock="Left" Items="{Binding Items}" HorizontalAlignment="Left">
+
+            </TreeView>
+
+            <TabControl>
+                <TabItem Header="Overview" />
+                <TabItem Header="Biomes" />
+                <TabItem Header="Items" />
+                <TabItem Header="Nodes" />
+                <TabItem Header="Recipes" />
+                <TabItem Header="Tools" />
+
+            </TabControl>
+
+
+        </DockPanel>
+
+
     </Panel>
 
 </Window>
