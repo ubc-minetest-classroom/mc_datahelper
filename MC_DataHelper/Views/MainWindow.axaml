@@ -30,25 +30,27 @@
         <DockPanel VerticalAlignment="Top">
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_New" />
-                    <MenuItem Header="_Open" />
-                    <MenuItem Header="_Save" />
-                    <MenuItem Header="_Save As" />
+                    <MenuItem Header="_New" Command="{Binding NewProjectCommand}" />
+                    <MenuItem Header="_Open" Command="{Binding OpenProjectCommand}" />
+                    <MenuItem Header="_Save" Command="{Binding SaveProjectCommand}" IsEnabled="{Binding IsProjectOpen}" />
+                    <MenuItem Header="_Save As" Command="{Binding SaveProjectAsCommand}"
+                              IsEnabled="{Binding IsProjectOpen}" />
                     <Separator />
-                    <MenuItem Header="_Exit" />
+                    <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
                 </MenuItem>
-                <MenuItem Header="_Edit">
-                    <MenuItem Header="Undo" />
-                    <MenuItem Header="Copy" />
-                    <MenuItem Header="Paste" />
+                <MenuItem Header="_Edit" IsEnabled="{Binding IsProjectOpen}">
+                    <MenuItem Header="Undo" Command="{Binding UndoCommand}" IsEnabled="{Binding editCommandsEnabled}" />
+                    <MenuItem Header="Redo" Command="{Binding RedoCommand}" IsEnabled="{Binding editCommandsEnabled}" />
+                    <MenuItem Header="Copy" Command="{Binding CopyCommand}" IsEnabled="{Binding editCommandsEnabled}" />
+                    <MenuItem Header="Paste" Command="{Binding PasteCommand}" IsEnabled="{Binding editCommandsEnabled}" />
                     <Separator />
-                    <MenuItem Header="Load Biomes from CSV"></MenuItem>
+                    <MenuItem Header="Load Biomes from CSV" Command="{Binding BiomeCSVWindowCommand}"></MenuItem>
                     <MenuItem Header="Import Existing Data"></MenuItem>
 
                 </MenuItem>
             </Menu>
 
-            <TreeView DockPanel.Dock="Left" Items="{Binding Items}" HorizontalAlignment="Left">
+            <TreeView DockPanel.Dock="Left" Items="{Binding TreeViewItems}" HorizontalAlignment="Left">
 
             </TreeView>
 
