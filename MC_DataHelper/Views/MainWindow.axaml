@@ -62,6 +62,9 @@
                         <TextBox Watermark="Mod Name" ToolTip.Tip="The name of the mod." Margin="8"
                                  IsEnabled="{Binding IsProjectOpen}">
                         </TextBox>
+                        <TextBox Watermark="Mod Title" ToolTip.Tip="The user-visible title of the mod." Margin="8"
+                                 IsEnabled="{Binding IsProjectOpen}">
+                        </TextBox>
                         <TextBox Watermark="Description" ToolTip.Tip="A brief description of the mod." Margin="8"
                                  IsEnabled="{Binding IsProjectOpen}">
                         </TextBox>

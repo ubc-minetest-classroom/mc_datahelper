@@ -74,8 +74,8 @@ namespace MC_DataHelper.ViewModels
 
             NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectAsync);
             OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectAsync);
-            SaveProjectCommand = ReactiveCommand.Create(() => { Package?.SavePackageToDisk(Environment.CurrentDirectory);});
-            SaveProjectAsCommand = ReactiveCommand.CreateFromTask(SaveProjectAsAsync);
+            SaveProjectCommand = ReactiveCommand.CreateFromTask(SaveProjectAsync);
+                SaveProjectAsCommand = ReactiveCommand.CreateFromTask(SaveProjectAsAsync);
             ExitCommand = ReactiveCommand.Create(() =>
             {
                 if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -93,6 +93,11 @@ namespace MC_DataHelper.ViewModels
             });
         }
 
+        private async Task SaveProjectAsync()
+        {
+            if (Package != null) await Package.SavePackageToDisk(Environment.CurrentDirectory);
+        }
+
         private async Task SaveProjectAsAsync()
         {
             var directoryPath = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
@@ -103,7 +108,7 @@ namespace MC_DataHelper.ViewModels
             if (directoryPath != null)
             {
                 Environment.CurrentDirectory = directoryPath;
-                Package?.SavePackageToDisk(directoryPath);
+                if (Package != null) await Package.SavePackageToDisk(directoryPath);
             }
         }
 
@@ -124,7 +129,7 @@ namespace MC_DataHelper.ViewModels
                 // Package.SavePackageToDisk(fileName);
             }
         }
-        
+
         private async Task OpenProjectAsync()
         {
             var directoryPath = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
