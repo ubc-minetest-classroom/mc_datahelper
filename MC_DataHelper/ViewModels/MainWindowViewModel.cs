@@ -33,7 +33,13 @@ namespace MC_DataHelper.ViewModels
             }
         }
 
-        private bool _isProjectOpen;
+        // In debug mode, we'll default to the project being set as open so that we can test the UI.
+#if DEBUG
+        private bool _isProjectOpen = true;
+#else
+        private bool _isProjectOpen = false;
+#endif
+
 
         public bool IsProjectOpen
         {
