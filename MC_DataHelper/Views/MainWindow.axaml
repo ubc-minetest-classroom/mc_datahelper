@@ -60,22 +60,22 @@
                 <TabItem Header="Overview">
                     <StackPanel>
                         <TextBox Watermark="Mod Name" ToolTip.Tip="The name of the mod." Margin="8"
-                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding Package.Config.Name}">
+                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding ConfigName}">
                         </TextBox>
                         <TextBox Watermark="Mod Title" ToolTip.Tip="The user-visible title of the mod." Margin="8"
-                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding Package.Config.Title}">
+                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding ConfigTitle}">
                         </TextBox>
                         <TextBox Watermark="Description" ToolTip.Tip="A brief description of the mod." Margin="8"
-                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding Package.Config.Description}">
+                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding ConfigDescription}">
                         </TextBox>
                         <TextBox Watermark="Author" ToolTip.Tip="The author of the mod." Margin="8"
-                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding Package.Config.Author}">
+                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding ConfigAuthor}">
                         </TextBox>
                         <TextBox Watermark="Dependencies" ToolTip.Tip="Mod dependencies." Margin="8"
-                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding Package.Config.Dependencies}">
+                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding ConfigDependencies}">
                         </TextBox>
                         <TextBox Watermark="Optional Dependencies" ToolTip.Tip="Optional Dependencies." Margin="8"
-                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding Package.Config.OptionalDependencies}">
+                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding ConfigOptionalDependencies}">
                         </TextBox>
                     </StackPanel>
                 </TabItem>

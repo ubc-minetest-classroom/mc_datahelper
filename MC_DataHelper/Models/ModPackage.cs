@@ -26,7 +26,7 @@ public class ModPackage
 
     public static async Task<ModPackage> LoadPackageFromDisk(string path)
     {
-        var confFileLines = await File.ReadAllLinesAsync(path + "mod.conf");
+        var confFileLines = await File.ReadAllLinesAsync(path + "/mod.conf");
         var confDictionary = new Dictionary<string, string>(4);
 
         foreach (var line in confFileLines)
@@ -44,10 +44,15 @@ public class ModPackage
 
         confDependencies = confDependencies?.Replace("mc_json_importer,", string.Empty);
 
-        var config = new ModConfig(confName ?? string.Empty, confDescription ?? string.Empty,
-            confDependencies ?? string.Empty, confOptionalDependencies ?? string.Empty,
-            confAuthor ?? string.Empty, confTitle ?? string.Empty);
-
+        var config = new ModConfig
+        {
+            Name = confName ?? string.Empty,
+            Description = confDescription ?? string.Empty,
+            Dependencies = confDependencies ?? string.Empty,
+            OptionalDependencies = confOptionalDependencies ?? string.Empty,
+            Author = confAuthor ?? string.Empty,
+            Title = confTitle ?? string.Empty
+        };
 
         return new ModPackage(config);
     }
