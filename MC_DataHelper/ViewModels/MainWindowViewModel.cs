@@ -75,7 +75,7 @@ namespace MC_DataHelper.ViewModels
             NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectAsync);
             OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectAsync);
             SaveProjectCommand = ReactiveCommand.Create(() => { Package?.SavePackageToDisk(Environment.CurrentDirectory);});
-            SaveProjectAsCommand = ReactiveCommand.Create(() => { Package?.SavePackageToDisk(Environment.CurrentDirectory); });
+            SaveProjectAsCommand = ReactiveCommand.CreateFromTask(SaveProjectAsAsync);
             ExitCommand = ReactiveCommand.Create(() =>
             {
                 if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -93,37 +93,50 @@ namespace MC_DataHelper.ViewModels
             });
         }
 
-       
+        private async Task SaveProjectAsAsync()
+        {
+            var directoryPath = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
+            {
+                Title = "Select a folder to save the project to.",
+                Directory = Environment.CurrentDirectory,
+            });
+            if (directoryPath != null)
+            {
+                Environment.CurrentDirectory = directoryPath;
+                Package?.SavePackageToDisk(directoryPath);
+            }
+        }
+
 
         private async Task NewProjectAsync()
         {
-            var directoryName = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
+            var directoryPath = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
             {
                 Title = "Select a folder to create a new project in",
                 Directory = Environment.CurrentDirectory,
             });
-            if (directoryName != null)
+            if (directoryPath != null)
             {
-                Environment.CurrentDirectory = directoryName;
+                Environment.CurrentDirectory = directoryPath;
                 Package = new ModPackage();
 
-                FooterText = directoryName;
+                FooterText = directoryPath;
                 // Package.SavePackageToDisk(fileName);
             }
         }
         
         private async Task OpenProjectAsync()
         {
-            var directoryName = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
+            var directoryPath = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
             {
                 Title = "Select a folder to open a project from",
                 Directory = Environment.CurrentDirectory,
             });
-            if (directoryName != null)
+            if (directoryPath != null)
             {
-                Environment.CurrentDirectory = directoryName;
-                Package = ModPackage.LoadPackageFromDisk(directoryName);
-                FooterText = directoryName;
+                Environment.CurrentDirectory = directoryPath;
+                Package = ModPackage.LoadPackageFromDisk(directoryPath);
+                FooterText = directoryPath;
             }
         }
     }
