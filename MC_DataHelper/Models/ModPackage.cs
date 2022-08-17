@@ -11,13 +11,13 @@ public class ModPackage
         DataDefinitions = new List<IDataDefinition>(0);
     }
 
-    public static void LoadPackageFromDisk(string path)
+    public static ModPackage LoadPackageFromDisk(string path)
     {
         //TODO: Load "package" from disk
         throw new NotImplementedException();
     }
 
-    public static void SavePackageToDisk(string path)
+    public void SavePackageToDisk(string path)
     {
         //TODO: Save mod "package" to disk
         throw new NotImplementedException();

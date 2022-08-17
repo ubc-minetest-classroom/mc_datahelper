@@ -1,8 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using MC_DataHelper.Models;
 using ReactiveUI;
@@ -51,13 +54,26 @@ namespace MC_DataHelper.ViewModels
         public ReactiveCommand<Unit, Unit> BiomeCsvWindowCommand { get; }
 
         public Interaction<Unit, BiomeCsvImportViewModel?> ShowBiomeCsvDialog { get; }
+        public Interaction<OpenFileDialog, string?> ShowOpenFileDialog { get; }
+        public Interaction<OpenFolderDialog, string?> ShowOpenFolderDialog { get; }
 
+        private string _footerText = "TIP: No project is open. Navigate to File -> New / Open to begin.";
+
+        public string FooterText
+        {
+            get => !_isProjectOpen ? "TIP: No project is open. Navigate to File -> New / Open to begin." : _footerText;
+            set => this.RaiseAndSetIfChanged(ref _footerText, value);
+        }
 
         // Initialize everything
         public MainWindowViewModel()
         {
-            NewProjectCommand = ReactiveCommand.Create(NewProject);
-            OpenProjectCommand = ReactiveCommand.Create(() => { });
+            ShowBiomeCsvDialog = new Interaction<Unit, BiomeCsvImportViewModel?>();
+            ShowOpenFileDialog = new Interaction<OpenFileDialog, string?>();
+            ShowOpenFolderDialog = new Interaction<OpenFolderDialog, string?>();
+
+            NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectAsync);
+            OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectAsync);
             SaveProjectCommand = ReactiveCommand.Create(() => { });
             SaveProjectAsCommand = ReactiveCommand.Create(() => { });
             ExitCommand = ReactiveCommand.Create(() =>
@@ -69,16 +85,46 @@ namespace MC_DataHelper.ViewModels
             RedoCommand = ReactiveCommand.Create(() => { });
             CopyCommand = ReactiveCommand.Create(() => { });
             PasteCommand = ReactiveCommand.Create(() => { });
-            ShowBiomeCsvDialog = new Interaction<Unit, BiomeCsvImportViewModel?>();
+
+
             BiomeCsvWindowCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var result = await ShowBiomeCsvDialog.Handle(Unit.Default);
             });
         }
 
-        private void NewProject()
+       
+
+        private async Task NewProjectAsync()
         {
-            Package = new ModPackage();
+            var directoryName = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
+            {
+                Title = "Select a folder to create a new project in",
+                Directory = Environment.CurrentDirectory,
+            });
+            if (directoryName != null)
+            {
+                Environment.CurrentDirectory = directoryName;
+                Package = new ModPackage();
+
+                FooterText = directoryName;
+                // Package.SavePackageToDisk(fileName);
+            }
+        }
+        
+        private async Task OpenProjectAsync()
+        {
+            var directoryName = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
+            {
+                Title = "Select a folder to open a project from",
+                Directory = Environment.CurrentDirectory,
+            });
+            if (directoryName != null)
+            {
+                Environment.CurrentDirectory = directoryName;
+                Package = ModPackage.LoadPackageFromDisk(directoryName);
+                FooterText = directoryName;
+            }
         }
     }
 }

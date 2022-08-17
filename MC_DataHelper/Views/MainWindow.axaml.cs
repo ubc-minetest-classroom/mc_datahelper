@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -13,6 +15,8 @@ namespace MC_DataHelper.Views
         {
             InitializeComponent();
             this.WhenActivated(d => d(ViewModel!.ShowBiomeCsvDialog.RegisterHandler(DoShowDialogAsync)));
+            this.WhenActivated(d => d(ViewModel.ShowOpenFileDialog.RegisterHandler(ShowOpenFileDialog)));
+            this.WhenActivated(d => d(ViewModel.ShowOpenFolderDialog.RegisterHandler(ShowOpenFolderDialog)));
         }
 
         private async Task DoShowDialogAsync(InteractionContext<Unit, BiomeCsvImportViewModel?> interaction)
@@ -21,6 +25,20 @@ namespace MC_DataHelper.Views
 
             var result = await dialog.ShowDialog<BiomeCsvImportViewModel?>(this);
             interaction.SetOutput(result);
+        }
+
+        private async Task ShowOpenFileDialog(InteractionContext<OpenFileDialog, string?> interaction)
+        {
+            var dialog = interaction.Input;
+            var fileNames = await dialog.ShowAsync(this);
+            interaction.SetOutput(fileNames?.FirstOrDefault());
+        }
+
+        private async Task ShowOpenFolderDialog(InteractionContext<OpenFolderDialog, string?> interaction)
+        {
+            var dialog = interaction.Input;
+            var directoryName = await dialog.ShowAsync(this);
+            interaction.SetOutput(directoryName);
         }
     }
 }

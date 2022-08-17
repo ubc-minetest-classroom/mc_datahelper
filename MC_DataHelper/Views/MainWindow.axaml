@@ -46,7 +46,7 @@
         </Menu>
         
         <Panel DockPanel.Dock="Bottom">
-            <TextBlock HorizontalAlignment="Right" Margin="8" IsVisible="{Binding !IsProjectOpen}">TIP: No Mod Package is Loaded. Navigate to File -> New / Open to begin.</TextBlock>
+            <TextBlock HorizontalAlignment="Right" Margin="8" Text="{Binding FooterText}" />
         </Panel>
 
         <SplitView DockPanel.Dock="Top" IsPaneOpen="True" DisplayMode="Inline" VerticalAlignment="Stretch"
