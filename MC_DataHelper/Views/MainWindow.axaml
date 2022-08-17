@@ -44,6 +44,10 @@
             </MenuItem>
             <Separator />
         </Menu>
+        
+        <Panel DockPanel.Dock="Bottom">
+            <TextBlock HorizontalAlignment="Right" Margin="8" IsVisible="{Binding !IsProjectOpen}">TIP: No Mod Package is Loaded. Navigate to File -> New / Open to begin.</TextBlock>
+        </Panel>
 
         <SplitView DockPanel.Dock="Top" IsPaneOpen="True" DisplayMode="Inline" VerticalAlignment="Stretch"
                    IsEnabled="{Binding IsProjectOpen}">
