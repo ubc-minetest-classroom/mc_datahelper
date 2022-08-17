@@ -74,8 +74,8 @@ namespace MC_DataHelper.ViewModels
 
             NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectAsync);
             OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectAsync);
-            SaveProjectCommand = ReactiveCommand.Create(() => { });
-            SaveProjectAsCommand = ReactiveCommand.Create(() => { });
+            SaveProjectCommand = ReactiveCommand.Create(() => { Package?.SavePackageToDisk(Environment.CurrentDirectory);});
+            SaveProjectAsCommand = ReactiveCommand.Create(() => { Package?.SavePackageToDisk(Environment.CurrentDirectory); });
             ExitCommand = ReactiveCommand.Create(() =>
             {
                 if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
