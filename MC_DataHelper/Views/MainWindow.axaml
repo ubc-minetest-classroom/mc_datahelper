@@ -25,26 +25,26 @@
 
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_New" Command="{Binding NewProjectCommand}" />
-                <MenuItem Header="_Open" Command="{Binding OpenProjectCommand}" />
-                <MenuItem Header="_Save" Command="{Binding SaveProjectCommand}" IsEnabled="{Binding IsProjectOpen}" />
+                <MenuItem Header="_New" Command="{Binding NewProjectCommand}" HotKey="Ctrl+N" />
+                <MenuItem Header="_Open" Command="{Binding OpenProjectCommand}" HotKey="Ctrl+O" />
+                <MenuItem Header="_Save" Command="{Binding SaveProjectCommand}" IsEnabled="{Binding IsProjectOpen}"
+                          HotKey="Ctrl+S" />
                 <MenuItem Header="_Save As" Command="{Binding SaveProjectAsCommand}"
-                          IsEnabled="{Binding IsProjectOpen}" />
+                          IsEnabled="{Binding IsProjectOpen}" HotKey="Ctrl+Alt+S" />
                 <Separator />
-                <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
+                <MenuItem Header="_Exit" Command="{Binding ExitCommand}" HotKey="Ctrl+Escape" />
             </MenuItem>
             <MenuItem Header="_Edit" IsEnabled="{Binding IsProjectOpen}">
-                <MenuItem Header="Undo" Command="{Binding UndoCommand}" IsEnabled="{Binding editCommandsEnabled}" />
-                <MenuItem Header="Redo" Command="{Binding RedoCommand}" IsEnabled="{Binding editCommandsEnabled}" />
-                <MenuItem Header="Copy" Command="{Binding CopyCommand}" IsEnabled="{Binding editCommandsEnabled}" />
-                <MenuItem Header="Paste" Command="{Binding PasteCommand}" IsEnabled="{Binding editCommandsEnabled}" />
+                <MenuItem Header="_Undo" Command="{Binding UndoCommand}" IsEnabled="{Binding editCommandsEnabled}" />
+                <MenuItem Header="_Redo" Command="{Binding RedoCommand}" IsEnabled="{Binding editCommandsEnabled}" />
+                <MenuItem Header="_Copy" Command="{Binding CopyCommand}" IsEnabled="{Binding editCommandsEnabled}" />
+                <MenuItem Header="_Paste" Command="{Binding PasteCommand}" IsEnabled="{Binding editCommandsEnabled}" />
                 <Separator />
-                <MenuItem Header="Load Biomes from CSV" Command="{Binding BiomeCsvWindowCommand}"></MenuItem>
-                <MenuItem Header="Import Existing Data"></MenuItem>
+                <MenuItem Header="_Load Biomes from CSV" Command="{Binding BiomeCsvWindowCommand}"></MenuItem>
+                <MenuItem Header="_Import Existing Data"></MenuItem>
             </MenuItem>
-            <Separator />
         </Menu>
-        
+
         <Panel DockPanel.Dock="Bottom">
             <TextBlock HorizontalAlignment="Right" Margin="8" Text="{Binding FooterText}" />
         </Panel>
