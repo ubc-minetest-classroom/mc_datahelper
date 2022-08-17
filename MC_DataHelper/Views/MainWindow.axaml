@@ -60,22 +60,22 @@
                 <TabItem Header="Overview">
                     <StackPanel>
                         <TextBox Watermark="Mod Name" ToolTip.Tip="The name of the mod." Margin="8"
-                                 IsEnabled="{Binding IsProjectOpen}">
+                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding Package.Config.Name}">
                         </TextBox>
                         <TextBox Watermark="Mod Title" ToolTip.Tip="The user-visible title of the mod." Margin="8"
-                                 IsEnabled="{Binding IsProjectOpen}">
+                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding Package.Config.Title}">
                         </TextBox>
                         <TextBox Watermark="Description" ToolTip.Tip="A brief description of the mod." Margin="8"
-                                 IsEnabled="{Binding IsProjectOpen}">
+                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding Package.Config.Description}">
                         </TextBox>
                         <TextBox Watermark="Author" ToolTip.Tip="The author of the mod." Margin="8"
-                                 IsEnabled="{Binding IsProjectOpen}">
+                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding Package.Config.Author}">
                         </TextBox>
                         <TextBox Watermark="Dependencies" ToolTip.Tip="Mod dependencies." Margin="8"
-                                 IsEnabled="{Binding IsProjectOpen}">
+                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding Package.Config.Dependencies}">
                         </TextBox>
                         <TextBox Watermark="Optional Dependencies" ToolTip.Tip="Optional Dependencies." Margin="8"
-                                 IsEnabled="{Binding IsProjectOpen}">
+                                 IsEnabled="{Binding IsProjectOpen}" Text="{Binding Package.Config.OptionalDependencies}">
                         </TextBox>
                     </StackPanel>
                 </TabItem>

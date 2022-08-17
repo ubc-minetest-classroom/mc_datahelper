@@ -7,6 +7,22 @@ public record ModConfig
 {
     private string _name;
 
+
+    public ModConfig(string name, string description, string dependencies, string optionalDependencies, string author,
+        string title)
+    {
+        _name = name;
+        Description = description;
+        Dependencies = dependencies;
+        OptionalDependencies = optionalDependencies;
+        Author = author;
+        Title = title;
+    }
+
+    public ModConfig() : this("", "", "", "", "", "")
+    {
+    }
+
     public string Name
     {
         get => _name;
@@ -19,7 +35,7 @@ public record ModConfig
 
     public string Title { get; set; }
     public string Description { get; set; }
-    private string Author { get; set; }
+    public string Author { get; set; }
     public string Dependencies { get; set; }
-    private string OptionalDependencies { get; set; }
+    public string OptionalDependencies { get; set; }
 }

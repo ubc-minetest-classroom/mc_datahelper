@@ -65,6 +65,8 @@ namespace MC_DataHelper.ViewModels
             set => this.RaiseAndSetIfChanged(ref _footerText, value);
         }
 
+        public string ModNameText { get; set; }
+
         // Initialize everything
         public MainWindowViewModel()
         {
@@ -75,7 +77,7 @@ namespace MC_DataHelper.ViewModels
             NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectAsync);
             OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectAsync);
             SaveProjectCommand = ReactiveCommand.CreateFromTask(SaveProjectAsync);
-                SaveProjectAsCommand = ReactiveCommand.CreateFromTask(SaveProjectAsAsync);
+            SaveProjectAsCommand = ReactiveCommand.CreateFromTask(SaveProjectAsAsync);
             ExitCommand = ReactiveCommand.Create(() =>
             {
                 if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -140,7 +142,7 @@ namespace MC_DataHelper.ViewModels
             if (directoryPath != null)
             {
                 Environment.CurrentDirectory = directoryPath;
-                Package = ModPackage.LoadPackageFromDisk(directoryPath);
+                Package = await ModPackage.LoadPackageFromDisk(directoryPath);
                 FooterText = directoryPath;
             }
         }
