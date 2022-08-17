@@ -2,7 +2,7 @@
 
 namespace MC_DataHelper.Models;
 
-public class DataDefinition : IDataDefinition
+public abstract class DataDefinition : IDataDefinition
 {
     public DataDefinition(string name)
     {

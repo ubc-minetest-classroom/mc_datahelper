@@ -2,6 +2,8 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using MC_DataHelper.Models;
 using ReactiveUI;
 
@@ -9,7 +11,25 @@ namespace MC_DataHelper.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public bool IsProjectOpen { get; set; } = true;
+        private ModPackage? _selectedPackage;
+
+        private ModPackage? Package
+        {
+            get => _selectedPackage;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedPackage, value);
+                IsProjectOpen = value != null;
+            }
+        }
+
+        private bool _isProjectOpen;
+
+        public bool IsProjectOpen
+        {
+            get => _isProjectOpen;
+            set => this.RaiseAndSetIfChanged(ref _isProjectOpen, value);
+        }
 
         public ObservableCollection<DataDefinition> TreeViewItems { get; } = new();
 
@@ -40,7 +60,11 @@ namespace MC_DataHelper.ViewModels
             OpenProjectCommand = ReactiveCommand.Create(() => { });
             SaveProjectCommand = ReactiveCommand.Create(() => { });
             SaveProjectAsCommand = ReactiveCommand.Create(() => { });
-            ExitCommand = ReactiveCommand.Create(() => { });
+            ExitCommand = ReactiveCommand.Create(() =>
+            {
+                if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                    desktop.Shutdown();
+            });
             UndoCommand = ReactiveCommand.Create(() => { });
             RedoCommand = ReactiveCommand.Create(() => { });
             CopyCommand = ReactiveCommand.Create(() => { });
@@ -54,6 +78,7 @@ namespace MC_DataHelper.ViewModels
 
         private void NewProject()
         {
+            Package = new ModPackage();
         }
     }
 }

@@ -3,13 +3,15 @@
         xmlns:vm="using:MC_DataHelper.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="600"
+        Width="1000"
+        Height="600"
         x:Class="MC_DataHelper.Views.MainWindow"
         Icon="/Assets/teleporter-logo.ico"
         Title="MC_DataHelper"
-        TransparencyLevelHint="AcrylicBlur"
-        Background="Transparent"
+
         ExtendClientAreaToDecorationsHint="True"
+        SystemDecorations="Full"
         WindowStartupLocation="CenterScreen">
 
 
@@ -17,52 +19,57 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <Panel>
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
-            <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial
-                    BackgroundSource="Digger"
-                    TintColor="Black"
-                    TintOpacity="1"
-                    MaterialOpacity="0.75" />
-            </ExperimentalAcrylicBorder.Material>
-        </ExperimentalAcrylicBorder>
 
-        <DockPanel VerticalAlignment="Top">
-            <Menu DockPanel.Dock="Top">
-                <MenuItem Header="_File">
-                    <MenuItem Header="_New" Command="{Binding NewProjectCommand}" />
-                    <MenuItem Header="_Open" Command="{Binding OpenProjectCommand}" />
-                    <MenuItem Header="_Save" Command="{Binding SaveProjectCommand}" IsEnabled="{Binding IsProjectOpen}" />
-                    <MenuItem Header="_Save As" Command="{Binding SaveProjectAsCommand}"
-                              IsEnabled="{Binding IsProjectOpen}" />
-                    <Separator />
-                    <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
-                </MenuItem>
-                <MenuItem Header="_Edit" IsEnabled="{Binding IsProjectOpen}">
-                    <MenuItem Header="Undo" Command="{Binding UndoCommand}" IsEnabled="{Binding editCommandsEnabled}" />
-                    <MenuItem Header="Redo" Command="{Binding RedoCommand}" IsEnabled="{Binding editCommandsEnabled}" />
-                    <MenuItem Header="Copy" Command="{Binding CopyCommand}" IsEnabled="{Binding editCommandsEnabled}" />
-                    <MenuItem Header="Paste" Command="{Binding PasteCommand}" IsEnabled="{Binding editCommandsEnabled}" />
-                    <Separator />
-                    <MenuItem Header="Load Biomes from CSV" Command="{Binding BiomeCsvWindowCommand}"></MenuItem>
-                    <MenuItem Header="Import Existing Data"></MenuItem>
+    <DockPanel>
 
-                </MenuItem>
-            </Menu>
 
-            <TreeView DockPanel.Dock="Left" Items="{Binding TreeViewItems}" HorizontalAlignment="Left">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Command="{Binding NewProjectCommand}" />
+                <MenuItem Header="_Open" Command="{Binding OpenProjectCommand}" />
+                <MenuItem Header="_Save" Command="{Binding SaveProjectCommand}" IsEnabled="{Binding IsProjectOpen}" />
+                <MenuItem Header="_Save As" Command="{Binding SaveProjectAsCommand}"
+                          IsEnabled="{Binding IsProjectOpen}" />
+                <Separator />
+                <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
+            </MenuItem>
+            <MenuItem Header="_Edit" IsEnabled="{Binding IsProjectOpen}">
+                <MenuItem Header="Undo" Command="{Binding UndoCommand}" IsEnabled="{Binding editCommandsEnabled}" />
+                <MenuItem Header="Redo" Command="{Binding RedoCommand}" IsEnabled="{Binding editCommandsEnabled}" />
+                <MenuItem Header="Copy" Command="{Binding CopyCommand}" IsEnabled="{Binding editCommandsEnabled}" />
+                <MenuItem Header="Paste" Command="{Binding PasteCommand}" IsEnabled="{Binding editCommandsEnabled}" />
+                <Separator />
+                <MenuItem Header="Load Biomes from CSV" Command="{Binding BiomeCsvWindowCommand}"></MenuItem>
+                <MenuItem Header="Import Existing Data"></MenuItem>
+            </MenuItem>
+            <Separator />
+        </Menu>
 
-            </TreeView>
+        <SplitView DockPanel.Dock="Top" IsPaneOpen="True" DisplayMode="Inline" VerticalAlignment="Stretch"
+                   IsEnabled="{Binding IsProjectOpen}">
+            <SplitView.Pane>
+                <TreeView Items="{Binding TreeViewItems}" />
+            </SplitView.Pane>
+
 
             <TabControl>
                 <TabItem Header="Overview">
                     <StackPanel>
-                        <TextBox Watermark="Mod Name"> </TextBox>
-                        <TextBox Watermark="Description"> </TextBox>
-                        <TextBox Watermark="Author"> </TextBox>
-                        <TextBox Watermark="Dependencies"> </TextBox>
-                        <TextBox Watermark="Optional Dependencies"> </TextBox>
+                        <TextBox Watermark="Mod Name" ToolTip.Tip="The name of the mod." Margin="8"
+                                 IsEnabled="{Binding IsProjectOpen}">
+                        </TextBox>
+                        <TextBox Watermark="Description" ToolTip.Tip="A brief description of the mod." Margin="8"
+                                 IsEnabled="{Binding IsProjectOpen}">
+                        </TextBox>
+                        <TextBox Watermark="Author" ToolTip.Tip="The author of the mod." Margin="8"
+                                 IsEnabled="{Binding IsProjectOpen}">
+                        </TextBox>
+                        <TextBox Watermark="Dependencies" ToolTip.Tip="Mod dependencies." Margin="8"
+                                 IsEnabled="{Binding IsProjectOpen}">
+                        </TextBox>
+                        <TextBox Watermark="Optional Dependencies" ToolTip.Tip="Optional Dependencies." Margin="8"
+                                 IsEnabled="{Binding IsProjectOpen}">
+                        </TextBox>
                     </StackPanel>
                 </TabItem>
                 <TabItem Header="Biomes" />
@@ -72,11 +79,8 @@
                 <TabItem Header="Tools" />
 
             </TabControl>
+        </SplitView>
+    </DockPanel>
 
-
-        </DockPanel>
-
-
-    </Panel>
 
 </Window>
