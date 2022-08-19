@@ -2,14 +2,13 @@
 
 namespace MC_DataHelper.Models;
 
-public abstract class BiomeDataDefinition : IDataDefinition
+public class BiomeDataDefinition : IDataDefinition
 {
-    protected BiomeDataDefinition(string name)
+    public BiomeDataDefinition()
     {
-        Name = name;
     }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = "New Biome";
     public string JsonType => "biome";
 
     public int DepthFiller { get; set; } = 3;

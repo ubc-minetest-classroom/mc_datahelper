@@ -14,6 +14,9 @@ namespace MC_DataHelper.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        public BiomeFormViewModel BiomeFormViewModel { get; }
+        
+        
         private ModPackage? _selectedPackage;
 
         private ModPackage? Package
@@ -135,6 +138,8 @@ namespace MC_DataHelper.ViewModels
         // Initialize everything
         public MainWindowViewModel()
         {
+            BiomeFormViewModel = new BiomeFormViewModel(new BiomeDataDefinition());
+           
             ShowBiomeCsvDialog = new Interaction<Unit, BiomeCsvImportViewModel?>();
             ShowOpenFileDialog = new Interaction<OpenFileDialog, string?>();
             ShowOpenFolderDialog = new Interaction<OpenFolderDialog, string?>();
