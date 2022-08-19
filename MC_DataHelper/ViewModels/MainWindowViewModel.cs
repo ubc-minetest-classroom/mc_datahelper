@@ -47,7 +47,7 @@ namespace MC_DataHelper.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isProjectOpen, value);
         }
 
-        public ObservableCollection<DataDefinition> TreeViewItems { get; } = new();
+        public ObservableCollection<BiomeDataDefinition> TreeViewItems { get; } = new();
 
 
         //File menu commands
