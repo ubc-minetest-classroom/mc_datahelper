@@ -9,14 +9,16 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using MC_DataHelper.Models;
 using ReactiveUI;
+using ReactiveUI.Validation.Abstractions;
+using ReactiveUI.Validation.Contexts;
 
 namespace MC_DataHelper.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
     {
         public BiomeFormViewModel BiomeFormViewModel { get; }
-        
-        
+
+
         private ModPackage? _selectedPackage;
 
         private ModPackage? Package
@@ -136,10 +138,10 @@ namespace MC_DataHelper.ViewModels
         }
 
         // Initialize everything
-        public MainWindowViewModel()
+        public MainWindowViewModel(BiomeFormViewModel biomeFormViewModel)
         {
-            BiomeFormViewModel = new BiomeFormViewModel(new BiomeDataDefinition());
-           
+            BiomeFormViewModel = biomeFormViewModel;
+
             ShowBiomeCsvDialog = new Interaction<Unit, BiomeCsvImportViewModel?>();
             ShowOpenFileDialog = new Interaction<OpenFileDialog, string?>();
             ShowOpenFolderDialog = new Interaction<OpenFolderDialog, string?>();
@@ -216,5 +218,7 @@ namespace MC_DataHelper.ViewModels
                 FooterText = directoryPath;
             }
         }
+
+        public ValidationContext ValidationContext { get; } = new ValidationContext();
     }
 }

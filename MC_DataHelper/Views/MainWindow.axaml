@@ -130,8 +130,8 @@
                             </Panel>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Command="{Binding BiomeFormViewModel.SubmitForm }" Margin="8">Add Biome</Button>
-                                <Button Command="{Binding BiomeFormViewModel.ClearForm }" Margin="8">Clear Form</Button>
+                                <Button Command="{Binding BiomeFormViewModel.SubmitFormCommand }" Margin="8">Add Biome</Button>
+                                <Button Command="{Binding BiomeFormViewModel.ClearFormCommand }" Margin="8">Clear Form</Button>
                             </StackPanel>
 
                         </StackPanel>

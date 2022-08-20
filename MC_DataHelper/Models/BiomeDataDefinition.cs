@@ -20,6 +20,7 @@ public class BiomeDataDefinition : IDataDefinition
     public int YMin { get; set; } = -31000;
     public int YMax { get; set; } = 31000;
     public int VerticalBlend { get; set; } = 8;
+    
     public string NodeCaveLiquid { get; set; } = "default:water_source";
     public string NodeFiller { get; set; } = "default:dirt";
     public string NodeRiverbed { get; set; } = "default:water_source";
@@ -27,4 +28,5 @@ public class BiomeDataDefinition : IDataDefinition
     public string NodeTop { get; set; } = "default:dirt_with_grass";
     public string NodeWater { get; set; } = "default:water_source";
     public string NodeWaterTop { get; set; } = "default:water_source";
+    public string? NodeDust { get; set; } = null;
 }
