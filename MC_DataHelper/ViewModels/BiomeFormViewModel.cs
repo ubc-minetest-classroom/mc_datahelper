@@ -36,7 +36,13 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
     public string DepthFiller
     {
         get => _data.DepthFiller.ToString();
-        set => _data.DepthFiller = int.Parse(value);
+        set
+        {
+            if (int.TryParse(value, out var number))
+            {
+                _data.DepthFiller = number;
+            }
+        }
     }
 
     public string NodeStone => _data.NodeStone;
@@ -46,7 +52,13 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
     public string DepthWaterTop
     {
         get => _data.DepthWaterTop.ToString();
-        set => _data.DepthWaterTop = int.Parse(value);
+        set
+        {
+            if (int.TryParse(value, out var number))
+            {
+                _data.DepthWaterTop = number;
+            }
+        }
     }
 
     public string NodeWater => _data.NodeWater;
@@ -56,7 +68,13 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
     public string DepthRiverbed
     {
         get => _data.DepthRiverbed.ToString();
-        set => _data.DepthRiverbed = int.Parse(value);
+        set
+        {
+            if (int.TryParse(value, out var number))
+            {
+                _data.DepthRiverbed = number;
+            }
+        }
     }
 
     public string NodeCaveLiquid => _data.NodeCaveLiquid;
@@ -64,31 +82,61 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
     public string YMin
     {
         get => _data.YMin.ToString();
-        set => _data.YMin = int.Parse(value);
+        set
+        {
+            if (int.TryParse(value, out var number))
+            {
+                _data.YMin = number;
+            }
+        }
     }
 
     public string YMax
     {
         get => _data.YMax.ToString();
-        set => _data.YMax = int.Parse(value);
+        set
+        {
+            if (int.TryParse(value, out var number))
+            {
+                _data.YMax = number;
+            }
+        }
     }
 
     public string VerticalBlend
     {
         get => _data.VerticalBlend.ToString();
-        set => _data.VerticalBlend = int.Parse(value);
+        set
+        {
+            if (int.TryParse(value, out var number))
+            {
+                _data.VerticalBlend = number;
+            }
+        }
     }
 
     public string HeatPoint
     {
         get => _data.HeatPoint.ToString();
-        set => _data.HeatPoint = int.Parse(value);
+        set
+        {
+            if (int.TryParse(value, out var number))
+            {
+                _data.HeatPoint = number;
+            }
+        }
     }
 
     public string HumidityPoint
     {
         get => _data.HumidityPoint.ToString();
-        set => _data.HumidityPoint = int.Parse(value);
+        set
+        {
+            if (int.TryParse(value, out var number))
+            {
+                _data.HumidityPoint = number;
+            }
+        }
     }
 
     public ReactiveCommand<Unit, Unit> SubmitFormCommand { get; }
@@ -99,13 +147,13 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
     {
         SubmitFormCommand = ReactiveCommand.Create(SubmitForm);
         ClearFormCommand = ReactiveCommand.Create(ClearForm);
-        
+
         this.ValidationRule(
             viewModel => viewModel.DepthTop,
             name => !int.TryParse(name, out var value),
             "You must specify a valid integer");
     }
-    
+
     public ValidationContext ValidationContext { get; } = new ValidationContext();
 
 
@@ -140,5 +188,4 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         this.RaisePropertyChanged(nameof(HeatPoint));
         this.RaisePropertyChanged(nameof(HumidityPoint));
     }
-
 }
