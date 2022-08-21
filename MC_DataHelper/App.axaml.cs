@@ -19,7 +19,7 @@ namespace MC_DataHelper
             {
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(new()),
+                    DataContext = new MainWindowViewModel(),
                 };
             }
 

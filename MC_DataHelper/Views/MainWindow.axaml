@@ -52,7 +52,13 @@
         <SplitView Margin="16" DockPanel.Dock="Top" IsPaneOpen="True" DisplayMode="Inline" VerticalAlignment="Stretch"
                    IsEnabled="{Binding IsProjectOpen}">
             <SplitView.Pane>
-                <TreeView Items="{Binding TreeViewItems}" />
+                <TreeView Items="{Binding TreeViewItems}">
+                    <TreeView.ItemTemplate>
+                        <TreeDataTemplate ItemsSource="{Binding Subfolders}">
+                            <TextBlock Text="Item"/>
+                        </TreeDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
             </SplitView.Pane>
 
 

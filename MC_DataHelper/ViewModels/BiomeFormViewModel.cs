@@ -1,5 +1,4 @@
 ﻿using System.Reactive;
-using Avalonia.Data;
 using MC_DataHelper.Models;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
@@ -11,6 +10,7 @@ namespace MC_DataHelper.ViewModels;
 public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 {
     private BiomeDataDefinition _data = new();
+    private ModPackage _parentPackage;
 
 
     public string BiomeName => _data.Name;
@@ -143,8 +143,9 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 
     public ReactiveCommand<Unit, Unit> ClearFormCommand { get; }
 
-    public BiomeFormViewModel()
+    public BiomeFormViewModel(ModPackage parentPackage)
     {
+        _parentPackage = parentPackage;
         SubmitFormCommand = ReactiveCommand.Create(SubmitForm);
         ClearFormCommand = ReactiveCommand.Create(ClearForm);
 
@@ -159,6 +160,8 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 
     private void SubmitForm()
     {
+        _parentPackage.DataDefinitions.Add(_data);
+        ClearForm();
     }
 
     private void ClearForm()
@@ -187,5 +190,11 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         this.RaisePropertyChanged(nameof(VerticalBlend));
         this.RaisePropertyChanged(nameof(HeatPoint));
         this.RaisePropertyChanged(nameof(HumidityPoint));
+    }
+
+    public void UpdatePackage(ModPackage selectedPackage)
+    {
+        _parentPackage = selectedPackage;
+        UpdateProperties();
     }
 }

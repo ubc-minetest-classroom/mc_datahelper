@@ -16,7 +16,7 @@ namespace MC_DataHelper.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
     {
-        public BiomeFormViewModel BiomeFormViewModel { get; }
+        public BiomeFormViewModel BiomeFormViewModel { get; set; }
 
 
         private ModPackage? _selectedPackage;
@@ -52,7 +52,7 @@ namespace MC_DataHelper.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isProjectOpen, value);
         }
 
-        public ObservableCollection<BiomeDataDefinition> TreeViewItems { get; } = new();
+       
 
 
         //File menu commands
@@ -76,7 +76,6 @@ namespace MC_DataHelper.ViewModels
         public Interaction<OpenFolderDialog, string?> ShowOpenFolderDialog { get; }
 
         private string _footerText = "TIP: No project is open. Navigate to File -> New / Open to begin.";
-
         public string FooterText
         {
             get => !_isProjectOpen ? "TIP: No project is open. Navigate to File -> New / Open to begin." : _footerText;
@@ -138,9 +137,9 @@ namespace MC_DataHelper.ViewModels
         }
 
         // Initialize everything
-        public MainWindowViewModel(BiomeFormViewModel biomeFormViewModel)
+        public MainWindowViewModel()
         {
-            BiomeFormViewModel = biomeFormViewModel;
+            BiomeFormViewModel = new BiomeFormViewModel(Package);
 
             ShowBiomeCsvDialog = new Interaction<Unit, BiomeCsvImportViewModel?>();
             ShowOpenFileDialog = new Interaction<OpenFileDialog, string?>();
@@ -170,6 +169,8 @@ namespace MC_DataHelper.ViewModels
         private async Task SaveProjectAsync()
         {
             if (Package != null) await Package.SavePackageToDisk(Environment.CurrentDirectory);
+
+            UpdateViewModels();
         }
 
         private async Task SaveProjectAsAsync()
@@ -184,6 +185,8 @@ namespace MC_DataHelper.ViewModels
                 Environment.CurrentDirectory = directoryPath;
                 if (Package != null) await Package.SavePackageToDisk(directoryPath);
             }
+
+            UpdateViewModels();
         }
 
 
@@ -202,6 +205,8 @@ namespace MC_DataHelper.ViewModels
                 FooterText = directoryPath;
                 // Package.SavePackageToDisk(fileName);
             }
+            
+            UpdateViewModels();
         }
 
         private async Task OpenProjectAsync()
@@ -217,6 +222,13 @@ namespace MC_DataHelper.ViewModels
                 Package = await ModPackage.LoadPackageFromDisk(directoryPath);
                 FooterText = directoryPath;
             }
+
+            UpdateViewModels();
+        }
+
+        private void UpdateViewModels()
+        {
+            BiomeFormViewModel.UpdatePackage(_selectedPackage);
         }
 
         public ValidationContext ValidationContext { get; } = new ValidationContext();
