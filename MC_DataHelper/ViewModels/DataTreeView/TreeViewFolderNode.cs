@@ -2,9 +2,9 @@
 
 namespace MC_DataHelper.ViewModels;
 
-public class TreeViewDataFolderNode : TreeViewNode
+public class TreeViewFolderNode : TreeViewNode
 {
-    public TreeViewDataFolderNode(string label, ObservableCollection<TreeViewDataNode> children)
+    public TreeViewFolderNode(string label, ObservableCollection<TreeViewDataNode> children)
     {
         Label = label;
         Children = children;

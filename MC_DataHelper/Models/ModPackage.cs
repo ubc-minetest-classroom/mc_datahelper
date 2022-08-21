@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MC_DataHelper.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MC_DataHelper.Models;
 
 public class ModPackage
 {
-    public ModPackage() : this(new ModConfig(), new List<IDataDefinition>(0))
+    public ModPackage() : this(new ModConfig(), new List<IDataDefinition?>(0))
     {
     }
 
-    public ModPackage(ModConfig config) : this(config, new List<IDataDefinition>(0))
+    public ModPackage(ModConfig config) : this(config, new List<IDataDefinition?>(0))
     {
     }
 
 
-    public ModPackage(ModConfig config, List<IDataDefinition> dataDefinitions)
+    public ModPackage(ModConfig config, List<IDataDefinition?> dataDefinitions)
     {
         Config = config;
         DataDefinitions = dataDefinitions;
@@ -54,11 +54,44 @@ public class ModPackage
             Title = confTitle ?? string.Empty
         };
 
-        return new ModPackage(config);
+        var dataDefinitions = new List<IDataDefinition?>();
+
+        var files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);
+        foreach (var filePath in files)
+        {
+            IDataDefinition? dataDefinition;
+            using StreamReader sr = new(filePath);
+            var json = await sr.ReadToEndAsync();
+            dynamic jsonObject = JObject.Parse(json);
+            string? jsonType = jsonObject._jsonType;
+            if (jsonType == null)
+            {
+                continue;
+            }
+
+            switch (jsonType.ToLower())
+            {
+                case "biome":
+                    dataDefinition = jsonObject as BiomeDataDefinition;
+                    break;
+                default:
+                    continue;
+            }
+
+            if (dataDefinition != null)
+            {
+                dataDefinitions.Add(dataDefinition);
+            }
+        }
+
+
+        return new ModPackage(config, dataDefinitions);
     }
 
     public async Task SavePackageToDisk(string path)
     {
+        Directory.Delete($"{path}/data", true);
+
         var modConfLines = new[]
         {
             "name = " + Config.Name,
@@ -69,13 +102,21 @@ public class ModPackage
             "title = " + Config.Title,
         };
 
-        await File.WriteAllLinesAsync(path + "/mod.conf", modConfLines);
+        await File.WriteAllLinesAsync($"{path}/mod.conf", modConfLines);
 
         const string initString =
             "json_importer.loadDirectory(minetest.get_modpath(minetest.get_current_modname()) .. \"\\\\data\\\\\")";
-        await File.WriteAllTextAsync(path + "/init.lua", initString);
+        await File.WriteAllTextAsync($"{path}/init.lua", initString);
 
-        Directory.CreateDirectory(path + "/data");
+        foreach (var dataDefinition in DataDefinitions)
+        {
+            var folder = dataDefinition.JsonType.ToLower();
+            var filePath = $"{path}/data/{folder}s/";
+            Directory.CreateDirectory(filePath);
+
+            var output = JsonConvert.SerializeObject(dataDefinition, Formatting.Indented);
+            await File.WriteAllTextAsync($"{filePath}/{dataDefinition.Name}.json", output);
+        }
     }
 
     public ModConfig Config { get; }
