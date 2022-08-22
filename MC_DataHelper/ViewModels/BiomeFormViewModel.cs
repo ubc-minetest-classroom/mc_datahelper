@@ -13,7 +13,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
     private ModPackage _parentPackage;
 
 
-    public string BiomeName => _data.Name;
+    public string BiomeName => _data.DataName;
 
     public string? NodeDust => _data.NodeDust;
 

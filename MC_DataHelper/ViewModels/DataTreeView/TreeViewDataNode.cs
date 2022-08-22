@@ -13,7 +13,7 @@ public class TreeViewDataNode : TreeViewNode
 
     public IDataDefinition DataDefinition { get; }
 
-    public string Label => DataDefinition.Name;
+    public string Label => DataDefinition.DataName;
 
     public ObservableCollection<TreeViewDataNode> Children { get; set; }
 }
