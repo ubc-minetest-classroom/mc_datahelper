@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -59,11 +58,11 @@ public class ModPackage
         var files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);
         foreach (var filePath in files)
         {
-            IDataDefinition? dataDefinition;
+            IDataDefinition? dataDefinition = null;
             using StreamReader sr = new(filePath);
-            var json = await sr.ReadToEndAsync();
-            dynamic jsonObject = JObject.Parse(json);
-            string? jsonType = jsonObject._jsonType;
+
+            var jsonObject = (JObject)await JToken.ReadFromAsync(new JsonTextReader(sr));
+            var jsonType = jsonObject["_jsonType"].Value<string>();
             if (jsonType == null)
             {
                 continue;
@@ -72,11 +71,13 @@ public class ModPackage
             switch (jsonType.ToLower())
             {
                 case "biome":
-                    dataDefinition = jsonObject as BiomeDataDefinition;
+
+                    dataDefinition = jsonObject.ToObject<BiomeDataDefinition>();
                     break;
                 default:
                     continue;
             }
+
 
             if (dataDefinition != null)
             {
@@ -94,12 +95,12 @@ public class ModPackage
 
         var modConfLines = new[]
         {
-            "name = " + Config.Name,
-            "description = " + Config.Description,
-            "depends = mc_json_importer," + Config.Dependencies,
-            "optional_depends =" + Config.OptionalDependencies,
-            "author = " + Config.Author,
-            "title = " + Config.Title,
+            $"name = {Config.Name}",
+            $"description = {Config.Description}",
+            $"depends = mc_json_importer,{Config.Dependencies}",
+            $"optional_depends ={Config.OptionalDependencies}",
+            $"author = {Config.Author}",
+            $"title = {Config.Title}",
         };
 
         await File.WriteAllLinesAsync($"{path}/mod.conf", modConfLines);
