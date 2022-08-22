@@ -71,7 +71,6 @@ public class ModPackage
             switch (jsonType.ToLower())
             {
                 case "biome":
-
                     dataDefinition = jsonObject.ToObject<BiomeDataDefinition>();
                     break;
                 default:
@@ -81,6 +80,12 @@ public class ModPackage
 
             if (dataDefinition != null)
             {
+                if (dataDefinition.DataName.Contains(':'))
+                {
+                    var splitString = dataDefinition.DataName.Split(':');
+                    dataDefinition.DataName = splitString[splitString.GetUpperBound(0)];
+                }
+
                 dataDefinitions.Add(dataDefinition);
             }
         }
@@ -91,7 +96,10 @@ public class ModPackage
 
     public async Task SavePackageToDisk(string path)
     {
-        Directory.Delete($"{path}/data", true);
+        if (Directory.Exists($"{path}/data"))
+        {
+            Directory.Delete($"{path}/data", true);
+        }
 
         var modConfLines = new[]
         {
@@ -112,11 +120,14 @@ public class ModPackage
         foreach (var dataDefinition in DataDefinitions)
         {
             var folder = dataDefinition.JsonType.ToLower();
-            var filePath = $"{path}/data/{folder}s/";
+            var filePath = $"{path}/data/{folder}s";
+            var Filename = $"{filePath}/{dataDefinition.DataName}.json";
             Directory.CreateDirectory(filePath);
 
+            dataDefinition.DataName = $"{Config.Name}:{dataDefinition.DataName}";
+
             var output = JsonConvert.SerializeObject(dataDefinition, Formatting.Indented);
-            await File.WriteAllTextAsync($"{filePath}/{dataDefinition.Name}.json", output);
+            await File.WriteAllTextAsync(Filename, output);
         }
     }
 
