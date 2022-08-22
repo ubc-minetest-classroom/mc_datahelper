@@ -75,6 +75,7 @@ public class ModPackage
                     dataDefinition = jsonObject.ToObject<BiomeDataDefinition>();
                     break;
                 default:
+                    dataDefinition = new UnknownDataDefinition(jsonObject.ToObject<dynamic>());
                     continue;
             }
 
@@ -128,7 +129,11 @@ public class ModPackage
 
             Directory.CreateDirectory(filePath);
 
-            var output = JsonConvert.SerializeObject(dataDefinition, Formatting.Indented);
+            object SerializedObject = dataDefinition.GetType() == typeof(UnknownDataDefinition)
+                ? ((UnknownDataDefinition)dataDefinition).Data
+                : dataDefinition;
+
+            var output = JsonConvert.SerializeObject(SerializedObject, Formatting.Indented);
             await File.WriteAllTextAsync(filename, output);
 
             dataDefinition.DataName = oldName;
