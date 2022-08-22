@@ -18,7 +18,7 @@ public class ModPackage
     }
 
 
-    public ModPackage(ModConfig config, List<IDataDefinition?> dataDefinitions)
+    private ModPackage(ModConfig config, List<IDataDefinition?> dataDefinitions)
     {
         Config = config;
         DataDefinitions = dataDefinitions;
@@ -26,7 +26,7 @@ public class ModPackage
 
     public static async Task<ModPackage> LoadPackageFromDisk(string path)
     {
-        var confFileLines = await File.ReadAllLinesAsync(path + "/mod.conf");
+        var confFileLines = await File.ReadAllLinesAsync($"{path}/mod.conf");
         var confDictionary = new Dictionary<string, string>(4);
 
         foreach (var line in confFileLines)
@@ -129,11 +129,11 @@ public class ModPackage
 
             Directory.CreateDirectory(filePath);
 
-            object SerializedObject = dataDefinition.GetType() == typeof(UnknownDataDefinition)
+            object serializedObject = dataDefinition.GetType() == typeof(UnknownDataDefinition)
                 ? ((UnknownDataDefinition)dataDefinition).Data
                 : dataDefinition;
 
-            var output = JsonConvert.SerializeObject(SerializedObject, Formatting.Indented);
+            var output = JsonConvert.SerializeObject(serializedObject, Formatting.Indented);
             await File.WriteAllTextAsync(filename, output);
 
             dataDefinition.DataName = oldName;
