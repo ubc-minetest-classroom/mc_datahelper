@@ -5,7 +5,8 @@ namespace MC_DataHelper.Models;
 public interface IDataDefinition
 {
     [JsonProperty(propertyName: "name")]
-    string Name { get; }
+    string DataName { get; set; }
+
     [JsonProperty(propertyName: "_jsonType")]
     public string JsonType { get; }
 }
