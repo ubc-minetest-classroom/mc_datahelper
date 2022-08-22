@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using MC_DataHelper.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -78,16 +80,14 @@ public class ModPackage
             }
 
 
-            if (dataDefinition != null)
+            if (dataDefinition == null) continue;
+            if (dataDefinition.DataName.Contains(':'))
             {
-                if (dataDefinition.DataName.Contains(':'))
-                {
-                    var splitString = dataDefinition.DataName.Split(':');
-                    dataDefinition.DataName = splitString[splitString.GetUpperBound(0)];
-                }
-
-                dataDefinitions.Add(dataDefinition);
+                var splitString = dataDefinition.DataName.Split(':');
+                dataDefinition.DataName = splitString[splitString.GetUpperBound(0)];
             }
+
+            dataDefinitions.Add(dataDefinition);
         }
 
 
@@ -119,15 +119,20 @@ public class ModPackage
 
         foreach (var dataDefinition in DataDefinitions)
         {
+            var oldName = dataDefinition.DataName;
+
             var folder = dataDefinition.JsonType.ToLower();
             var filePath = $"{path}/data/{folder}s";
-            var Filename = $"{filePath}/{dataDefinition.DataName}.json";
-            Directory.CreateDirectory(filePath);
+            var filename = FileNameHelper.NextAvailableFilename($"{filePath}/{oldName}.json");
 
             dataDefinition.DataName = $"{Config.Name}:{dataDefinition.DataName}";
 
+            Directory.CreateDirectory(filePath);
+
             var output = JsonConvert.SerializeObject(dataDefinition, Formatting.Indented);
-            await File.WriteAllTextAsync(Filename, output);
+            await File.WriteAllTextAsync(filename, output);
+
+            dataDefinition.DataName = oldName;
         }
     }
 
