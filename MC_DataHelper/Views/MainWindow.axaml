@@ -52,13 +52,7 @@
         <SplitView Margin="16" DockPanel.Dock="Top" IsPaneOpen="True" DisplayMode="Inline" VerticalAlignment="Stretch"
                    IsEnabled="{Binding IsProjectOpen}">
             <SplitView.Pane>
-                <TreeView Items="{Binding TreeViewItems}">
-                    <TreeView.ItemTemplate>
-                        <TreeDataTemplate ItemsSource="{Binding Subfolders}">
-                            <TextBlock Text="Item"/>
-                        </TreeDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
+                <TreeView Items="{Binding TreeViewItems}" />
             </SplitView.Pane>
 
 
@@ -99,28 +93,34 @@
                                      ToolTip.Tip="Node forming surface layer of biome and thickness of this layer."
                                      Margin="8" />
 
-                            <TextBox Text="{Binding BiomeFormViewModel.DepthTop}" Watermark="Depth_Top" ToolTip.Tip="Depth of the top node layer." Margin="8" />
+                            <TextBox Text="{Binding BiomeFormViewModel.DepthTop}" Watermark="Depth_Top"
+                                     ToolTip.Tip="Depth of the top node layer." Margin="8" />
                             <TextBox Text="{Binding BiomeFormViewModel.NodeFiller}" Watermark="Node_Filler"
                                      ToolTip.Tip="Node forming lower layer of biome and thickness of this layer."
                                      Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.DepthFiller}" Watermark="Depth_Filler" ToolTip.Tip="Depth of the filler node layer." Margin="8" />
+                            <TextBox Text="{Binding BiomeFormViewModel.DepthFiller}" Watermark="Depth_Filler"
+                                     ToolTip.Tip="Depth of the filler node layer." Margin="8" />
                             <TextBox Text="{Binding BiomeFormViewModel.NodeStone}" Watermark="Node_Stone"
                                      ToolTip.Tip="Node that forms the layer between roughly y_min and y_max.."
                                      Margin="8" />
                             <TextBox Text="{Binding BiomeFormViewModel.NodeWaterTop}" Watermark="Node_Water_Top"
                                      ToolTip.Tip="Node forming a surface layer in seawater with the defined thickness."
                                      Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.DepthWaterTop}" Watermark="Depth_Water_Top" ToolTip.Tip="Depth of the top water layer." Margin="8" />
+                            <TextBox Text="{Binding BiomeFormViewModel.DepthWaterTop}" Watermark="Depth_Water_Top"
+                                     ToolTip.Tip="Depth of the top water layer." Margin="8" />
                             <TextBox Text="{Binding BiomeFormViewModel.NodeWater}" Watermark="Node_Water"
                                      ToolTip.Tip="Node that replaces all seawater nodes not in the surface layer."
                                      Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.NodeRiverbed}" Watermark="Node_Riverbed" ToolTip.Tip="Node placed under river water." Margin="8" />
+                            <TextBox Text="{Binding BiomeFormViewModel.NodeRiverbed}" Watermark="Node_Riverbed"
+                                     ToolTip.Tip="Node placed under river water." Margin="8" />
                             <TextBox Text="{Binding BiomeFormViewModel.DepthRiverbed}" Watermark="Depth_Riverbed"
                                      ToolTip.Tip="Thickness of the layer placed under river water." Margin="8" />
                             <TextBox Text="{Binding BiomeFormViewModel.NodeCaveLiquid}" Watermark="Node_Cave_Liquid"
                                      ToolTip.Tip="Nodes placed inside 50% of the medium size caves." Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.YMin}" Watermark="Y_Min" ToolTip.Tip="Lower limit for the biome." Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.YMax}" Watermark="Y_Max" ToolTip.Tip="Upper limit for the biome." Margin="8" />
+                            <TextBox Text="{Binding BiomeFormViewModel.YMin}" Watermark="Y_Min"
+                                     ToolTip.Tip="Lower limit for the biome." Margin="8" />
+                            <TextBox Text="{Binding BiomeFormViewModel.YMax}" Watermark="Y_Max"
+                                     ToolTip.Tip="Upper limit for the biome." Margin="8" />
                             <TextBox Text="{Binding BiomeFormViewModel.VerticalBlend}" Watermark="Vertical_Blend"
                                      ToolTip.Tip="Vertical distance in nodes above 'y_max' over which the biome will blend with the biome above."
                                      Margin="8" />

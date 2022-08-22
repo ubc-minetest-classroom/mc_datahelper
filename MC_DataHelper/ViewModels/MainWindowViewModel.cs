@@ -52,8 +52,6 @@ namespace MC_DataHelper.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isProjectOpen, value);
         }
 
-       
-
 
         //File menu commands
         public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
@@ -76,6 +74,9 @@ namespace MC_DataHelper.ViewModels
         public Interaction<OpenFolderDialog, string?> ShowOpenFolderDialog { get; }
 
         private string _footerText = "TIP: No project is open. Navigate to File -> New / Open to begin.";
+
+        public ObservableCollection<TreeViewFolderNode> TreeViewItems { get; } = new();
+
         public string FooterText
         {
             get => !_isProjectOpen ? "TIP: No project is open. Navigate to File -> New / Open to begin." : _footerText;
@@ -205,7 +206,7 @@ namespace MC_DataHelper.ViewModels
                 FooterText = directoryPath;
                 // Package.SavePackageToDisk(fileName);
             }
-            
+
             UpdateViewModels();
         }
 
