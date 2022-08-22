@@ -35,10 +35,10 @@
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}" HotKey="Ctrl+Escape" />
             </MenuItem>
             <MenuItem Header="_Edit" IsEnabled="{Binding IsProjectOpen}">
-                <MenuItem Header="_Undo" Command="{Binding UndoCommand}" IsEnabled="{Binding editCommandsEnabled}" />
-                <MenuItem Header="_Redo" Command="{Binding RedoCommand}" IsEnabled="{Binding editCommandsEnabled}" />
-                <MenuItem Header="_Copy" Command="{Binding CopyCommand}" IsEnabled="{Binding editCommandsEnabled}" />
-                <MenuItem Header="_Paste" Command="{Binding PasteCommand}" IsEnabled="{Binding editCommandsEnabled}" />
+                <MenuItem Header="_Undo" Command="{Binding UndoCommand}" />
+                <MenuItem Header="_Redo" Command="{Binding RedoCommand}" />
+                <MenuItem Header="_Copy" Command="{Binding CopyCommand}" />
+                <MenuItem Header="_Paste" Command="{Binding PasteCommand}" />
                 <Separator />
                 <MenuItem Header="_Load Biomes from CSV" Command="{Binding BiomeCsvWindowCommand}"></MenuItem>
                 <MenuItem Header="_Import Existing Data"></MenuItem>
@@ -52,7 +52,13 @@
         <SplitView Margin="16" DockPanel.Dock="Top" IsPaneOpen="True" DisplayMode="Inline" VerticalAlignment="Stretch"
                    IsEnabled="{Binding IsProjectOpen}">
             <SplitView.Pane>
-                <TreeView Items="{Binding TreeViewItems}" />
+                <TreeView Items="{Binding TreeViewItems}" SelectionMode="AlwaysSelected">
+                    <TreeView.ItemTemplate>
+                        <TreeDataTemplate ItemsSource="{Binding Children}">
+                            <TextBlock Text="{Binding Label}" />
+                        </TreeDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
             </SplitView.Pane>
 
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using MC_DataHelper.Helpers;
@@ -64,7 +63,7 @@ public class ModPackage
             using StreamReader sr = new(filePath);
 
             var jsonObject = (JObject)await JToken.ReadFromAsync(new JsonTextReader(sr));
-            var jsonType = jsonObject["_jsonType"].Value<string>();
+            var jsonType = jsonObject["_jsonType"]?.Value<string>();
             if (jsonType == null)
             {
                 continue;

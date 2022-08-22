@@ -8,6 +8,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using MC_DataHelper.Models;
+using MC_DataHelper.ViewModels.DataTreeView;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Contexts;
@@ -165,6 +166,10 @@ namespace MC_DataHelper.ViewModels
             {
                 var result = await ShowBiomeCsvDialog.Handle(Unit.Default);
             });
+            
+            TreeViewItems.Add(new TreeViewFolderNode(("Project")));
+            TreeViewItems.Add(new TreeViewFolderNode(("Test")));
+            TreeViewItems.Add(new TreeViewFolderNode(("Lukas")));
         }
 
         private async Task SaveProjectAsync()
