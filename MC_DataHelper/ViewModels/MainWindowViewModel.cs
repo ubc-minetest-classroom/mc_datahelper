@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -141,7 +142,7 @@ namespace MC_DataHelper.ViewModels
         // Initialize everything
         public MainWindowViewModel()
         {
-            BiomeFormViewModel = new BiomeFormViewModel(Package);
+            BiomeFormViewModel = new BiomeFormViewModel(this,Package);
 
             ShowBiomeCsvDialog = new Interaction<Unit, BiomeCsvImportViewModel?>();
             ShowOpenFileDialog = new Interaction<OpenFileDialog, string?>();
@@ -166,10 +167,28 @@ namespace MC_DataHelper.ViewModels
             {
                 var result = await ShowBiomeCsvDialog.Handle(Unit.Default);
             });
-            
-            TreeViewItems.Add(new TreeViewFolderNode(("Project")));
-            TreeViewItems.Add(new TreeViewFolderNode(("Test")));
-            TreeViewItems.Add(new TreeViewFolderNode(("Lukas")));
+
+            UpdateTree();
+        }
+
+        private void UpdateTree()
+        {
+            TreeViewItems.Clear();
+            if (Package?.DataDefinitions == null) return;
+
+            var folders = new Dictionary<string, TreeViewFolderNode>();
+
+            foreach (var dataDefinition in Package.DataDefinitions)
+            {
+                if (!folders.TryGetValue(dataDefinition.JsonType, out var folder))
+                {
+                    folder = new TreeViewFolderNode($"{dataDefinition.JsonType}s");
+                    folders.Add(dataDefinition.JsonType, folder);
+                    TreeViewItems.Add(folder);
+                }
+
+                folder.Children.Add(new TreeViewDataNode(dataDefinition));
+            }
         }
 
         private async Task SaveProjectAsync()
@@ -177,6 +196,7 @@ namespace MC_DataHelper.ViewModels
             if (Package != null) await Package.SavePackageToDisk(Environment.CurrentDirectory);
 
             UpdateViewModels();
+            UpdateTree();
         }
 
         private async Task SaveProjectAsAsync()
@@ -193,6 +213,7 @@ namespace MC_DataHelper.ViewModels
             }
 
             UpdateViewModels();
+            UpdateTree();
         }
 
 
@@ -213,6 +234,7 @@ namespace MC_DataHelper.ViewModels
             }
 
             UpdateViewModels();
+            UpdateTree();
         }
 
         private async Task OpenProjectAsync()
@@ -230,6 +252,7 @@ namespace MC_DataHelper.ViewModels
             }
 
             UpdateViewModels();
+            UpdateTree();
         }
 
         private void UpdateViewModels()

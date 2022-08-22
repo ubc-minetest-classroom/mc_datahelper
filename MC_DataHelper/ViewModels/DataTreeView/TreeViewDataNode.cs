@@ -5,10 +5,10 @@ namespace MC_DataHelper.ViewModels;
 
 public class TreeViewDataNode : TreeViewNode
 {
-    public TreeViewDataNode(IDataDefinition dataDefinition, ObservableCollection<TreeViewDataNode> children)
+    public TreeViewDataNode(IDataDefinition dataDefinition)
     {
         DataDefinition = dataDefinition;
-        Children = children;
+        Children = null;
     }
 
     public IDataDefinition DataDefinition { get; }

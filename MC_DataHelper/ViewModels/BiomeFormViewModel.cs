@@ -12,6 +12,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
     private BiomeDataDefinition _data = new();
     private ModPackage _parentPackage;
 
+    MainWindowViewModel _mainWindowViewModel;
 
     public string BiomeName => _data.DataName;
 
@@ -143,8 +144,10 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 
     public ReactiveCommand<Unit, Unit> ClearFormCommand { get; }
 
-    public BiomeFormViewModel(ModPackage parentPackage)
+    public BiomeFormViewModel(MainWindowViewModel mainWindowViewModel, ModPackage parentPackage)
     {
+        _mainWindowViewModel = mainWindowViewModel;
+        
         _parentPackage = parentPackage;
         SubmitFormCommand = ReactiveCommand.Create(SubmitForm);
         ClearFormCommand = ReactiveCommand.Create(ClearForm);

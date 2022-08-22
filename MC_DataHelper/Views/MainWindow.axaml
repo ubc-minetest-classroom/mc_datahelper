@@ -52,13 +52,22 @@
         <SplitView Margin="16" DockPanel.Dock="Top" IsPaneOpen="True" DisplayMode="Inline" VerticalAlignment="Stretch"
                    IsEnabled="{Binding IsProjectOpen}">
             <SplitView.Pane>
-                <TreeView Items="{Binding TreeViewItems}" SelectionMode="AlwaysSelected">
-                    <TreeView.ItemTemplate>
-                        <TreeDataTemplate ItemsSource="{Binding Children}">
-                            <TextBlock Text="{Binding Label}" />
-                        </TreeDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
+
+                <DockPanel>
+
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
+                        <Button Margin="4">New Item</Button>
+                        <Button Margin="4">Delete Item</Button>
+                    </StackPanel>
+
+                    <TreeView DockPanel.Dock="Top" Items="{Binding TreeViewItems}" SelectionMode="AlwaysSelected">
+                        <TreeView.ItemTemplate>
+                            <TreeDataTemplate ItemsSource="{Binding Children}">
+                                <TextBlock Text="{Binding Label}" />
+                            </TreeDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </DockPanel>
             </SplitView.Pane>
 
 
