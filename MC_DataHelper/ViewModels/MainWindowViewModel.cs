@@ -67,6 +67,7 @@ namespace MC_DataHelper.ViewModels
         public ReactiveCommand<Unit, Unit> BiomeCsvWindowCommand { get; }
 
         public ReactiveCommand<Unit, Unit> DeleteTreeItemCommand { get; }
+        public ReactiveCommand<Unit, Unit> RefreshTreeItemsCommand { get; }
 
         public Interaction<Unit, BiomeCsvImportViewModel?> ShowBiomeCsvDialog { get; }
         public Interaction<OpenFileDialog, string?> ShowOpenFileDialog { get; }
@@ -166,6 +167,7 @@ namespace MC_DataHelper.ViewModels
 
 
             DeleteTreeItemCommand = ReactiveCommand.Create(DeleteTreeItem);
+            RefreshTreeItemsCommand = ReactiveCommand.Create(CreateTree);
 
 
             BiomeCsvWindowCommand = ReactiveCommand.CreateFromTask(async () =>
@@ -224,7 +226,6 @@ namespace MC_DataHelper.ViewModels
             if (Package != null) await Package.SavePackageToDisk(Environment.CurrentDirectory);
 
             UpdateViewModels();
-            CreateTree();
         }
 
         private async Task SaveProjectAsAsync()
@@ -241,7 +242,6 @@ namespace MC_DataHelper.ViewModels
             }
 
             UpdateViewModels();
-            CreateTree();
         }
 
         private async Task NewProjectAsync()
@@ -266,6 +266,7 @@ namespace MC_DataHelper.ViewModels
 
         private async Task OpenProjectAsync()
         {
+            var oldPackageHashCode = Package.GetHashCode();
             var directoryPath = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
             {
                 Title = "Select a folder to open a project from",
@@ -279,7 +280,11 @@ namespace MC_DataHelper.ViewModels
             }
 
             UpdateViewModels();
-            CreateTree();
+
+            if (oldPackageHashCode != Package.GetHashCode())
+            {
+                CreateTree();
+            }
         }
 
         private void UpdateViewModels()

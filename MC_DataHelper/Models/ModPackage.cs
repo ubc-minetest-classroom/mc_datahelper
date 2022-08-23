@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using MC_DataHelper.Helpers;
@@ -144,4 +145,22 @@ public class ModPackage
 
     public ModConfig Config { get; }
     public List<IDataDefinition> DataDefinitions { get; }
+
+    
+    protected bool Equals(ModPackage other)
+    {
+        return Config.Equals(other.Config) && DataDefinitions.Equals(other.DataDefinitions);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        return obj.GetType() == this.GetType() && Equals((ModPackage)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Config, DataDefinitions);
+    }
 }

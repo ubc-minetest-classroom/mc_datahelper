@@ -56,6 +56,8 @@
                 <DockPanel>
 
                     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
+                        <Button Margin="4" Command="{Binding RefreshTreeItemsCommand}">Refresh Items</Button>
+
                         <Button Margin="4" Command="{Binding DeleteTreeItemCommand}">Delete Item</Button>
                     </StackPanel>
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
@@ -66,4 +67,46 @@ public class BiomeDataDefinition : IDataDefinition
 
     [JsonProperty("node_dust", NullValueHandling = NullValueHandling.Ignore)]
     public string? NodeDust { get; set; } = null;
+    
+    protected bool Equals(BiomeDataDefinition other)
+    {
+        return DataName == other.DataName && DepthFiller == other.DepthFiller && DepthRiverbed == other.DepthRiverbed &&
+               DepthTop == other.DepthTop && DepthWaterTop == other.DepthWaterTop && HeatPoint == other.HeatPoint &&
+               HumidityPoint == other.HumidityPoint && YMin == other.YMin && YMax == other.YMax &&
+               VerticalBlend == other.VerticalBlend && NodeCaveLiquid == other.NodeCaveLiquid &&
+               NodeFiller == other.NodeFiller && NodeRiverbed == other.NodeRiverbed && NodeStone == other.NodeStone &&
+               NodeTop == other.NodeTop && NodeWater == other.NodeWater && NodeWaterTop == other.NodeWaterTop &&
+               NodeDust == other.NodeDust;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        return obj.GetType() == this.GetType() && Equals((BiomeDataDefinition)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        var hashCode = new HashCode();
+        hashCode.Add(DataName);
+        hashCode.Add(DepthFiller);
+        hashCode.Add(DepthRiverbed);
+        hashCode.Add(DepthTop);
+        hashCode.Add(DepthWaterTop);
+        hashCode.Add(HeatPoint);
+        hashCode.Add(HumidityPoint);
+        hashCode.Add(YMin);
+        hashCode.Add(YMax);
+        hashCode.Add(VerticalBlend);
+        hashCode.Add(NodeCaveLiquid);
+        hashCode.Add(NodeFiller);
+        hashCode.Add(NodeRiverbed);
+        hashCode.Add(NodeStone);
+        hashCode.Add(NodeTop);
+        hashCode.Add(NodeWater);
+        hashCode.Add(NodeWaterTop);
+        hashCode.Add(NodeDust);
+        return hashCode.ToHashCode();
+    }
 }
