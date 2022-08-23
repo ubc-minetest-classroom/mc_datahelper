@@ -119,7 +119,7 @@ public class ModPackage
         await File.WriteAllTextAsync($"{path}/init.lua", initString);
 
         Directory.CreateDirectory($"{path}/data");
-        
+
         foreach (var dataDefinition in DataDefinitions)
         {
             var oldName = dataDefinition.DataName;
@@ -132,9 +132,12 @@ public class ModPackage
 
             Directory.CreateDirectory(filePath);
 
-            object serializedObject = dataDefinition.GetType() == typeof(UnknownDataDefinition)
-                ? ((UnknownDataDefinition)dataDefinition).Data
-                : dataDefinition;
+
+            object serializedObject;
+            if (dataDefinition is UnknownDataDefinition definition)
+                serializedObject = definition.Data;
+            else
+                serializedObject = dataDefinition;
 
             var output = JsonConvert.SerializeObject(serializedObject, Formatting.Indented);
             await File.WriteAllTextAsync(filename, output);
@@ -146,7 +149,7 @@ public class ModPackage
     public ModConfig Config { get; }
     public List<IDataDefinition> DataDefinitions { get; }
 
-    
+
     protected bool Equals(ModPackage other)
     {
         return Config.Equals(other.Config) && DataDefinitions.Equals(other.DataDefinitions);
