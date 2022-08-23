@@ -217,8 +217,6 @@ namespace MC_DataHelper.ViewModels
             var node = (TreeViewDataNode)SelectedTreeViewItem;
             Package.DataDefinitions.Remove(node.DataDefinition);
             node.ParentNode.Children.Remove(node);
-
-            //  CreateTree();
         }
 
         private async Task SaveProjectAsync()
@@ -266,7 +264,6 @@ namespace MC_DataHelper.ViewModels
 
         private async Task OpenProjectAsync()
         {
-            var oldPackageHashCode = Package.GetHashCode();
             var directoryPath = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
             {
                 Title = "Select a folder to open a project from",
@@ -280,11 +277,7 @@ namespace MC_DataHelper.ViewModels
             }
 
             UpdateViewModels();
-
-            if (oldPackageHashCode != Package.GetHashCode())
-            {
-                CreateTree();
-            }
+            CreateTree();
         }
 
         private void UpdateViewModels()
