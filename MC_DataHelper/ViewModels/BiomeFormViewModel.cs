@@ -229,8 +229,11 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         this.RaisePropertyChanged(nameof(HumidityPoint));
     }
 
-    public void UpdatePackage()
+    public void UpdateDataSource(BiomeDataDefinition nodeDataDefinition)
     {
+        _data = nodeDataDefinition;
         UpdateProperties();
     }
+
+ 
 }

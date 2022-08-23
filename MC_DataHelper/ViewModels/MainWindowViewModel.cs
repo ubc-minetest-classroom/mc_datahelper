@@ -40,13 +40,23 @@ namespace MC_DataHelper.ViewModels
         }
 
 
-        private bool _isProjectOpen;
+        private readonly Dictionary<string, TreeViewFolderNode> _folders = new Dictionary<string, TreeViewFolderNode>();
 
+        public ObservableCollection<TreeViewFolderNode> TreeViewItems { get; } = new();
 
-        public bool IsProjectOpen
+        private ITreeViewNode? _selectedTreeViewItem;
+
+        public ITreeViewNode? SelectedTreeViewItem
         {
-            get => _isProjectOpen;
-            set => this.RaiseAndSetIfChanged(ref _isProjectOpen, value);
+            get => _selectedTreeViewItem;
+            set
+            {
+                _selectedTreeViewItem = value;
+                if (value != null)
+                {
+                    ChangeOpenEditorView(value);
+                }
+            }
         }
 
 
@@ -73,13 +83,16 @@ namespace MC_DataHelper.ViewModels
         public Interaction<OpenFileDialog, string?> ShowOpenFileDialog { get; }
         public Interaction<OpenFolderDialog, string?> ShowOpenFolderDialog { get; }
 
+
+        private bool _isProjectOpen;
+
+        public bool IsProjectOpen
+        {
+            get => _isProjectOpen;
+            set => this.RaiseAndSetIfChanged(ref _isProjectOpen, value);
+        }
+
         private string _footerText = "TIP: No project is open. Navigate to File -> New / Open to begin.";
-        private readonly Dictionary<string, TreeViewFolderNode> _folders = new Dictionary<string, TreeViewFolderNode>();
-
-        public ObservableCollection<TreeViewFolderNode> TreeViewItems { get; } = new();
-
-        public ITreeViewNode? SelectedTreeViewItem { get; set; }
-
 
         public string FooterText
         {
@@ -213,8 +226,7 @@ namespace MC_DataHelper.ViewModels
 
         private void DeleteTreeItem()
         {
-            if (SelectedTreeViewItem?.GetType() != typeof(TreeViewDataNode) || Package == null) return;
-            var node = (TreeViewDataNode)SelectedTreeViewItem;
+            if (Package == null || SelectedTreeViewItem is not TreeViewDataNode node) return;
             Package.DataDefinitions.Remove(node.DataDefinition);
             node.ParentNode.Children.Remove(node);
         }
@@ -282,9 +294,14 @@ namespace MC_DataHelper.ViewModels
 
         private void UpdateViewModels()
         {
-            if (_selectedPackage != null)
+        }
+
+        private void ChangeOpenEditorView(ITreeViewNode iTreeViewNode)
+        {
+            if (iTreeViewNode is not TreeViewDataNode node) return;
+            if (node.DataDefinition is BiomeDataDefinition biomeDataDefinition)
             {
-                BiomeFormViewModel.UpdatePackage();
+                BiomeFormViewModel.UpdateDataSource(biomeDataDefinition);
             }
         }
 

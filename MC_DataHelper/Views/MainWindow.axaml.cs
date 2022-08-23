@@ -22,7 +22,6 @@ namespace MC_DataHelper.Views
         private async Task DoShowDialogAsync(InteractionContext<Unit, BiomeCsvImportViewModel?> interaction)
         {
             var dialog = new BiomeCsvImportWindow();
-
             var result = await dialog.ShowDialog<BiomeCsvImportViewModel?>(this);
             interaction.SetOutput(result);
         }
@@ -40,5 +39,6 @@ namespace MC_DataHelper.Views
             var directoryName = await dialog.ShowAsync(this);
             interaction.SetOutput(directoryName);
         }
+        
     }
 }
