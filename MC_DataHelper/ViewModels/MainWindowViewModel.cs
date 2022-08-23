@@ -17,7 +17,7 @@ namespace MC_DataHelper.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
     {
-        public BiomeFormViewModel BiomeFormViewModel { get; set; }
+        public BiomeFormViewModel BiomeFormViewModel { get; }
 
 
         private ModPackage? _selectedPackage;
@@ -44,21 +44,14 @@ namespace MC_DataHelper.ViewModels
 
         public ObservableCollection<TreeViewFolderNode> TreeViewItems { get; } = new();
 
-        private ITreeViewNode? _selectedTreeViewItem;
+        public ITreeViewNode? SelectedTreeViewItem { get; set; }
 
-        public ITreeViewNode? SelectedTreeViewItem
+
+        public bool EditingExistingBiome
         {
-            get => _selectedTreeViewItem;
-            set
-            {
-                _selectedTreeViewItem = value;
-                if (value != null)
-                {
-                    ChangeOpenEditorView(value);
-                }
-            }
+            get => _editingExistingBiome;
+            set => this.RaiseAndSetIfChanged(ref _editingExistingBiome, value);
         }
-
 
         //File menu commands
         public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
@@ -78,6 +71,7 @@ namespace MC_DataHelper.ViewModels
 
         public ReactiveCommand<Unit, Unit> DeleteTreeItemCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshTreeItemsCommand { get; }
+        public ReactiveCommand<Unit, Unit> EditTreeItemCommand { get; }
 
         public Interaction<Unit, BiomeCsvImportViewModel?> ShowBiomeCsvDialog { get; }
         public Interaction<OpenFileDialog, string?> ShowOpenFileDialog { get; }
@@ -98,6 +92,15 @@ namespace MC_DataHelper.ViewModels
         {
             get => !_isProjectOpen ? "TIP: No project is open. Navigate to File -> New / Open to begin." : _footerText;
             set => this.RaiseAndSetIfChanged(ref _footerText, value);
+        }
+
+        private int _selectedTabIndex;
+        private bool _editingExistingBiome;
+
+        public int SelectedTabIndex
+        {
+            get => _selectedTabIndex;
+            set => this.RaiseAndSetIfChanged(ref _selectedTabIndex, value);
         }
 
         public string ConfigName
@@ -181,6 +184,7 @@ namespace MC_DataHelper.ViewModels
 
             DeleteTreeItemCommand = ReactiveCommand.Create(DeleteTreeItem);
             RefreshTreeItemsCommand = ReactiveCommand.Create(CreateTree);
+            EditTreeItemCommand = ReactiveCommand.Create(EditTreeItem);
 
 
             BiomeCsvWindowCommand = ReactiveCommand.CreateFromTask(async () =>
@@ -191,6 +195,18 @@ namespace MC_DataHelper.ViewModels
             CreateTree();
         }
 
+        private void EditTreeItem()
+        {
+            if (SelectedTreeViewItem is not TreeViewDataNode node) return;
+            switch (node.DataDefinition)
+            {
+                case BiomeDataDefinition biomeDataDefinition:
+                    BiomeFormViewModel.UpdateDataSource(biomeDataDefinition, node);
+                    SelectedTabIndex = 1;
+                    break;
+            }
+        }
+
         public void AddDataDefinition(IDataDefinition dataDefinition)
         {
             if (Package == null) return;
@@ -198,7 +214,7 @@ namespace MC_DataHelper.ViewModels
             AddTreeItem(dataDefinition);
         }
 
-        public void CreateTree()
+        private void CreateTree()
         {
             TreeViewItems.Clear();
             _folders.Clear();
@@ -294,15 +310,6 @@ namespace MC_DataHelper.ViewModels
 
         private void UpdateViewModels()
         {
-        }
-
-        private void ChangeOpenEditorView(ITreeViewNode iTreeViewNode)
-        {
-            if (iTreeViewNode is not TreeViewDataNode node) return;
-            if (node.DataDefinition is BiomeDataDefinition biomeDataDefinition)
-            {
-                BiomeFormViewModel.UpdateDataSource(biomeDataDefinition);
-            }
         }
 
         public ValidationContext ValidationContext { get; } = new ValidationContext();

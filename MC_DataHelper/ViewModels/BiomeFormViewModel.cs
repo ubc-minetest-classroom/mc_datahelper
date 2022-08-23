@@ -11,12 +11,28 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 {
     private BiomeDataDefinition _data = new();
 
-    readonly MainWindowViewModel _mainWindowViewModel;
+    private TreeViewDataNode? _selectedNode;
+
+    private TreeViewDataNode? SelectedNode
+    {
+        get => _selectedNode;
+        set
+        {
+            _selectedNode = value;
+            _mainWindowViewModel.EditingExistingBiome = value != null;
+        }
+    }
+
+    private readonly MainWindowViewModel _mainWindowViewModel;
 
     public string BiomeName
     {
         get => _data.DataName;
-        set => _data.DataName = value;
+        set
+        {
+            _data.DataName = value;
+            SelectedNode?.refreshLabel();
+        }
     }
 
     public string? NodeDust
@@ -151,28 +167,16 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         }
     }
 
-    public string HeatPoint
+    public int HeatPoint
     {
-        get => _data.HeatPoint.ToString();
-        set
-        {
-            if (int.TryParse(value, out var number))
-            {
-                _data.HeatPoint = number;
-            }
-        }
+        get => _data.HeatPoint;
+        set => _data.HeatPoint = value;
     }
 
-    public string HumidityPoint
+    public int HumidityPoint
     {
-        get => _data.HumidityPoint.ToString();
-        set
-        {
-            if (int.TryParse(value, out var number))
-            {
-                _data.HumidityPoint = number;
-            }
-        }
+        get => _data.HumidityPoint;
+        set => _data.HumidityPoint = value;
     }
 
     public ReactiveCommand<Unit, Unit> SubmitFormCommand { get; }
@@ -194,7 +198,6 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 
     public ValidationContext ValidationContext { get; } = new ValidationContext();
 
-
     private void SubmitForm()
     {
         _mainWindowViewModel.AddDataDefinition(_data);
@@ -203,6 +206,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 
     private void ClearForm()
     {
+        SelectedNode = null;
         _data = new BiomeDataDefinition();
         UpdateProperties();
     }
@@ -229,11 +233,9 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         this.RaisePropertyChanged(nameof(HumidityPoint));
     }
 
-    public void UpdateDataSource(BiomeDataDefinition nodeDataDefinition)
+    public void UpdateDataSource(BiomeDataDefinition nodeDataDefinition, TreeViewDataNode treeViewDataNode)
     {
         _data = nodeDataDefinition;
         UpdateProperties();
     }
-
- 
 }

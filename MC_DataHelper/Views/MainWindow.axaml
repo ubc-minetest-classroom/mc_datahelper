@@ -58,9 +58,10 @@
                     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
                         <Button Margin="4" Command="{Binding RefreshTreeItemsCommand}">Refresh Items</Button>
                         <Button Margin="4" Command="{Binding DeleteTreeItemCommand}">Delete Item</Button>
+                        <Button Margin="4" Command="{Binding EditTreeItemCommand}">Edit Item</Button>
                     </StackPanel>
 
-                    <TreeView DockPanel.Dock="Top" Items="{Binding TreeViewItems}" SelectionMode="AlwaysSelected" SelectedItem="{Binding SelectedTreeViewItem}">
+                    <TreeView DockPanel.Dock="Top" Items="{Binding TreeViewItems}" SelectionMode="Single" SelectedItem="{Binding SelectedTreeViewItem}">
                         <TreeView.ItemTemplate>
                             <TreeDataTemplate ItemsSource="{Binding Children}">
                                 <TextBlock Text="{Binding Label}" />
@@ -71,7 +72,7 @@
             </SplitView.Pane>
 
 
-            <TabControl>
+            <TabControl SelectedIndex="{Binding SelectedTabIndex}">
                 <TabItem Header="Overview">
                     <ScrollViewer AllowAutoHide="True">
                         <StackPanel>
@@ -142,17 +143,17 @@
 
                             <Panel Margin="8" ToolTip.Tip="Characteristic temperature for the biome.">
                                 <TextBlock>Heat_Point</TextBlock>
-                                <Slider Value="{Binding BiomeFormViewModel.HeatPoint, Mode=TwoWay}" Minimum="-15" Maximum="115" />
+                                <Slider Value="{Binding BiomeFormViewModel.HeatPoint, Mode=TwoWay}" Minimum="0" Maximum="100"  TickFrequency="1"/>
                             </Panel>
 
                             <Panel Margin="8" ToolTip.Tip="Characteristic humidity for the biome.">
                                 <TextBlock>Humidity_Point</TextBlock>
-                                <Slider Value="{Binding BiomeFormViewModel.HumidityPoint, Mode=TwoWay}" Minimum="-15" Maximum="115" />
+                                <Slider Value="{Binding BiomeFormViewModel.HumidityPoint, Mode=TwoWay}" Minimum="0" Maximum="100" TickFrequency="1"/>
                             </Panel>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Command="{Binding BiomeFormViewModel.SubmitFormCommand }" Margin="8">Add Biome</Button>
-                                <Button Command="{Binding BiomeFormViewModel.ClearFormCommand }" Margin="8">Clear Form</Button>
+                                <Button Command="{Binding BiomeFormViewModel.SubmitFormCommand }" Margin="8"  IsEnabled="{Binding !EditingExistingBiome}">Add Biome</Button>
+                                <Button Command="{Binding BiomeFormViewModel.ClearFormCommand }" Margin="8">New Biome</Button>
                             </StackPanel>
 
                         </StackPanel>
