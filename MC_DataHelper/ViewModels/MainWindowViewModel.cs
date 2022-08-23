@@ -66,6 +66,8 @@ namespace MC_DataHelper.ViewModels
         public ReactiveCommand<Unit, Unit> PasteCommand { get; }
 
         public ReactiveCommand<Unit, Unit> BiomeCsvWindowCommand { get; }
+        
+        public ReactiveCommand<Unit, Unit> DeleteTreeItemCommand { get; }
 
         public Interaction<Unit, BiomeCsvImportViewModel?> ShowBiomeCsvDialog { get; }
         public Interaction<OpenFileDialog, string?> ShowOpenFileDialog { get; }
@@ -74,6 +76,9 @@ namespace MC_DataHelper.ViewModels
         private string _footerText = "TIP: No project is open. Navigate to File -> New / Open to begin.";
 
         public ObservableCollection<TreeViewFolderNode> TreeViewItems { get; } = new();
+        
+        public TreeViewNode SelectedTreeViewItem { get; set; }
+
 
         public string FooterText
         {
@@ -157,6 +162,9 @@ namespace MC_DataHelper.ViewModels
             RedoCommand = ReactiveCommand.Create(() => { });
             CopyCommand = ReactiveCommand.Create(() => { });
             PasteCommand = ReactiveCommand.Create(() => { });
+            
+            
+            DeleteTreeItemCommand = ReactiveCommand.Create(DeleteTreeItem);
 
 
             BiomeCsvWindowCommand = ReactiveCommand.CreateFromTask(async () =>
@@ -165,6 +173,15 @@ namespace MC_DataHelper.ViewModels
             });
 
             UpdateTree();
+        }
+
+        private void DeleteTreeItem()
+        {
+            if (SelectedTreeViewItem.GetType() == typeof(TreeViewDataNode))
+            {
+                Package.DataDefinitions.Remove((SelectedTreeViewItem as TreeViewDataNode).DataDefinition);
+                UpdateTree();
+            }
         }
 
         public void UpdateTree()

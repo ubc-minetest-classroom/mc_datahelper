@@ -117,12 +117,14 @@ public class ModPackage
             "json_importer.loadDirectory(minetest.get_modpath(minetest.get_current_modname()) .. \"\\\\data\\\\\")";
         await File.WriteAllTextAsync($"{path}/init.lua", initString);
 
+        Directory.CreateDirectory($"{path}/data");
+        
         foreach (var dataDefinition in DataDefinitions)
         {
             var oldName = dataDefinition.DataName;
 
-            var folder = dataDefinition.JsonType.ToLower();
-            var filePath = $"{path}/data/{folder}s";
+            var folderName = dataDefinition.JsonType.ToLower();
+            var filePath = $"{path}/data/{folderName}s";
             var filename = FileNameHelper.NextAvailableFilename($"{filePath}/{oldName}.json");
 
             dataDefinition.DataName = $"{Config.Name}:{dataDefinition.DataName}";

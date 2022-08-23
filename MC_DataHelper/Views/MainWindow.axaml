@@ -56,11 +56,10 @@
                 <DockPanel>
 
                     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
-                        <Button Margin="4">New Item</Button>
-                        <Button Margin="4">Delete Item</Button>
+                        <Button Margin="4" Command="{Binding DeleteTreeItemCommand}">Delete Item</Button>
                     </StackPanel>
 
-                    <TreeView DockPanel.Dock="Top" Items="{Binding TreeViewItems}" SelectionMode="AlwaysSelected">
+                    <TreeView DockPanel.Dock="Top" Items="{Binding TreeViewItems}" SelectionMode="AlwaysSelected" SelectedItem="{Binding SelectedTreeViewItem}">
                         <TreeView.ItemTemplate>
                             <TreeDataTemplate ItemsSource="{Binding Children}">
                                 <TextBlock Text="{Binding Label}" />
