@@ -1,7 +1,263 @@
-﻿namespace MC_DataHelper.ViewModels
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using MC_DataHelper.Models;
+using MC_DataHelper.ViewModels.DataTreeView;
+using ReactiveUI;
+using ReactiveUI.Validation.Abstractions;
+using ReactiveUI.Validation.Contexts;
+
+namespace MC_DataHelper.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
     {
-        public string Greeting => "Welcome to Avalonia!";
+        public BiomeFormViewModel BiomeFormViewModel { get; set; }
+
+
+        private ModPackage? _selectedPackage;
+
+        private ModPackage? Package
+        {
+            get => _selectedPackage;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedPackage, value);
+                IsProjectOpen = value != null;
+
+                this.RaisePropertyChanged(nameof(ConfigName));
+                this.RaisePropertyChanged(nameof(ConfigDescription));
+                this.RaisePropertyChanged(nameof(ConfigDependencies));
+                this.RaisePropertyChanged(nameof(ConfigOptionalDependencies));
+                this.RaisePropertyChanged(nameof(ConfigAuthor));
+                this.RaisePropertyChanged(nameof(ConfigTitle));
+            }
+        }
+
+
+        private bool _isProjectOpen = false;
+
+
+        public bool IsProjectOpen
+        {
+            get => _isProjectOpen;
+            set => this.RaiseAndSetIfChanged(ref _isProjectOpen, value);
+        }
+
+
+        //File menu commands
+        public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
+        public ReactiveCommand<Unit, Unit> OpenProjectCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveProjectCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveProjectAsCommand { get; }
+        public ReactiveCommand<Unit, Unit> ExitCommand { get; }
+
+
+        //Edit menu commands
+        public ReactiveCommand<Unit, Unit> UndoCommand { get; }
+        public ReactiveCommand<Unit, Unit> RedoCommand { get; }
+        public ReactiveCommand<Unit, Unit> CopyCommand { get; }
+        public ReactiveCommand<Unit, Unit> PasteCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> BiomeCsvWindowCommand { get; }
+
+        public Interaction<Unit, BiomeCsvImportViewModel?> ShowBiomeCsvDialog { get; }
+        public Interaction<OpenFileDialog, string?> ShowOpenFileDialog { get; }
+        public Interaction<OpenFolderDialog, string?> ShowOpenFolderDialog { get; }
+
+        private string _footerText = "TIP: No project is open. Navigate to File -> New / Open to begin.";
+
+        public ObservableCollection<TreeViewFolderNode> TreeViewItems { get; } = new();
+
+        public string FooterText
+        {
+            get => !_isProjectOpen ? "TIP: No project is open. Navigate to File -> New / Open to begin." : _footerText;
+            set => this.RaiseAndSetIfChanged(ref _footerText, value);
+        }
+
+        public string ConfigName
+        {
+            get => Package?.Config.Name ?? string.Empty;
+            set
+            {
+                if (Package != null) Package.Config.Name = value;
+            }
+        }
+
+        public string ConfigDescription
+        {
+            get => Package?.Config.Description ?? string.Empty;
+            set
+            {
+                if (Package != null) Package.Config.Description = value;
+            }
+        }
+
+        public string ConfigDependencies
+        {
+            get => Package?.Config.Dependencies ?? string.Empty;
+            set
+            {
+                if (Package != null) Package.Config.Dependencies = value;
+            }
+        }
+
+        public string ConfigOptionalDependencies
+        {
+            get => Package?.Config.OptionalDependencies ?? string.Empty;
+            set
+            {
+                if (Package != null) Package.Config.OptionalDependencies = value;
+            }
+        }
+
+        public string ConfigAuthor
+        {
+            get => Package?.Config.Author ?? string.Empty;
+            set
+            {
+                if (Package != null) Package.Config.Author = value;
+            }
+        }
+
+        public string ConfigTitle
+        {
+            get => Package?.Config.Title ?? string.Empty;
+            set
+            {
+                if (Package != null) Package.Config.Title = value;
+            }
+        }
+
+        // Initialize everything
+        public MainWindowViewModel()
+        {
+            BiomeFormViewModel = new BiomeFormViewModel(this, Package);
+
+            ShowBiomeCsvDialog = new Interaction<Unit, BiomeCsvImportViewModel?>();
+            ShowOpenFileDialog = new Interaction<OpenFileDialog, string?>();
+            ShowOpenFolderDialog = new Interaction<OpenFolderDialog, string?>();
+
+            NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectAsync);
+            OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectAsync);
+            SaveProjectCommand = ReactiveCommand.CreateFromTask(SaveProjectAsync);
+            SaveProjectAsCommand = ReactiveCommand.CreateFromTask(SaveProjectAsAsync);
+            ExitCommand = ReactiveCommand.Create(() =>
+            {
+                if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                    desktop.Shutdown();
+            });
+            UndoCommand = ReactiveCommand.Create(() => { });
+            RedoCommand = ReactiveCommand.Create(() => { });
+            CopyCommand = ReactiveCommand.Create(() => { });
+            PasteCommand = ReactiveCommand.Create(() => { });
+
+
+            BiomeCsvWindowCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var result = await ShowBiomeCsvDialog.Handle(Unit.Default);
+            });
+
+            UpdateTree();
+        }
+
+        public void UpdateTree()
+        {
+            TreeViewItems.Clear();
+            if (Package?.DataDefinitions == null) return;
+
+            var folders = new Dictionary<string, TreeViewFolderNode>();
+
+            foreach (var dataDefinition in Package.DataDefinitions)
+            {
+                if (!folders.TryGetValue(dataDefinition.JsonType, out var folder))
+                {
+                    folder = new TreeViewFolderNode($"{dataDefinition.JsonType}s");
+                    folders.Add(dataDefinition.JsonType, folder);
+                    TreeViewItems.Add(folder);
+                }
+
+                folder.Children.Add(new TreeViewDataNode(dataDefinition));
+            }
+        }
+
+        private async Task SaveProjectAsync()
+        {
+            if (Package != null) await Package.SavePackageToDisk(Environment.CurrentDirectory);
+
+            UpdateViewModels();
+            UpdateTree();
+        }
+
+        private async Task SaveProjectAsAsync()
+        {
+            var directoryPath = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
+            {
+                Title = "Select a folder to save the project to.",
+                Directory = Environment.CurrentDirectory,
+            });
+            if (directoryPath != null)
+            {
+                Environment.CurrentDirectory = directoryPath;
+                if (Package != null) await Package.SavePackageToDisk(directoryPath);
+            }
+
+            UpdateViewModels();
+            UpdateTree();
+        }
+
+        private async Task NewProjectAsync()
+        {
+            var directoryPath = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
+            {
+                Title = "Select a folder to create a new project in",
+                Directory = Environment.CurrentDirectory,
+            });
+            if (directoryPath != null)
+            {
+                Environment.CurrentDirectory = directoryPath;
+                Package = new ModPackage();
+
+                FooterText = directoryPath;
+                // Package.SavePackageToDisk(fileName);
+            }
+
+            UpdateViewModels();
+            UpdateTree();
+        }
+
+        private async Task OpenProjectAsync()
+        {
+            var directoryPath = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
+            {
+                Title = "Select a folder to open a project from",
+                Directory = Environment.CurrentDirectory,
+            });
+            if (directoryPath != null)
+            {
+                Environment.CurrentDirectory = directoryPath;
+                Package = await ModPackage.LoadPackageFromDisk(directoryPath);
+                FooterText = directoryPath;
+            }
+
+            UpdateViewModels();
+            UpdateTree();
+        }
+
+        private void UpdateViewModels()
+        {
+            if (_selectedPackage != null)
+            {
+                BiomeFormViewModel.UpdatePackage(_selectedPackage);
+            }
+        }
+
+        public ValidationContext ValidationContext { get; } = new ValidationContext();
     }
 }
