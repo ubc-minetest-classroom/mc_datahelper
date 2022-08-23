@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -41,7 +40,7 @@ namespace MC_DataHelper.ViewModels
         }
 
 
-        private bool _isProjectOpen = false;
+        private bool _isProjectOpen;
 
 
         public bool IsProjectOpen
@@ -74,10 +73,11 @@ namespace MC_DataHelper.ViewModels
         public Interaction<OpenFolderDialog, string?> ShowOpenFolderDialog { get; }
 
         private string _footerText = "TIP: No project is open. Navigate to File -> New / Open to begin.";
+        private readonly Dictionary<string, TreeViewFolderNode> _folders = new Dictionary<string, TreeViewFolderNode>();
 
         public ObservableCollection<TreeViewFolderNode> TreeViewItems { get; } = new();
 
-        public ITreeViewNode SelectedTreeViewItem { get; set; }
+        public ITreeViewNode? SelectedTreeViewItem { get; set; }
 
 
         public string FooterText
@@ -143,9 +143,10 @@ namespace MC_DataHelper.ViewModels
         // Initialize everything
         public MainWindowViewModel()
         {
-            BiomeFormViewModel = new BiomeFormViewModel(this, Package);
+            BiomeFormViewModel = new BiomeFormViewModel(this);
 
             ShowBiomeCsvDialog = new Interaction<Unit, BiomeCsvImportViewModel?>();
+            _isProjectOpen = false;
             ShowOpenFileDialog = new Interaction<OpenFileDialog, string?>();
             ShowOpenFolderDialog = new Interaction<OpenFolderDialog, string?>();
 
@@ -169,41 +170,53 @@ namespace MC_DataHelper.ViewModels
 
             BiomeCsvWindowCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var result = await ShowBiomeCsvDialog.Handle(Unit.Default);
+                await ShowBiomeCsvDialog.Handle(Unit.Default);
             });
 
             CreateTree();
         }
 
-        private void DeleteTreeItem()
+        public void AddDataDefinition(IDataDefinition dataDefinition)
         {
-            if (SelectedTreeViewItem.GetType() == typeof(TreeViewDataNode))
-            {
-                var node = (TreeViewDataNode)SelectedTreeViewItem;
-                Package.DataDefinitions.Remove(node.DataDefinition);
-                node.ParentNode.Children.Remove(node);
-                //  CreateTree();
-            }
+            if (Package == null) return;
+            Package.DataDefinitions.Add(dataDefinition);
+            AddTreeItem(dataDefinition);
         }
 
         public void CreateTree()
         {
             TreeViewItems.Clear();
+            _folders.Clear();
+
             if (Package?.DataDefinitions == null) return;
 
-            var folders = new Dictionary<string, TreeViewFolderNode>();
 
             foreach (var dataDefinition in Package.DataDefinitions)
             {
-                if (!folders.TryGetValue(dataDefinition.JsonType, out var folder))
-                {
-                    folder = new TreeViewFolderNode($"{dataDefinition.JsonType}s");
-                    folders.Add(dataDefinition.JsonType, folder);
-                    TreeViewItems.Add(folder);
-                }
-
-                folder.Children.Add(new TreeViewDataNode(folder, dataDefinition));
+                AddTreeItem(dataDefinition);
             }
+        }
+
+        private void AddTreeItem(IDataDefinition dataDefinition)
+        {
+            if (!_folders.TryGetValue(dataDefinition.JsonType, out var folder))
+            {
+                folder = new TreeViewFolderNode($"{dataDefinition.JsonType}s");
+                _folders.Add(dataDefinition.JsonType, folder);
+                TreeViewItems.Add(folder);
+            }
+
+            folder.Children.Add(new TreeViewDataNode(folder, dataDefinition));
+        }
+
+        private void DeleteTreeItem()
+        {
+            if (SelectedTreeViewItem?.GetType() != typeof(TreeViewDataNode) || Package == null) return;
+            var node = (TreeViewDataNode)SelectedTreeViewItem;
+            Package.DataDefinitions.Remove(node.DataDefinition);
+            node.ParentNode.Children.Remove(node);
+
+            //  CreateTree();
         }
 
         private async Task SaveProjectAsync()
@@ -273,7 +286,7 @@ namespace MC_DataHelper.ViewModels
         {
             if (_selectedPackage != null)
             {
-                BiomeFormViewModel.UpdatePackage(_selectedPackage);
+                BiomeFormViewModel.UpdatePackage();
             }
         }
 

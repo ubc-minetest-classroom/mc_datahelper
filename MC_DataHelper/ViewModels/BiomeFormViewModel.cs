@@ -10,9 +10,8 @@ namespace MC_DataHelper.ViewModels;
 public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 {
     private BiomeDataDefinition _data = new();
-    private ModPackage _parentPackage;
 
-    MainWindowViewModel _mainWindowViewModel;
+    readonly MainWindowViewModel _mainWindowViewModel;
 
     public string BiomeName
     {
@@ -180,11 +179,10 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 
     public ReactiveCommand<Unit, Unit> ClearFormCommand { get; }
 
-    public BiomeFormViewModel(MainWindowViewModel mainWindowViewModel, ModPackage parentPackage)
+    public BiomeFormViewModel(MainWindowViewModel mainWindowViewModel)
     {
         _mainWindowViewModel = mainWindowViewModel;
         
-        _parentPackage = parentPackage;
         SubmitFormCommand = ReactiveCommand.Create(SubmitForm);
         ClearFormCommand = ReactiveCommand.Create(ClearForm);
 
@@ -198,14 +196,14 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 
 
     private void SubmitForm()
-    {
-        _parentPackage.DataDefinitions.Add(_data);
+    { 
+        _mainWindowViewModel.AddDataDefinition(_data);
         ClearForm();
     }
 
     private void ClearForm()
     {
-        _data = new();
+        _data = new BiomeDataDefinition();
         UpdateProperties();
     }
 
@@ -233,9 +231,8 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         _mainWindowViewModel.CreateTree();
     }
 
-    public void UpdatePackage(ModPackage selectedPackage)
+    public void UpdatePackage()
     {
-        _parentPackage = selectedPackage;
         UpdateProperties();
     }
 }
