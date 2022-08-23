@@ -182,7 +182,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
     public BiomeFormViewModel(MainWindowViewModel mainWindowViewModel)
     {
         _mainWindowViewModel = mainWindowViewModel;
-        
+
         SubmitFormCommand = ReactiveCommand.Create(SubmitForm);
         ClearFormCommand = ReactiveCommand.Create(ClearForm);
 
@@ -196,7 +196,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 
 
     private void SubmitForm()
-    { 
+    {
         _mainWindowViewModel.AddDataDefinition(_data);
         ClearForm();
     }
@@ -227,8 +227,6 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         this.RaisePropertyChanged(nameof(VerticalBlend));
         this.RaisePropertyChanged(nameof(HeatPoint));
         this.RaisePropertyChanged(nameof(HumidityPoint));
-        
-        _mainWindowViewModel.CreateTree();
     }
 
     public void UpdatePackage()
