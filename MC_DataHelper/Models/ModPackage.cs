@@ -70,7 +70,7 @@ public class ModPackage
                 continue;
             }
 
-            switch (jsonType.ToLower())
+            switch (jsonType.ToLowerInvariant())
             {
                 case "biome":
                     dataDefinition = jsonObject.ToObject<BiomeDataDefinition>();
