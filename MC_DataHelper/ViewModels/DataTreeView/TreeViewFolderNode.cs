@@ -2,7 +2,7 @@
 
 namespace MC_DataHelper.ViewModels.DataTreeView;
 
-public class TreeViewFolderNode : TreeViewNode
+public class TreeViewFolderNode : ITreeViewNode
 {
     public TreeViewFolderNode(string label)
     {

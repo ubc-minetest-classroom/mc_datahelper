@@ -3,10 +3,11 @@ using MC_DataHelper.Models;
 
 namespace MC_DataHelper.ViewModels;
 
-public class TreeViewDataNode : TreeViewNode
+public class TreeViewDataNode : ITreeViewNode
 {
-    public TreeViewDataNode(IDataDefinition dataDefinition)
+    public TreeViewDataNode(ITreeViewNode parentNode, IDataDefinition dataDefinition)
     {
+        this.ParentNode = parentNode;
         DataDefinition = dataDefinition;
         Children = null;
     }
@@ -16,4 +17,5 @@ public class TreeViewDataNode : TreeViewNode
     public string Label => DataDefinition.DataName;
 
     public ObservableCollection<TreeViewDataNode> Children { get; set; }
+    public ITreeViewNode ParentNode { get; }
 }

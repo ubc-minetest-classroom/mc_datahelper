@@ -66,7 +66,7 @@ namespace MC_DataHelper.ViewModels
         public ReactiveCommand<Unit, Unit> PasteCommand { get; }
 
         public ReactiveCommand<Unit, Unit> BiomeCsvWindowCommand { get; }
-        
+
         public ReactiveCommand<Unit, Unit> DeleteTreeItemCommand { get; }
 
         public Interaction<Unit, BiomeCsvImportViewModel?> ShowBiomeCsvDialog { get; }
@@ -76,8 +76,8 @@ namespace MC_DataHelper.ViewModels
         private string _footerText = "TIP: No project is open. Navigate to File -> New / Open to begin.";
 
         public ObservableCollection<TreeViewFolderNode> TreeViewItems { get; } = new();
-        
-        public TreeViewNode SelectedTreeViewItem { get; set; }
+
+        public ITreeViewNode SelectedTreeViewItem { get; set; }
 
 
         public string FooterText
@@ -162,8 +162,8 @@ namespace MC_DataHelper.ViewModels
             RedoCommand = ReactiveCommand.Create(() => { });
             CopyCommand = ReactiveCommand.Create(() => { });
             PasteCommand = ReactiveCommand.Create(() => { });
-            
-            
+
+
             DeleteTreeItemCommand = ReactiveCommand.Create(DeleteTreeItem);
 
 
@@ -172,19 +172,21 @@ namespace MC_DataHelper.ViewModels
                 var result = await ShowBiomeCsvDialog.Handle(Unit.Default);
             });
 
-            UpdateTree();
+            CreateTree();
         }
 
         private void DeleteTreeItem()
         {
             if (SelectedTreeViewItem.GetType() == typeof(TreeViewDataNode))
             {
-                Package.DataDefinitions.Remove((SelectedTreeViewItem as TreeViewDataNode).DataDefinition);
-                UpdateTree();
+                var node = (TreeViewDataNode)SelectedTreeViewItem;
+                Package.DataDefinitions.Remove(node.DataDefinition);
+                node.ParentNode.Children.Remove(node);
+                //  CreateTree();
             }
         }
 
-        public void UpdateTree()
+        public void CreateTree()
         {
             TreeViewItems.Clear();
             if (Package?.DataDefinitions == null) return;
@@ -200,7 +202,7 @@ namespace MC_DataHelper.ViewModels
                     TreeViewItems.Add(folder);
                 }
 
-                folder.Children.Add(new TreeViewDataNode(dataDefinition));
+                folder.Children.Add(new TreeViewDataNode(folder, dataDefinition));
             }
         }
 
@@ -209,7 +211,7 @@ namespace MC_DataHelper.ViewModels
             if (Package != null) await Package.SavePackageToDisk(Environment.CurrentDirectory);
 
             UpdateViewModels();
-            UpdateTree();
+            CreateTree();
         }
 
         private async Task SaveProjectAsAsync()
@@ -226,7 +228,7 @@ namespace MC_DataHelper.ViewModels
             }
 
             UpdateViewModels();
-            UpdateTree();
+            CreateTree();
         }
 
         private async Task NewProjectAsync()
@@ -246,7 +248,7 @@ namespace MC_DataHelper.ViewModels
             }
 
             UpdateViewModels();
-            UpdateTree();
+            CreateTree();
         }
 
         private async Task OpenProjectAsync()
@@ -264,7 +266,7 @@ namespace MC_DataHelper.ViewModels
             }
 
             UpdateViewModels();
-            UpdateTree();
+            CreateTree();
         }
 
         private void UpdateViewModels()

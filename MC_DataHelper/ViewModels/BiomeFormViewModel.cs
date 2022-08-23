@@ -230,7 +230,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         this.RaisePropertyChanged(nameof(HeatPoint));
         this.RaisePropertyChanged(nameof(HumidityPoint));
         
-        _mainWindowViewModel.UpdateTree();
+        _mainWindowViewModel.CreateTree();
     }
 
     public void UpdatePackage(ModPackage selectedPackage)
