@@ -14,11 +14,23 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 
     MainWindowViewModel _mainWindowViewModel;
 
-    public string BiomeName => _data.DataName;
+    public string BiomeName
+    {
+        get => _data.DataName;
+        set => _data.DataName = value;
+    }
 
-    public string? NodeDust => _data.NodeDust;
+    public string? NodeDust
+    {
+        get => _data.NodeDust;
+        set => _data.NodeDust = value;
+    }
 
-    public string NodeTop => _data.NodeTop;
+    public string NodeTop
+    {
+        get => _data.NodeTop;
+        set => _data.NodeTop = value;
+    }
 
     public string DepthTop
     {
@@ -32,7 +44,11 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         }
     }
 
-    public string NodeFiller => _data.NodeFiller;
+    public string NodeFiller
+    {
+        get => _data.NodeFiller;
+        set => _data.NodeFiller = value;
+    }
 
     public string DepthFiller
     {
@@ -46,9 +62,17 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         }
     }
 
-    public string NodeStone => _data.NodeStone;
+    public string NodeStone
+    {
+        get => _data.NodeStone;
+        set => _data.NodeStone = value;
+    }
 
-    public string NodeWaterTop => _data.NodeWaterTop;
+    public string NodeWaterTop
+    {
+        get => _data.NodeWaterTop;
+        set => _data.NodeWaterTop = value;
+    }
 
     public string DepthWaterTop
     {
@@ -62,9 +86,17 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         }
     }
 
-    public string NodeWater => _data.NodeWater;
+    public string NodeWater
+    {
+        get => _data.NodeWater;
+        set => _data.NodeWater = value;
+    }
 
-    public string NodeRiverbed => _data.NodeRiverbed;
+    public string NodeRiverbed
+    {
+        get => _data.NodeRiverbed;
+        set => _data.NodeRiverbed = value;
+    }
 
     public string DepthRiverbed
     {
@@ -78,7 +110,11 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         }
     }
 
-    public string NodeCaveLiquid => _data.NodeCaveLiquid;
+    public string NodeCaveLiquid
+    {
+        get => _data.NodeCaveLiquid;
+        set => _data.NodeCaveLiquid = value;
+    }
 
     public string YMin
     {

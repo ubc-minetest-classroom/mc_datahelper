@@ -40,12 +40,8 @@ namespace MC_DataHelper.ViewModels
             }
         }
 
-        // In debug mode, we'll default to the project being set as open so that we can test the UI.
-#if DEBUG
-        private bool _isProjectOpen = true;
-#else
+
         private bool _isProjectOpen = false;
-#endif
 
 
         public bool IsProjectOpen
@@ -142,7 +138,7 @@ namespace MC_DataHelper.ViewModels
         // Initialize everything
         public MainWindowViewModel()
         {
-            BiomeFormViewModel = new BiomeFormViewModel(this,Package);
+            BiomeFormViewModel = new BiomeFormViewModel(this, Package);
 
             ShowBiomeCsvDialog = new Interaction<Unit, BiomeCsvImportViewModel?>();
             ShowOpenFileDialog = new Interaction<OpenFileDialog, string?>();
@@ -216,7 +212,6 @@ namespace MC_DataHelper.ViewModels
             UpdateTree();
         }
 
-
         private async Task NewProjectAsync()
         {
             var directoryPath = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
@@ -257,7 +252,10 @@ namespace MC_DataHelper.ViewModels
 
         private void UpdateViewModels()
         {
-            BiomeFormViewModel.UpdatePackage(_selectedPackage);
+            if (_selectedPackage != null)
+            {
+                BiomeFormViewModel.UpdatePackage(_selectedPackage);
+            }
         }
 
         public ValidationContext ValidationContext { get; } = new ValidationContext();

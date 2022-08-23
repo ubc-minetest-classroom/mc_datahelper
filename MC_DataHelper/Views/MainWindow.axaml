@@ -99,55 +99,55 @@
                 <TabItem Header="Biomes">
                     <ScrollViewer AllowAutoHide="True">
                         <StackPanel>
-                            <TextBox Text="{Binding BiomeFormViewModel.BiomeName}" Watermark="Biome Name"
+                            <TextBox Text="{Binding BiomeFormViewModel.BiomeName, Mode=TwoWay}" Watermark="Biome Name"
                                      ToolTip.Tip="The name of the biome." Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.NodeDust}" Watermark="Node_Dust"
+                            <TextBox Text="{Binding BiomeFormViewModel.NodeDust, Mode=TwoWay}" Watermark="Node_Dust"
                                      ToolTip.Tip="Node dropped onto upper surface after all else is generated."
                                      Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.NodeTop}" Watermark="Node_Top"
+                            <TextBox Text="{Binding BiomeFormViewModel.NodeTop, Mode=TwoWay}" Watermark="Node_Top"
                                      ToolTip.Tip="Node forming surface layer of biome and thickness of this layer."
                                      Margin="8" />
 
-                            <TextBox Text="{Binding BiomeFormViewModel.DepthTop}" Watermark="Depth_Top"
+                            <TextBox Text="{Binding BiomeFormViewModel.DepthTop, Mode=TwoWay}" Watermark="Depth_Top"
                                      ToolTip.Tip="Depth of the top node layer." Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.NodeFiller}" Watermark="Node_Filler"
+                            <TextBox Text="{Binding BiomeFormViewModel.NodeFiller, Mode=TwoWay}" Watermark="Node_Filler"
                                      ToolTip.Tip="Node forming lower layer of biome and thickness of this layer."
                                      Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.DepthFiller}" Watermark="Depth_Filler"
+                            <TextBox Text="{Binding BiomeFormViewModel.DepthFiller, Mode=TwoWay}" Watermark="Depth_Filler"
                                      ToolTip.Tip="Depth of the filler node layer." Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.NodeStone}" Watermark="Node_Stone"
+                            <TextBox Text="{Binding BiomeFormViewModel.NodeStone, Mode=TwoWay}" Watermark="Node_Stone"
                                      ToolTip.Tip="Node that forms the layer between roughly y_min and y_max.."
                                      Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.NodeWaterTop}" Watermark="Node_Water_Top"
+                            <TextBox Text="{Binding BiomeFormViewModel.NodeWaterTop, Mode=TwoWay}" Watermark="Node_Water_Top"
                                      ToolTip.Tip="Node forming a surface layer in seawater with the defined thickness."
                                      Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.DepthWaterTop}" Watermark="Depth_Water_Top"
+                            <TextBox Text="{Binding BiomeFormViewModel.DepthWaterTop, Mode=TwoWay}" Watermark="Depth_Water_Top"
                                      ToolTip.Tip="Depth of the top water layer." Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.NodeWater}" Watermark="Node_Water"
+                            <TextBox Text="{Binding BiomeFormViewModel.NodeWater, Mode=TwoWay}" Watermark="Node_Water"
                                      ToolTip.Tip="Node that replaces all seawater nodes not in the surface layer."
                                      Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.NodeRiverbed}" Watermark="Node_Riverbed"
+                            <TextBox Text="{Binding BiomeFormViewModel.NodeRiverbed, Mode=TwoWay}" Watermark="Node_Riverbed"
                                      ToolTip.Tip="Node placed under river water." Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.DepthRiverbed}" Watermark="Depth_Riverbed"
+                            <TextBox Text="{Binding BiomeFormViewModel.DepthRiverbed, Mode=TwoWay}" Watermark="Depth_Riverbed"
                                      ToolTip.Tip="Thickness of the layer placed under river water." Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.NodeCaveLiquid}" Watermark="Node_Cave_Liquid"
+                            <TextBox Text="{Binding BiomeFormViewModel.NodeCaveLiquid, Mode=TwoWay}" Watermark="Node_Cave_Liquid"
                                      ToolTip.Tip="Nodes placed inside 50% of the medium size caves." Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.YMin}" Watermark="Y_Min"
+                            <TextBox Text="{Binding BiomeFormViewModel.YMin, Mode=TwoWay}" Watermark="Y_Min"
                                      ToolTip.Tip="Lower limit for the biome." Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.YMax}" Watermark="Y_Max"
+                            <TextBox Text="{Binding BiomeFormViewModel.YMax, Mode=TwoWay}" Watermark="Y_Max"
                                      ToolTip.Tip="Upper limit for the biome." Margin="8" />
-                            <TextBox Text="{Binding BiomeFormViewModel.VerticalBlend}" Watermark="Vertical_Blend"
+                            <TextBox Text="{Binding BiomeFormViewModel.VerticalBlend, Mode=TwoWay}" Watermark="Vertical_Blend"
                                      ToolTip.Tip="Vertical distance in nodes above 'y_max' over which the biome will blend with the biome above."
                                      Margin="8" />
 
                             <Panel Margin="8" ToolTip.Tip="Characteristic temperature for the biome.">
                                 <TextBlock>Heat_Point</TextBlock>
-                                <Slider Value="{Binding BiomeFormViewModel.HeatPoint}" Minimum="-15" Maximum="115" />
+                                <Slider Value="{Binding BiomeFormViewModel.HeatPoint, Mode=TwoWay}" Minimum="-15" Maximum="115" />
                             </Panel>
 
                             <Panel Margin="8" ToolTip.Tip="Characteristic humidity for the biome.">
                                 <TextBlock>Humidity_Point</TextBlock>
-                                <Slider Value="{Binding BiomeFormViewModel.HumidityPoint}" Minimum="-15" Maximum="115" />
+                                <Slider Value="{Binding BiomeFormViewModel.HumidityPoint, Mode=TwoWay}" Minimum="-15" Maximum="115" />
                             </Panel>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
