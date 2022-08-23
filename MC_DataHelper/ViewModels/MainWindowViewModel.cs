@@ -171,7 +171,7 @@ namespace MC_DataHelper.ViewModels
             UpdateTree();
         }
 
-        private void UpdateTree()
+        public void UpdateTree()
         {
             TreeViewItems.Clear();
             if (Package?.DataDefinitions == null) return;
