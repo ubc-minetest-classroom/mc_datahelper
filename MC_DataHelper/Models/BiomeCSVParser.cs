@@ -41,7 +41,7 @@ public class BiomeCsvParser
         return null;
     }
 
-    public List<BiomeDataDefinition> ReadCsv(string filePath)
+    public List<BiomeDataDefinition> ReadCsvToBiomeData(string filePath)
     {
         using var reader = new StreamReader(filePath);
         using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
