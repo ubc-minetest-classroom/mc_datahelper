@@ -22,11 +22,14 @@
         <TextBlock Margin="8" DockPanel.Dock="Top" VerticalAlignment="Center">File Path:</TextBlock>
         <TextBox Margin="8" DockPanel.Dock="Top" Watermark="*.CSV" Text="{Binding FilePath}"></TextBox>
 
-        <Button Margin="8" DockPanel.Dock="Top" Command="{Binding BrowseCsvFileCommand}">Browse</Button>
+        <StackPanel Orientation="Horizontal">
+            <Button Margin="8" DockPanel.Dock="Top" Command="{Binding BrowseCsvFileCommand}">Browse</Button>
+            <Button Margin="8" DockPanel.Dock="Top" Command="{Binding LoadCsvFileCommand}">Load *.CSV</Button>
+        </StackPanel>
 
         <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Bottom"
                     Orientation="Horizontal">
-            <Button Margin="8">Import CSV</Button>
+            <Button Margin="8" Command="{Binding ImportCSVCommand}">Import CSV</Button>
             <Button Margin="8">Cancel</Button>
         </StackPanel>
 

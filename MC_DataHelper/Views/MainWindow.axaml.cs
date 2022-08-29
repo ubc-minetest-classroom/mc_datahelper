@@ -3,6 +3,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
+using MC_DataHelper.Models;
 using MC_DataHelper.ViewModels;
 using ReactiveUI;
 
@@ -18,11 +19,11 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
         this.WhenActivated(d => d(ViewModel!.ShowOpenFolderDialog.RegisterHandler(ShowOpenFolderDialog)));
     }
 
-    private async Task DoShowBiomeCsvDialogAsync(InteractionContext<Unit, BiomeCsvImportWindowViewModel?> interaction)
+    private async Task DoShowBiomeCsvDialogAsync(InteractionContext<ModPackage, BiomeCsvImportWindowViewModel> interaction)
     {
         var dialog = new BiomeCsvImportWindow
         {
-            DataContext = new BiomeCsvImportWindowViewModel()
+            DataContext = new BiomeCsvImportWindowViewModel(interaction.Input)
         };
         var result = await dialog.ShowDialog<BiomeCsvImportWindowViewModel?>(this);
         interaction.SetOutput(result);

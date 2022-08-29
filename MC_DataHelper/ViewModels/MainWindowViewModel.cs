@@ -36,7 +36,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
     {
         BiomeFormViewModel = new BiomeFormViewModel(this);
 
-        ShowBiomeCsvDialog = new Interaction<Unit, BiomeCsvImportWindowViewModel?>();
+        ShowBiomeCsvDialog = new Interaction<ModPackage, BiomeCsvImportWindowViewModel?>();
         _isProjectOpen = false;
         ShowOpenFileDialog = new Interaction<OpenFileDialog, string?>();
         ShowOpenFolderDialog = new Interaction<OpenFolderDialog, string?>();
@@ -65,7 +65,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
 
         BiomeCsvWindowCommand = ReactiveCommand.CreateFromTask(async () =>
         {
-            await ShowBiomeCsvDialog.Handle(Unit.Default);
+            if (Package != null) await ShowBiomeCsvDialog.Handle(Package);
         });
 
         CreateTree();
@@ -144,7 +144,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
     public ReactiveCommand<Unit, Unit> RefreshTreeItemsCommand { get; }
     public ReactiveCommand<Unit, Unit> EditTreeItemCommand { get; }
 
-    public Interaction<Unit, BiomeCsvImportWindowViewModel?> ShowBiomeCsvDialog { get; }
+    public Interaction<ModPackage, BiomeCsvImportWindowViewModel?> ShowBiomeCsvDialog { get; }
     public Interaction<OpenFileDialog, string?> ShowOpenFileDialog { get; }
     public Interaction<OpenFolderDialog, string?> ShowOpenFolderDialog { get; }
 
