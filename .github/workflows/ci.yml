@@ -1,0 +1,35 @@
+name: .NET 5 CI
+on: [push]
+
+jobs:
+  build:
+    strategy:
+        matrix:
+            rid: [win-x64, linux-x64, win-x86, osx-x64]
+    runs-on: ubuntu-latest
+    name: .NET 6 Build Application
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+        
+        - name: Install .net Core
+          uses: actions/setup-dotnet@v2
+          with:
+            dotnet-version: '6.0.x'
+        
+        - name: Add msbuild to PATH
+          uses: microsoft/setup-msbuild@v1.1
+        
+        - name: Run tests
+          run:  dotnet test
+        
+        - name: Build application 
+          run: dotnet publish -c Release -r ${{ matrix.rid }} -o artifacts -p:PublishReadyToRun=true
+          
+        - name: Upload artifacts
+          uses: actions/upload-artifact@v3
+          with:
+            name: Build ${{ matrix.rid }}
+            path: artifacts/
+            if-no-files-found: warn
+          

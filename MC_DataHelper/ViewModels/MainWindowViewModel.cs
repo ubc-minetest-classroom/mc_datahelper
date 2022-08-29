@@ -29,6 +29,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
     private ModPackage? _selectedPackage;
 
     private int _selectedTabIndex;
+    private ITreeViewNode? _selectedTreeViewItem;
 
     // Initialize everything
     public MainWindowViewModel()
@@ -49,7 +50,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
             if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                 desktop.Shutdown();
         });
-        
+
         //TODO: Implement these commands
         UndoCommand = ReactiveCommand.Create(() => { });
         RedoCommand = ReactiveCommand.Create(() => { });
@@ -91,7 +92,30 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
 
     public ObservableCollection<TreeViewFolderNode> TreeViewItems { get; } = new();
 
-    public ITreeViewNode? SelectedTreeViewItem { get; set; }
+    public ITreeViewNode? SelectedTreeViewItem
+    {
+        get => _selectedTreeViewItem;
+        set
+        {
+            if (value is TreeViewFolderNode folder)
+            {
+                this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, null);
+            }
+            else if (value is TreeViewDataNode dataNode)
+            {
+                this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, value);
+
+                if (dataNode.DataDefinition is BiomeDataDefinition biomeDataDefinition)
+                {
+                    SelectedTabIndex = 1;
+                }
+                else
+                {
+                    SelectedTabIndex = 0;
+                }
+            }
+        }
+    }
 
 
     public bool EditingExistingBiome

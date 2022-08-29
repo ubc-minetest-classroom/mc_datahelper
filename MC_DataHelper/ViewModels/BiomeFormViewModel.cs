@@ -33,6 +33,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         set
         {
             _selectedNode = value;
+            _mainWindowViewModel.SelectedTreeViewItem = value;
             _mainWindowViewModel.EditingExistingBiome = value != null;
         }
     }
@@ -185,6 +186,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
     private void ClearForm()
     {
         SelectedNode = null;
+        _mainWindowViewModel.SelectedTreeViewItem = null;
         _data = new BiomeDataDefinition();
         UpdateProperties();
     }
