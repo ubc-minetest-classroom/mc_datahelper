@@ -25,6 +25,9 @@ public class ModPackage
         DataDefinitions = dataDefinitions;
     }
 
+    public ModConfig Config { get; }
+    public List<IDataDefinition> DataDefinitions { get; }
+
     public static async Task<ModPackage> LoadPackageFromDisk(string path)
     {
         var confFileLines = await File.ReadAllLinesAsync($"{path}/mod.conf");
@@ -65,10 +68,7 @@ public class ModPackage
 
             var jsonObject = (JObject)await JToken.ReadFromAsync(new JsonTextReader(sr));
             var jsonType = jsonObject["_jsonType"]?.Value<string>();
-            if (jsonType == null)
-            {
-                continue;
-            }
+            if (jsonType == null) continue;
 
             switch (jsonType.ToLowerInvariant())
             {
@@ -97,10 +97,7 @@ public class ModPackage
 
     public async Task SavePackageToDisk(string path)
     {
-        if (Directory.Exists($"{path}/data"))
-        {
-            Directory.Delete($"{path}/data", true);
-        }
+        if (Directory.Exists($"{path}/data")) Directory.Delete($"{path}/data", true);
 
         var modConfLines = new[]
         {
@@ -109,7 +106,7 @@ public class ModPackage
             $"depends = mc_json_importer,{Config.Dependencies}",
             $"optional_depends ={Config.OptionalDependencies}",
             $"author = {Config.Author}",
-            $"title = {Config.Title}",
+            $"title = {Config.Title}"
         };
 
         await File.WriteAllLinesAsync($"{path}/mod.conf", modConfLines);
@@ -146,9 +143,6 @@ public class ModPackage
         }
     }
 
-    public ModConfig Config { get; }
-    public List<IDataDefinition> DataDefinitions { get; }
-
 
     protected bool Equals(ModPackage other)
     {
@@ -159,7 +153,7 @@ public class ModPackage
     {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
-        return obj.GetType() == this.GetType() && Equals((ModPackage)obj);
+        return obj.GetType() == GetType() && Equals((ModPackage)obj);
     }
 
     public override int GetHashCode()

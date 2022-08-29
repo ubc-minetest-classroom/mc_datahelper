@@ -1,5 +1,6 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MC_DataHelper.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -7,23 +8,29 @@
         Height="600"
         x:Class="MC_DataHelper.Views.BiomeCsvImportWindow"
         Title="Biome CSV Importer"
-        TransparencyLevelHint="AcrylicBlur"
-        ExtendClientAreaToDecorationsHint="True"
+
         WindowStartupLocation="CenterOwner">
-    <Panel>
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
-            <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial
-                    BackgroundSource="Digger"
-                    TintColor="Black"
-                    TintOpacity="1"
-                    MaterialOpacity="0.65" />
-            </ExperimentalAcrylicBorder.Material>
-        </ExperimentalAcrylicBorder>
 
-        <Panel Margin="40">
 
-        </Panel>
-    </Panel>
+    <Design.DataContext>
+        <vm:BiomeCsvImportWindowViewModel />
+    </Design.DataContext>
+
+
+    <DockPanel Margin="16">
+
+        <TextBlock Margin="8" DockPanel.Dock="Top" VerticalAlignment="Center">File Path:</TextBlock>
+        <TextBox Margin="8" DockPanel.Dock="Top" Watermark="*.CSV" Text="{Binding FilePath}"></TextBox>
+
+        <Button Margin="8" DockPanel.Dock="Top" Command="{Binding BrowseCsvFileCommand}">Browse</Button>
+
+        <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                    Orientation="Horizontal">
+            <Button Margin="8">Import CSV</Button>
+            <Button Margin="8">Cancel</Button>
+        </StackPanel>
+
+
+    </DockPanel>
 
 </Window>

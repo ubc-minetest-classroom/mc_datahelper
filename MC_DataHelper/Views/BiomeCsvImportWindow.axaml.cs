@@ -1,21 +1,29 @@
-﻿using Avalonia;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.ReactiveUI;
+using MC_DataHelper.ViewModels;
+using ReactiveUI;
 
 namespace MC_DataHelper.Views;
 
-public partial class BiomeCsvImportWindow : Window
+public partial class BiomeCsvImportWindow : ReactiveWindow<BiomeCsvImportWindowViewModel>
 {
     public BiomeCsvImportWindow()
     {
         InitializeComponent();
-#if DEBUG
-        this.AttachDevTools();
-#endif
+        this.WhenActivated(d =>
+            d(ViewModel?.ShowOpenFileDialog.RegisterHandler(ShowOpenFileDialog) ??
+              throw new InvalidOperationException($"Viewmodel for {nameof(ViewModel)} is null.")));
     }
 
-    private void InitializeComponent()
+
+    private async Task ShowOpenFileDialog(InteractionContext<OpenFileDialog, string?> interaction)
     {
-        AvaloniaXamlLoader.Load(this);
+        var dialog = interaction.Input;
+        var fileNames = await dialog.ShowAsync(this);
+        interaction.SetOutput(fileNames?.FirstOrDefault());
     }
 }

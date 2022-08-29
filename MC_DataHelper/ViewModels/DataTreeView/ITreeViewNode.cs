@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using ReactiveUI;
 
 namespace MC_DataHelper.ViewModels;
 

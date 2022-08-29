@@ -19,5 +19,4 @@ public class TreeViewFolderNode : ReactiveObject, ITreeViewNode
 
     public string Label { get; }
     public ObservableCollection<TreeViewDataNode> Children { get; }
-    
 }

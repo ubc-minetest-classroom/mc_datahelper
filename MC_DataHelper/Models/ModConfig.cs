@@ -38,7 +38,7 @@ public record ModConfig
     public string Author { get; set; }
     public string Dependencies { get; set; }
     public string OptionalDependencies { get; set; }
-    
+
     public virtual bool Equals(ModConfig? other)
     {
         if (ReferenceEquals(null, other)) return false;

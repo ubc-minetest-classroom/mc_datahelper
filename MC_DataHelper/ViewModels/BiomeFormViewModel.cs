@@ -9,9 +9,23 @@ namespace MC_DataHelper.ViewModels;
 
 public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 {
+    private readonly MainWindowViewModel _mainWindowViewModel;
     private BiomeDataDefinition _data = new();
 
     private TreeViewDataNode? _selectedNode;
+
+    public BiomeFormViewModel(MainWindowViewModel mainWindowViewModel)
+    {
+        _mainWindowViewModel = mainWindowViewModel;
+
+        SubmitFormCommand = ReactiveCommand.Create(SubmitForm);
+        ClearFormCommand = ReactiveCommand.Create(ClearForm);
+
+        this.ValidationRule(
+            viewModel => viewModel.DepthTop,
+            name => !int.TryParse(name, out var value),
+            "You must specify a valid integer");
+    }
 
     private TreeViewDataNode? SelectedNode
     {
@@ -22,8 +36,6 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
             _mainWindowViewModel.EditingExistingBiome = value != null;
         }
     }
-
-    private readonly MainWindowViewModel _mainWindowViewModel;
 
     public string BiomeName
     {
@@ -52,10 +64,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         get => _data.DepthTop.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.DepthTop = number;
-            }
+            if (int.TryParse(value, out var number)) _data.DepthTop = number;
         }
     }
 
@@ -70,10 +79,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         get => _data.DepthFiller.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.DepthFiller = number;
-            }
+            if (int.TryParse(value, out var number)) _data.DepthFiller = number;
         }
     }
 
@@ -94,10 +100,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         get => _data.DepthWaterTop.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.DepthWaterTop = number;
-            }
+            if (int.TryParse(value, out var number)) _data.DepthWaterTop = number;
         }
     }
 
@@ -118,10 +121,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         get => _data.DepthRiverbed.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.DepthRiverbed = number;
-            }
+            if (int.TryParse(value, out var number)) _data.DepthRiverbed = number;
         }
     }
 
@@ -136,10 +136,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         get => _data.YMin.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.YMin = number;
-            }
+            if (int.TryParse(value, out var number)) _data.YMin = number;
         }
     }
 
@@ -148,10 +145,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         get => _data.YMax.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.YMax = number;
-            }
+            if (int.TryParse(value, out var number)) _data.YMax = number;
         }
     }
 
@@ -160,10 +154,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         get => _data.VerticalBlend.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.VerticalBlend = number;
-            }
+            if (int.TryParse(value, out var number)) _data.VerticalBlend = number;
         }
     }
 
@@ -183,20 +174,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 
     public ReactiveCommand<Unit, Unit> ClearFormCommand { get; }
 
-    public BiomeFormViewModel(MainWindowViewModel mainWindowViewModel)
-    {
-        _mainWindowViewModel = mainWindowViewModel;
-
-        SubmitFormCommand = ReactiveCommand.Create(SubmitForm);
-        ClearFormCommand = ReactiveCommand.Create(ClearForm);
-
-        this.ValidationRule(
-            viewModel => viewModel.DepthTop,
-            name => !int.TryParse(name, out var value),
-            "You must specify a valid integer");
-    }
-
-    public ValidationContext ValidationContext { get; } = new ValidationContext();
+    public ValidationContext ValidationContext { get; } = new();
 
     private void SubmitForm()
     {

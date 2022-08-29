@@ -1,22 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace MC_DataHelper.Models;
 
 public class BiomeDataDefinition : IDataDefinition
 {
-    public BiomeDataDefinition()
-    {
-    }
-
-    [JsonProperty("name", NullValueHandling = NullValueHandling.Include)]
-    public string DataName { get; set; } = "New Biome";
-
-    [JsonProperty("_jsonType", NullValueHandling = NullValueHandling.Include)]
-    public string JsonType => "biome";
-
     [JsonProperty("depth_filler", NullValueHandling = NullValueHandling.Ignore)]
     public int DepthFiller { get; set; } = 3;
 
@@ -66,8 +54,14 @@ public class BiomeDataDefinition : IDataDefinition
     public string NodeWaterTop { get; set; } = "default:water_source";
 
     [JsonProperty("node_dust", NullValueHandling = NullValueHandling.Ignore)]
-    public string? NodeDust { get; set; } = null;
-    
+    public string? NodeDust { get; set; }
+
+    [JsonProperty("name", NullValueHandling = NullValueHandling.Include)]
+    public string DataName { get; set; } = "New Biome";
+
+    [JsonProperty("_jsonType", NullValueHandling = NullValueHandling.Include)]
+    public string JsonType => "biome";
+
     protected bool Equals(BiomeDataDefinition other)
     {
         return DataName == other.DataName && DepthFiller == other.DepthFiller && DepthRiverbed == other.DepthRiverbed &&
@@ -83,7 +77,7 @@ public class BiomeDataDefinition : IDataDefinition
     {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
-        return obj.GetType() == this.GetType() && Equals((BiomeDataDefinition)obj);
+        return obj.GetType() == GetType() && Equals((BiomeDataDefinition)obj);
     }
 
     public override int GetHashCode()

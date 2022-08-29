@@ -2,6 +2,11 @@
 
 public class UnknownDataDefinition : IDataDefinition
 {
+    public UnknownDataDefinition(dynamic data)
+    {
+        Data = data;
+    }
+
     public dynamic Data { get; }
 
     public string DataName
@@ -11,9 +16,4 @@ public class UnknownDataDefinition : IDataDefinition
     }
 
     public string JsonType => Data._jsonType;
-
-    public UnknownDataDefinition(dynamic data)
-    {
-        Data = data;
-    }
 }

@@ -1,8 +1,7 @@
 ﻿using ReactiveUI;
 
-namespace MC_DataHelper.ViewModels
+namespace MC_DataHelper.ViewModels;
+
+public class ViewModelBase : ReactiveObject
 {
-    public class ViewModelBase : ReactiveObject
-    {
-    }
 }
