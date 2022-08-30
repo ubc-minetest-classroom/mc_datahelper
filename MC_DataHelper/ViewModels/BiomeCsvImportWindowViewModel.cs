@@ -23,7 +23,7 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> LoadCsvFileCommand { get; }
 
 
-    private string _filePath = @"C:\Users\Lukas Olson\Desktop\Minetest BEC Zones Biomes.csv";
+    private string _filePath = string.Empty;
 
     public string FilePath
     {

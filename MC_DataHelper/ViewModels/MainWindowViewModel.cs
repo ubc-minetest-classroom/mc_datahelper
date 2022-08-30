@@ -67,6 +67,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
         BiomeCsvWindowCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             if (Package != null) await ShowBiomeCsvDialog.Handle(Package);
+            CreateTree();
         });
 
         CreateTree();
@@ -276,8 +277,6 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
     private async Task SaveProjectAsync()
     {
         if (Package != null) await Package.SavePackageToDisk(Environment.CurrentDirectory);
-
-        UpdateViewModels();
     }
 
     private async Task SaveProjectAsAsync()
@@ -292,8 +291,6 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
             Environment.CurrentDirectory = directoryPath;
             if (Package != null) await Package.SavePackageToDisk(directoryPath);
         }
-
-        UpdateViewModels();
     }
 
     private async Task NewProjectAsync()
@@ -312,7 +309,6 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
             // Package.SavePackageToDisk(fileName);
         }
 
-        UpdateViewModels();
         CreateTree();
     }
 
@@ -334,11 +330,6 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
             Package = null;
         }
 
-        UpdateViewModels();
         CreateTree();
-    }
-
-    private void UpdateViewModels()
-    {
     }
 }
