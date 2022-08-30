@@ -30,7 +30,7 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
         set => _filePath = this.RaiseAndSetIfChanged(ref _filePath, value);
     }
 
-    public ObservableCollection<Tuple<string, string>> FieldMatchList { get; }
+    public ObservableCollection<FieldHeaderPair> FieldMatchList { get; }
 
     public ObservableCollection<string> CsvFieldNames { get; }
 
@@ -43,7 +43,7 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
         ImportCsvCommand = ReactiveCommand.CreateFromTask(ImportCsvFile);
         LoadCsvFileCommand = ReactiveCommand.CreateFromTask(LoadCsvFile);
 
-        FieldMatchList = new ObservableCollection<Tuple<string, string>>();
+        FieldMatchList = new ObservableCollection<FieldHeaderPair>();
         CsvFieldNames = new ObservableCollection<string>();
     }
 
@@ -95,7 +95,13 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
 
         foreach (var field in biomeFields)
         {
-            FieldMatchList.Add(new Tuple<string, string>(field, ""));
+            var match = string.Empty;
+            if (CsvFieldNames.Contains(field))
+            {
+                match = field;
+            }
+
+            FieldMatchList.Add(new FieldHeaderPair(field, match));
         }
     }
 
@@ -109,5 +115,29 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
         var parser = new BiomeCsvParser();
         var biomes = parser.ReadCsvToBiomeData(FilePath);
         _modPackage.DataDefinitions.AddRange(biomes);
+    }
+}
+
+public class FieldHeaderPair : ReactiveObject
+{
+    private string _field;
+    private string _header;
+
+    public string Field
+    {
+        get => _field;
+        set => this.RaiseAndSetIfChanged(ref _field, value);
+    }
+
+    public string Header
+    {
+        get => _header;
+        set => this.RaiseAndSetIfChanged(ref _header, value);
+    }
+
+    public FieldHeaderPair(string field, string header)
+    {
+        Field = field;
+        Header = header;
     }
 }

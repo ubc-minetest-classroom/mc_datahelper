@@ -37,12 +37,12 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <UniformGrid Rows="1" Columns="2">
-                        <TextBlock Text="{Binding Path=Item1}" Margin="8" />
-                       
-                        
+                        <TextBlock Text="{Binding Path=Field}" Margin="8" />
+
+
                         <AutoCompleteBox Margin="8"
-                                         Watermark="{Binding Path=Item1}" Text="{Binding Path=Item2}"
-                                         FilterMode="ContainsOrdinal" IsTextCompletionEnabled="True">
+                                         Watermark="{Binding Path=Field}" Text="{Binding Path=Header}"
+                                         FilterMode="None" IsTextCompletionEnabled="True">
                             <AutoCompleteBox.Items>
                                 <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListBox}}">
                                     <Binding.Path>DataContext.CsvFieldNames</Binding.Path>
