@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -119,13 +120,13 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
 
         foreach (var field in biomeFields)
         {
-            if (string.Equals(field, "JsonType", StringComparison.InvariantCultureIgnoreCase))
+            if (string.Equals(field, "JsonType", StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
 
             var match = string.Empty;
-            if (CsvFieldNames.Contains(field))
+            if (CsvFieldNames.Contains(field, StringComparer.OrdinalIgnoreCase))
             {
                 match = field;
             }
