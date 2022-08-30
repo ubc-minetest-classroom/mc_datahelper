@@ -1,35 +1,59 @@
-name: .NET 5 CI
-on: [push]
+name: .NET 6 Continuous Integration and Deployment
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     strategy:
-        matrix:
-            rid: [win-x64, linux-x64, win-x86, osx-x64]
+      matrix:
+        rid: [win-x64, linux-x64, win-x86, osx-x64]
     runs-on: ubuntu-latest
     name: .NET 6 Build Application
     steps:
-        - name: Checkout repository
-          uses: actions/checkout@v3
-        
-        - name: Install .net Core
-          uses: actions/setup-dotnet@v2
-          with:
-            dotnet-version: '6.0.x'
-        
-        - name: Add msbuild to PATH
-          uses: microsoft/setup-msbuild@v1.1
-        
-        - name: Run tests
-          run:  dotnet test
-        
-        - name: Build application 
-          run: dotnet publish -c Release -r ${{ matrix.rid }} -o artifacts -p:PublishReadyToRun=true
-          
-        - name: Upload artifacts
-          uses: actions/upload-artifact@v3
-          with:
-            name: Build ${{ matrix.rid }}
-            path: artifacts/
-            if-no-files-found: warn
-          
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install .net Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: "6.0.x"
+
+      - name: Retrieve NUGET cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Run tests
+        run: dotnet test --logger trx
+
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Tests
+          path: WebApi.Tests/TestResults/*.trx
+          reporter: dotnet-trx
+
+      - name: Build application
+        run: dotnet publish -c Release -r ${{ matrix.rid }} -o ${{env.DOTNET_ROOT}}/datahelper -p:PublishReadyToRun=true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build ${{ matrix.rid }}
+          path: ${{env.DOTNET_ROOT}}/datahelper/
+          if-no-files-found: warn
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+    name: upload
+    steps:
+      - uses: actions/download-artifact@v3
+
+      - name: Display structure of downloaded files
+        run: ls -R
