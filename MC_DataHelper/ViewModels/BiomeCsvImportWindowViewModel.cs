@@ -118,6 +118,11 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
 
         foreach (var field in biomeFields)
         {
+            if (string.Equals(field, "JsonType", StringComparison.InvariantCultureIgnoreCase))
+            {
+                continue;
+            }
+
             var match = string.Empty;
             if (CsvFieldNames.Contains(field))
             {
@@ -144,7 +149,7 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
 
         var map = new BiomeDataDefinitionMap(new List<FieldHeaderPair>(FieldMatchList));
 
-        //  var biomes = parser.ReadCsvToBiomeData(FilePath, map);
-        //  _modPackage.DataDefinitions.AddRange(biomes);
+        var biomes = parser.ReadCsvToBiomeData(FilePath, map);
+        _modPackage.DataDefinitions.AddRange(biomes);
     }
 }
