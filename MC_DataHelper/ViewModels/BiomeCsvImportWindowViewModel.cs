@@ -34,6 +34,21 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
 
     public ObservableCollection<string> CsvFieldNames { get; }
 
+    private bool _csvLoaded = false;
+    private string _footerText = "Step 1/3: Select the CSV file to import by clicking 'Browse' or by entering its path in the textbox above.";
+
+    public bool CsvLoaded
+    {
+        get => _csvLoaded;
+        set => this.RaiseAndSetIfChanged(ref _csvLoaded, value);
+    }
+
+    public string FooterText
+    {
+        get => _footerText;
+        set => this.RaiseAndSetIfChanged(ref _footerText, value);
+    }
+
 
     public BiomeCsvImportWindowViewModel(ModPackage modPackage)
     {
@@ -70,11 +85,16 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
         if (filePath != null)
         {
             FilePath = filePath;
+            FooterText = "Step 2/3: CSV file selected. Click 'Load *.CSV' to load the file.";
         }
     }
 
     private async Task LoadCsvFile()
     {
+        CsvLoaded = false;
+        
+        FooterText = "Step 2/3: CSV file selected. Click 'Load *.CSV' to load the file.";
+
         if (!File.Exists(FilePath))
         {
             return;
@@ -103,6 +123,11 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
 
             FieldMatchList.Add(new FieldHeaderPair(field, match));
         }
+
+        CsvLoaded = true;
+
+        FooterText =
+            "Step 3/3: Using the above fields, match each field in the biome definition to its corresponding header in the CSV file. Then, click 'Import *.CSV'";
     }
 
     private async Task ImportCsvFile()
@@ -115,29 +140,5 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
         var parser = new BiomeCsvParser();
         var biomes = parser.ReadCsvToBiomeData(FilePath);
         _modPackage.DataDefinitions.AddRange(biomes);
-    }
-}
-
-public class FieldHeaderPair : ReactiveObject
-{
-    private string _field;
-    private string _header;
-
-    public string Field
-    {
-        get => _field;
-        set => this.RaiseAndSetIfChanged(ref _field, value);
-    }
-
-    public string Header
-    {
-        get => _header;
-        set => this.RaiseAndSetIfChanged(ref _header, value);
-    }
-
-    public FieldHeaderPair(string field, string header)
-    {
-        Field = field;
-        Header = header;
     }
 }

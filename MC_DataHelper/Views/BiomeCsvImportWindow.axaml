@@ -23,16 +23,15 @@
         <TextBox Margin="8" DockPanel.Dock="Top" Watermark="*.CSV" Text="{Binding FilePath}"></TextBox>
 
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-            <Button Margin="8" DockPanel.Dock="Top" Command="{Binding BrowseCsvFileCommand}">Browse</Button>
+            <Button Margin="8" DockPanel.Dock="Top" Command="{Binding BrowseCsvFileCommand}">Browse Files</Button>
             <Button Margin="8" DockPanel.Dock="Top" Command="{Binding LoadCsvFileCommand}">Load *.CSV</Button>
+            <Button IsEnabled="{Binding CsvLoaded}" Margin="8" Command="{Binding ImportCsvCommand}">Import *.CSV</Button>
+
         </StackPanel>
 
-        <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                    Orientation="Horizontal">
-            <Button Margin="8" Command="{Binding ImportCsvCommand}">Import CSV</Button>
-            <Button Margin="8">Cancel</Button>
-        </StackPanel>
-
+        <Panel DockPanel.Dock="Bottom">
+            <TextBlock HorizontalAlignment="Right" Margin="8" Text="{Binding FooterText}" />
+        </Panel>
         <ListBox Items="{Binding FieldMatchList}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
