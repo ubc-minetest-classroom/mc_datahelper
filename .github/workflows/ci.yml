@@ -9,7 +9,7 @@ jobs:
   build:
     strategy:
       matrix:
-        rid: [win-x64, linux-x64, win-x86, osx-x64]
+        rid: [win-x64]
     runs-on: ubuntu-latest
     name: .NET 6 Build Application
     steps:
@@ -37,7 +37,7 @@ jobs:
         if: success() || failure()
         with:
           name: Tests
-          path: WebApi.Tests/TestResults/*.trx
+          path: ${{env.DOTNET_ROOT}}/mc_datahelper/ModelTests/TestResults/*.trx
           reporter: dotnet-trx
 
       - name: Build application
