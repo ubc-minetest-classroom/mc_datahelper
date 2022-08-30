@@ -9,6 +9,7 @@ using Avalonia.Controls;
 using DynamicData;
 using MC_DataHelper.Helpers;
 using MC_DataHelper.Models;
+using MC_DataHelper.Models.DataDefinitions;
 using ReactiveUI;
 
 namespace MC_DataHelper.ViewModels;

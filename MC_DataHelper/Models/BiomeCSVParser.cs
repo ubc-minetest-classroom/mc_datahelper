@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using CsvHelper;
 using CsvHelper.Configuration;
+using MC_DataHelper.Models.DataDefinitions;
 using MC_DataHelper.ViewModels;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NLog.Fluent;

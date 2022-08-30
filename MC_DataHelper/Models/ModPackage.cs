@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using MC_DataHelper.Helpers;
+using MC_DataHelper.Models.DataDefinitions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -10,16 +11,16 @@ namespace MC_DataHelper.Models;
 
 public class ModPackage
 {
-    public ModPackage() : this(new ModConfig(), new List<IDataDefinition?>(0))
+    public ModPackage() : this(new ModConfig(), new List<IDataDefinition>(0))
     {
     }
 
-    public ModPackage(ModConfig config) : this(config, new List<IDataDefinition?>(0))
+    public ModPackage(ModConfig config) : this(config, new List<IDataDefinition>(0))
     {
     }
 
 
-    private ModPackage(ModConfig config, List<IDataDefinition?> dataDefinitions)
+    private ModPackage(ModConfig config, List<IDataDefinition> dataDefinitions)
     {
         Config = config;
         DataDefinitions = dataDefinitions;
@@ -28,11 +29,12 @@ public class ModPackage
     public ModConfig Config { get; }
     public List<IDataDefinition> DataDefinitions { get; }
 
-    private JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+    private readonly JsonSerializerSettings _jsonSettings = new()
     {
         TypeNameHandling = TypeNameHandling.None,
         Formatting = Formatting.Indented,
-        NullValueHandling = NullValueHandling.Ignore
+        NullValueHandling = NullValueHandling.Ignore,
+        ContractResolver = new NoNullWhiteSpaceResolver(),
     };
 
     public static async Task<ModPackage> LoadPackageFromDisk(string path)
@@ -65,12 +67,12 @@ public class ModPackage
             Title = confTitle ?? string.Empty
         };
 
-        var dataDefinitions = new List<IDataDefinition?>();
+        var dataDefinitions = new List<IDataDefinition>();
 
         var files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);
         foreach (var filePath in files)
         {
-            IDataDefinition? dataDefinition = null;
+            IDataDefinition? dataDefinition;
             using StreamReader sr = new(filePath);
 
             var jsonObject = (JObject)await JToken.ReadFromAsync(new JsonTextReader(sr));
@@ -84,7 +86,7 @@ public class ModPackage
                     break;
                 default:
                     dataDefinition = new UnknownDataDefinition(jsonObject.ToObject<dynamic>());
-                    continue;
+                    break;
             }
 
 
@@ -151,7 +153,7 @@ public class ModPackage
     }
 
 
-    protected bool Equals(ModPackage other)
+    private bool Equals(ModPackage other)
     {
         return Config.Equals(other.Config) && DataDefinitions.Equals(other.DataDefinitions);
     }

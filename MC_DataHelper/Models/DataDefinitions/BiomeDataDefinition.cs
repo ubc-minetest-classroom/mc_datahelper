@@ -1,10 +1,10 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace MC_DataHelper.Models;
+namespace MC_DataHelper.Models.DataDefinitions;
 
 public record BiomeDataDefinition : IDataDefinition
 {
+    
     [JsonProperty("depth_filler", NullValueHandling = NullValueHandling.Ignore)]
     public int? DepthFiller { get; set; } = 3;
 

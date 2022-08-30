@@ -9,6 +9,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using MC_DataHelper.Models;
+using MC_DataHelper.Models.DataDefinitions;
 using MC_DataHelper.ViewModels.DataTreeView;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;

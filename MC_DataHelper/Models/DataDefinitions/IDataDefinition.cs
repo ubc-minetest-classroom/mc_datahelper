@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace MC_DataHelper.Models;
+namespace MC_DataHelper.Models.DataDefinitions;
 
 public interface IDataDefinition
 {

@@ -1,5 +1,6 @@
 ﻿using System.Reactive;
 using MC_DataHelper.Models;
+using MC_DataHelper.Models.DataDefinitions;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Contexts;

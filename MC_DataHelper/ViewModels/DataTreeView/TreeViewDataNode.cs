@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using DynamicData.Binding;
 using MC_DataHelper.Models;
+using MC_DataHelper.Models.DataDefinitions;
 using ReactiveUI;
 
 namespace MC_DataHelper.ViewModels;
