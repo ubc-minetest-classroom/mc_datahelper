@@ -33,10 +33,26 @@
             <Button Margin="8">Cancel</Button>
         </StackPanel>
 
-        <ContentControl>
-            
-        </ContentControl>
-
+        <ListBox Items="{Binding FieldMatchList}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <UniformGrid Rows="1" Columns="2">
+                        <TextBlock Text="{Binding Path=Item1}" Margin="8" />
+                       
+                        
+                        <AutoCompleteBox Margin="8"
+                                         Watermark="{Binding Path=Item1}" Text="{Binding Path=Item2}"
+                                         FilterMode="ContainsOrdinal" IsTextCompletionEnabled="True">
+                            <AutoCompleteBox.Items>
+                                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListBox}}">
+                                    <Binding.Path>DataContext.CsvFieldNames</Binding.Path>
+                                </Binding>
+                            </AutoCompleteBox.Items>
+                        </AutoCompleteBox>
+                    </UniformGrid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
     </DockPanel>
 

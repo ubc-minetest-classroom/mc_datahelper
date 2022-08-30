@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using DynamicData;
 using MC_DataHelper.Helpers;
 using MC_DataHelper.Models;
 using ReactiveUI;
@@ -13,7 +14,7 @@ namespace MC_DataHelper.ViewModels;
 
 public class BiomeCsvImportWindowViewModel : ViewModelBase
 {
-    private ModPackage _modPackage;
+    private readonly ModPackage _modPackage;
     public Interaction<OpenFileDialog, string?> ShowOpenFileDialog { get; }
     public ReactiveCommand<Unit, Unit> BrowseCsvFileCommand { get; }
     public ReactiveCommand<Unit, Unit> ImportCsvCommand { get; }
@@ -29,9 +30,9 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
         set => _filePath = this.RaiseAndSetIfChanged(ref _filePath, value);
     }
 
-    public Dictionary<string, string> FieldMatchDictionary { get; }
+    public ObservableCollection<Tuple<string, string>> FieldMatchList { get; }
 
-    public List<string> CSVFieldNames { get; }
+    public ObservableCollection<string> CsvFieldNames { get; }
 
 
     public BiomeCsvImportWindowViewModel(ModPackage modPackage)
@@ -42,8 +43,8 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
         ImportCsvCommand = ReactiveCommand.CreateFromTask(ImportCsvFile);
         LoadCsvFileCommand = ReactiveCommand.CreateFromTask(LoadCsvFile);
 
-        FieldMatchDictionary = new Dictionary<string, string>();
-        CSVFieldNames = new List<string>();
+        FieldMatchList = new ObservableCollection<Tuple<string, string>>();
+        CsvFieldNames = new ObservableCollection<string>();
     }
 
     public BiomeCsvImportWindowViewModel() : this(new ModPackage())
@@ -80,15 +81,22 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
         }
 
         var parser = new BiomeCsvParser();
-        var headerRow = parser.ReadHeaderRow(FilePath);
 
-        SetupFieldMatchDictionary();
+        CsvFieldNames.Clear();
+        CsvFieldNames.AddRange(parser.ReadHeaderRow(FilePath) ?? Array.Empty<string>());
+
+        SetupFieldMatchList();
     }
 
-    private void SetupFieldMatchDictionary()
+    private void SetupFieldMatchList()
     {
-        FieldMatchDictionary.Clear();
-        var recordProperties = typeof(BiomeDataDefinition).GetPropertyNames();
+        FieldMatchList.Clear();
+        var biomeFields = typeof(BiomeDataDefinition).GetPropertyNames();
+
+        foreach (var field in biomeFields)
+        {
+            FieldMatchList.Add(new Tuple<string, string>(field, ""));
+        }
     }
 
     private async Task ImportCsvFile()
