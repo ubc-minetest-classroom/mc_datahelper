@@ -37,7 +37,7 @@ jobs:
         if: success() || failure()
         with:
           name: Tests
-          path: ~/work/mc_datahelper/mc_datahelper/ModelTests/TestResults/*.trx
+          path: /home/runner/work/mc_datahelper/mc_datahelper/ModelTests/TestResults/*.trx
           reporter: dotnet-trx
 
       - name: Build application
