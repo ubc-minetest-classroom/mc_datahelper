@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -87,6 +88,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
             this.RaisePropertyChanged(nameof(ConfigOptionalDependencies));
             this.RaisePropertyChanged(nameof(ConfigAuthor));
             this.RaisePropertyChanged(nameof(ConfigTitle));
+            this.RaisePropertyChanged(nameof(FooterText));
         }
     }
 
@@ -321,11 +323,15 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
             Title = "Select a folder to open a project from",
             Directory = Environment.CurrentDirectory
         });
-        if (directoryPath != null)
+        if (directoryPath != null && File.Exists($"{directoryPath}/mod.conf"))
         {
             Environment.CurrentDirectory = directoryPath;
             Package = await ModPackage.LoadPackageFromDisk(directoryPath);
             FooterText = directoryPath;
+        }
+        else
+        {
+            Package = null;
         }
 
         UpdateViewModels();

@@ -144,7 +144,7 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
 
         var map = new BiomeDataDefinitionMap(new List<FieldHeaderPair>(FieldMatchList));
 
-        var biomes = parser.ReadCsvToBiomeData(FilePath, map);
-        _modPackage.DataDefinitions.AddRange(biomes);
+        //  var biomes = parser.ReadCsvToBiomeData(FilePath, map);
+        //  _modPackage.DataDefinitions.AddRange(biomes);
     }
 }
