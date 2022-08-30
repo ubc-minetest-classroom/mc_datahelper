@@ -4,6 +4,7 @@ using Avalonia.Controls.Templates;
 using MC_DataHelper.ViewModels;
 
 namespace MC_DataHelper.Helpers;
+
 //CODE from: https://github.com/grokys/FileDialogMvvm/tree/master/FileDialogMvvm
 public class ViewLocator : IDataTemplate
 {
@@ -15,13 +16,8 @@ public class ViewLocator : IDataTemplate
         var type = Type.GetType(name);
 
         if (type != null)
-        {
             return (Control)Activator.CreateInstance(type)!;
-        }
-        else
-        {
-            return new TextBlock { Text = "Not Found: " + name };
-        }
+        return new TextBlock { Text = "Not Found: " + name };
     }
 
     public bool Match(object data)

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using MC_DataHelper.Helpers;
+using MC_DataHelper.Models.DataDefinitions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -9,20 +11,31 @@ namespace MC_DataHelper.Models;
 
 public class ModPackage
 {
-    public ModPackage() : this(new ModConfig(), new List<IDataDefinition?>(0))
+    public ModPackage() : this(new ModConfig(), new List<IDataDefinition>(0))
     {
     }
 
-    public ModPackage(ModConfig config) : this(config, new List<IDataDefinition?>(0))
+    public ModPackage(ModConfig config) : this(config, new List<IDataDefinition>(0))
     {
     }
 
 
-    private ModPackage(ModConfig config, List<IDataDefinition?> dataDefinitions)
+    private ModPackage(ModConfig config, List<IDataDefinition> dataDefinitions)
     {
         Config = config;
         DataDefinitions = dataDefinitions;
     }
+
+    public ModConfig Config { get; }
+    public List<IDataDefinition> DataDefinitions { get; }
+
+    private readonly JsonSerializerSettings _jsonSettings = new()
+    {
+        TypeNameHandling = TypeNameHandling.None,
+        Formatting = Formatting.Indented,
+        NullValueHandling = NullValueHandling.Ignore,
+        ContractResolver = new NoNullWhiteSpaceResolver(),
+    };
 
     public static async Task<ModPackage> LoadPackageFromDisk(string path)
     {
@@ -54,29 +67,26 @@ public class ModPackage
             Title = confTitle ?? string.Empty
         };
 
-        var dataDefinitions = new List<IDataDefinition?>();
+        var dataDefinitions = new List<IDataDefinition>();
 
         var files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);
         foreach (var filePath in files)
         {
-            IDataDefinition? dataDefinition = null;
+            IDataDefinition? dataDefinition;
             using StreamReader sr = new(filePath);
 
             var jsonObject = (JObject)await JToken.ReadFromAsync(new JsonTextReader(sr));
             var jsonType = jsonObject["_jsonType"]?.Value<string>();
-            if (jsonType == null)
-            {
-                continue;
-            }
+            if (jsonType == null) continue;
 
-            switch (jsonType.ToLower())
+            switch (jsonType.ToLowerInvariant())
             {
                 case "biome":
                     dataDefinition = jsonObject.ToObject<BiomeDataDefinition>();
                     break;
                 default:
                     dataDefinition = new UnknownDataDefinition(jsonObject.ToObject<dynamic>());
-                    continue;
+                    break;
             }
 
 
@@ -96,10 +106,7 @@ public class ModPackage
 
     public async Task SavePackageToDisk(string path)
     {
-        if (Directory.Exists($"{path}/data"))
-        {
-            Directory.Delete($"{path}/data", true);
-        }
+        if (Directory.Exists($"{path}/data")) Directory.Delete($"{path}/data", true);
 
         var modConfLines = new[]
         {
@@ -108,7 +115,7 @@ public class ModPackage
             $"depends = mc_json_importer,{Config.Dependencies}",
             $"optional_depends ={Config.OptionalDependencies}",
             $"author = {Config.Author}",
-            $"title = {Config.Title}",
+            $"title = {Config.Title}"
         };
 
         await File.WriteAllLinesAsync($"{path}/mod.conf", modConfLines);
@@ -117,29 +124,49 @@ public class ModPackage
             "json_importer.loadDirectory(minetest.get_modpath(minetest.get_current_modname()) .. \"\\\\data\\\\\")";
         await File.WriteAllTextAsync($"{path}/init.lua", initString);
 
+        Directory.CreateDirectory($"{path}/data");
+
         foreach (var dataDefinition in DataDefinitions)
         {
             var oldName = dataDefinition.DataName;
 
-            var folder = dataDefinition.JsonType.ToLower();
-            var filePath = $"{path}/data/{folder}s";
+            var folderName = dataDefinition.JsonType.ToLower();
+            var filePath = $"{path}/data/{folderName}s";
             var filename = FileNameHelper.NextAvailableFilename($"{filePath}/{oldName}.json");
 
             dataDefinition.DataName = $"{Config.Name}:{dataDefinition.DataName}";
 
             Directory.CreateDirectory(filePath);
 
-            object serializedObject = dataDefinition.GetType() == typeof(UnknownDataDefinition)
-                ? ((UnknownDataDefinition)dataDefinition).Data
-                : dataDefinition;
 
-            var output = JsonConvert.SerializeObject(serializedObject, Formatting.Indented);
+            object serializedObject;
+            if (dataDefinition is UnknownDataDefinition definition)
+                serializedObject = definition.Data;
+            else
+                serializedObject = dataDefinition;
+
+            var output = JsonConvert.SerializeObject(serializedObject, _jsonSettings);
             await File.WriteAllTextAsync(filename, output);
 
             dataDefinition.DataName = oldName;
         }
     }
 
-    public ModConfig Config { get; }
-    public List<IDataDefinition> DataDefinitions { get; }
+
+    private bool Equals(ModPackage other)
+    {
+        return Config.Equals(other.Config) && DataDefinitions.Equals(other.DataDefinitions);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        return obj.GetType() == GetType() && Equals((ModPackage)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Config, DataDefinitions);
+    }
 }

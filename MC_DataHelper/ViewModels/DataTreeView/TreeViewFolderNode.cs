@@ -1,8 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using ReactiveUI;
 
 namespace MC_DataHelper.ViewModels.DataTreeView;
 
-public class TreeViewFolderNode : TreeViewNode
+public class TreeViewFolderNode : ReactiveObject, ITreeViewNode
 {
     public TreeViewFolderNode(string label)
     {

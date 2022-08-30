@@ -28,8 +28,8 @@ public record ModConfig
         get => _name;
         set
         {
-            var rgx = new Regex("[^a-zA-Z]");
-            _name = rgx.Replace(value, string.Empty);
+            var rgx = new Regex(pattern: "[^a-z0-9_]");
+            _name = rgx.Replace(value.ToLowerInvariant().Replace(' ', '_'), string.Empty);
         }
     }
 
@@ -38,4 +38,18 @@ public record ModConfig
     public string Author { get; set; }
     public string Dependencies { get; set; }
     public string OptionalDependencies { get; set; }
+
+    public virtual bool Equals(ModConfig? other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return _name == other._name && Title == other.Title && Description == other.Description &&
+               Author == other.Author && Dependencies == other.Dependencies &&
+               OptionalDependencies == other.OptionalDependencies;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_name, Title, Description, Author, Dependencies, OptionalDependencies);
+    }
 }

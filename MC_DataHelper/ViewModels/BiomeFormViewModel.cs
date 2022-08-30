@@ -1,23 +1,46 @@
 ﻿using System.Reactive;
 using MC_DataHelper.Models;
+using MC_DataHelper.Models.DataDefinitions;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Contexts;
-using ReactiveUI.Validation.Extensions;
 
 namespace MC_DataHelper.ViewModels;
 
 public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 {
+    private readonly MainWindowViewModel _mainWindowViewModel;
     private BiomeDataDefinition _data = new();
-    private ModPackage _parentPackage;
 
-    MainWindowViewModel _mainWindowViewModel;
+    private TreeViewDataNode? _selectedNode;
 
-    public string BiomeName
+    public BiomeFormViewModel(MainWindowViewModel mainWindowViewModel)
+    {
+        _mainWindowViewModel = mainWindowViewModel;
+
+        SubmitFormCommand = ReactiveCommand.Create(SubmitForm);
+        ClearFormCommand = ReactiveCommand.Create(ClearForm);
+    }
+
+    private TreeViewDataNode? SelectedNode
+    {
+        get => _selectedNode;
+        set
+        {
+            _selectedNode = value;
+            _mainWindowViewModel.SelectedTreeViewItem = value;
+            _mainWindowViewModel.EditingExistingBiome = value != null;
+        }
+    }
+
+    public string? BiomeName
     {
         get => _data.DataName;
-        set => _data.DataName = value;
+        set
+        {
+            _data.DataName = value;
+            SelectedNode?.refreshLabel();
+        }
     }
 
     public string? NodeDust
@@ -26,186 +49,140 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         set => _data.NodeDust = value;
     }
 
-    public string NodeTop
+    public string? NodeTop
     {
         get => _data.NodeTop;
         set => _data.NodeTop = value;
     }
 
-    public string DepthTop
+    public string? DepthTop
     {
         get => _data.DepthTop.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.DepthTop = number;
-            }
+            if (int.TryParse(value, out var number)) _data.DepthTop = number;
         }
     }
 
-    public string NodeFiller
+    public string? NodeFiller
     {
         get => _data.NodeFiller;
         set => _data.NodeFiller = value;
     }
 
-    public string DepthFiller
+    public string? DepthFiller
     {
         get => _data.DepthFiller.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.DepthFiller = number;
-            }
+            if (int.TryParse(value, out var number)) _data.DepthFiller = number;
         }
     }
 
-    public string NodeStone
+    public string? NodeStone
     {
         get => _data.NodeStone;
         set => _data.NodeStone = value;
     }
 
-    public string NodeWaterTop
+    public string? NodeWaterTop
     {
         get => _data.NodeWaterTop;
         set => _data.NodeWaterTop = value;
     }
 
-    public string DepthWaterTop
+    public string? DepthWaterTop
     {
         get => _data.DepthWaterTop.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.DepthWaterTop = number;
-            }
+            if (int.TryParse(value, out var number)) _data.DepthWaterTop = number;
         }
     }
 
-    public string NodeWater
+    public string? NodeWater
     {
         get => _data.NodeWater;
         set => _data.NodeWater = value;
     }
 
-    public string NodeRiverbed
+    public string? NodeRiverbed
     {
         get => _data.NodeRiverbed;
         set => _data.NodeRiverbed = value;
     }
 
-    public string DepthRiverbed
+    public string? DepthRiverbed
     {
         get => _data.DepthRiverbed.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.DepthRiverbed = number;
-            }
+            if (int.TryParse(value, out var number)) _data.DepthRiverbed = number;
         }
     }
 
-    public string NodeCaveLiquid
+    public string? NodeCaveLiquid
     {
         get => _data.NodeCaveLiquid;
         set => _data.NodeCaveLiquid = value;
     }
 
-    public string YMin
+    public string? YMin
     {
         get => _data.YMin.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.YMin = number;
-            }
+            if (int.TryParse(value, out var number)) _data.YMin = number;
         }
     }
 
-    public string YMax
+    public string? YMax
     {
         get => _data.YMax.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.YMax = number;
-            }
+            if (int.TryParse(value, out var number)) _data.YMax = number;
         }
     }
 
-    public string VerticalBlend
+    public string? VerticalBlend
     {
         get => _data.VerticalBlend.ToString();
         set
         {
-            if (int.TryParse(value, out var number))
-            {
-                _data.VerticalBlend = number;
-            }
+            if (int.TryParse(value, out var number)) _data.VerticalBlend = number;
         }
     }
 
-    public string HeatPoint
+    public int HeatPoint
     {
-        get => _data.HeatPoint.ToString();
-        set
-        {
-            if (int.TryParse(value, out var number))
-            {
-                _data.HeatPoint = number;
-            }
-        }
+        get => _data.HeatPoint ?? 0;
+        set => _data.HeatPoint = value;
     }
 
-    public string HumidityPoint
+    public int HumidityPoint
     {
-        get => _data.HumidityPoint.ToString();
-        set
-        {
-            if (int.TryParse(value, out var number))
-            {
-                _data.HumidityPoint = number;
-            }
-        }
+        get => _data.HumidityPoint ?? 0;
+        set => _data.HumidityPoint = value;
     }
 
     public ReactiveCommand<Unit, Unit> SubmitFormCommand { get; }
 
     public ReactiveCommand<Unit, Unit> ClearFormCommand { get; }
 
-    public BiomeFormViewModel(MainWindowViewModel mainWindowViewModel, ModPackage parentPackage)
-    {
-        _mainWindowViewModel = mainWindowViewModel;
-        
-        _parentPackage = parentPackage;
-        SubmitFormCommand = ReactiveCommand.Create(SubmitForm);
-        ClearFormCommand = ReactiveCommand.Create(ClearForm);
-
-        this.ValidationRule(
-            viewModel => viewModel.DepthTop,
-            name => !int.TryParse(name, out var value),
-            "You must specify a valid integer");
-    }
-
-    public ValidationContext ValidationContext { get; } = new ValidationContext();
-
+    public ValidationContext ValidationContext { get; } = new();
 
     private void SubmitForm()
     {
-        _parentPackage.DataDefinitions.Add(_data);
+        _mainWindowViewModel.AddDataDefinition(_data);
         ClearForm();
     }
 
     private void ClearForm()
     {
-        _data = new();
+        SelectedNode = null;
+        _mainWindowViewModel.SelectedTreeViewItem = null;
+        _data = new BiomeDataDefinition();
         UpdateProperties();
     }
 
@@ -229,13 +206,11 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         this.RaisePropertyChanged(nameof(VerticalBlend));
         this.RaisePropertyChanged(nameof(HeatPoint));
         this.RaisePropertyChanged(nameof(HumidityPoint));
-        
-        _mainWindowViewModel.UpdateTree();
     }
 
-    public void UpdatePackage(ModPackage selectedPackage)
+    public void UpdateDataSource(BiomeDataDefinition nodeDataDefinition, TreeViewDataNode treeViewDataNode)
     {
-        _parentPackage = selectedPackage;
+        _data = nodeDataDefinition;
         UpdateProperties();
     }
 }
