@@ -28,8 +28,8 @@ public record ModConfig
         get => _name;
         set
         {
-            var rgx = new Regex("[^a-zA-Z]");
-            _name = rgx.Replace(value, string.Empty);
+            var rgx = new Regex(pattern: "[^a-z0-9_]");
+            _name = rgx.Replace(value.ToLowerInvariant().Replace(' ', '_'), string.Empty);
         }
     }
 
