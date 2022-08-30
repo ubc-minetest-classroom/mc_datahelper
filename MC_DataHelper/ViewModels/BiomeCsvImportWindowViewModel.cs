@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Reactive;
@@ -35,7 +36,9 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
     public ObservableCollection<string> CsvFieldNames { get; }
 
     private bool _csvLoaded = false;
-    private string _footerText = "Step 1/3: Select the CSV file to import by clicking 'Browse' or by entering its path in the textbox above.";
+
+    private string _footerText =
+        "Step 1/3: Select the CSV file to import by clicking 'Browse' or by entering its path in the textbox above.";
 
     public bool CsvLoaded
     {
@@ -92,7 +95,7 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
     private async Task LoadCsvFile()
     {
         CsvLoaded = false;
-        
+
         FooterText = "Step 2/3: CSV file selected. Click 'Load *.CSV' to load the file.";
 
         if (!File.Exists(FilePath))
@@ -138,7 +141,10 @@ public class BiomeCsvImportWindowViewModel : ViewModelBase
         }
 
         var parser = new BiomeCsvParser();
-        var biomes = parser.ReadCsvToBiomeData(FilePath);
+
+        var map = new BiomeDataDefinitionMap(new List<FieldHeaderPair>(FieldMatchList));
+
+        var biomes = parser.ReadCsvToBiomeData(FilePath, map);
         _modPackage.DataDefinitions.AddRange(biomes);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using ReactiveUI;
 
-namespace MC_DataHelper.ViewModels;
+namespace MC_DataHelper.Models;
 
 public class FieldHeaderPair : ReactiveObject
 {
