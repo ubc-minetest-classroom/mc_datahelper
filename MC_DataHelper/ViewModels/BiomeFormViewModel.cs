@@ -3,7 +3,6 @@ using MC_DataHelper.Models;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Contexts;
-using ReactiveUI.Validation.Extensions;
 
 namespace MC_DataHelper.ViewModels;
 
@@ -20,11 +19,6 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 
         SubmitFormCommand = ReactiveCommand.Create(SubmitForm);
         ClearFormCommand = ReactiveCommand.Create(ClearForm);
-
-        this.ValidationRule(
-            viewModel => viewModel.DepthTop,
-            name => !int.TryParse(name, out var value),
-            "You must specify a valid integer");
     }
 
     private TreeViewDataNode? SelectedNode
@@ -38,7 +32,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         }
     }
 
-    public string BiomeName
+    public string? BiomeName
     {
         get => _data.DataName;
         set
@@ -54,13 +48,13 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         set => _data.NodeDust = value;
     }
 
-    public string NodeTop
+    public string? NodeTop
     {
         get => _data.NodeTop;
         set => _data.NodeTop = value;
     }
 
-    public string DepthTop
+    public string? DepthTop
     {
         get => _data.DepthTop.ToString();
         set
@@ -69,13 +63,13 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         }
     }
 
-    public string NodeFiller
+    public string? NodeFiller
     {
         get => _data.NodeFiller;
         set => _data.NodeFiller = value;
     }
 
-    public string DepthFiller
+    public string? DepthFiller
     {
         get => _data.DepthFiller.ToString();
         set
@@ -84,19 +78,19 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         }
     }
 
-    public string NodeStone
+    public string? NodeStone
     {
         get => _data.NodeStone;
         set => _data.NodeStone = value;
     }
 
-    public string NodeWaterTop
+    public string? NodeWaterTop
     {
         get => _data.NodeWaterTop;
         set => _data.NodeWaterTop = value;
     }
 
-    public string DepthWaterTop
+    public string? DepthWaterTop
     {
         get => _data.DepthWaterTop.ToString();
         set
@@ -105,19 +99,19 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         }
     }
 
-    public string NodeWater
+    public string? NodeWater
     {
         get => _data.NodeWater;
         set => _data.NodeWater = value;
     }
 
-    public string NodeRiverbed
+    public string? NodeRiverbed
     {
         get => _data.NodeRiverbed;
         set => _data.NodeRiverbed = value;
     }
 
-    public string DepthRiverbed
+    public string? DepthRiverbed
     {
         get => _data.DepthRiverbed.ToString();
         set
@@ -126,13 +120,13 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         }
     }
 
-    public string NodeCaveLiquid
+    public string? NodeCaveLiquid
     {
         get => _data.NodeCaveLiquid;
         set => _data.NodeCaveLiquid = value;
     }
 
-    public string YMin
+    public string? YMin
     {
         get => _data.YMin.ToString();
         set
@@ -141,7 +135,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         }
     }
 
-    public string YMax
+    public string? YMax
     {
         get => _data.YMax.ToString();
         set
@@ -150,7 +144,7 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
         }
     }
 
-    public string VerticalBlend
+    public string? VerticalBlend
     {
         get => _data.VerticalBlend.ToString();
         set
@@ -161,13 +155,13 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 
     public int HeatPoint
     {
-        get => _data.HeatPoint;
+        get => _data.HeatPoint ?? 0;
         set => _data.HeatPoint = value;
     }
 
     public int HumidityPoint
     {
-        get => _data.HumidityPoint;
+        get => _data.HumidityPoint ?? 0;
         set => _data.HumidityPoint = value;
     }
 

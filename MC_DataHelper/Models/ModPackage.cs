@@ -28,6 +28,13 @@ public class ModPackage
     public ModConfig Config { get; }
     public List<IDataDefinition> DataDefinitions { get; }
 
+    private JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+    {
+        TypeNameHandling = TypeNameHandling.None,
+        Formatting = Formatting.Indented,
+        NullValueHandling = NullValueHandling.Ignore
+    };
+
     public static async Task<ModPackage> LoadPackageFromDisk(string path)
     {
         var confFileLines = await File.ReadAllLinesAsync($"{path}/mod.conf");
@@ -136,7 +143,7 @@ public class ModPackage
             else
                 serializedObject = dataDefinition;
 
-            var output = JsonConvert.SerializeObject(serializedObject, Formatting.Indented);
+            var output = JsonConvert.SerializeObject(serializedObject, _jsonSettings);
             await File.WriteAllTextAsync(filename, output);
 
             dataDefinition.DataName = oldName;
