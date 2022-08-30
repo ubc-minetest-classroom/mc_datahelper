@@ -41,7 +41,7 @@ jobs:
           reporter: dotnet-trx
 
       - name: Build application
-        run: dotnet publish -c Release -r ${{ matrix.rid }} -o ${{env.DOTNET_ROOT}}/datahelper -p:PublishReadyToRun=true
+        run: dotnet publish -c Release -r ${{ matrix.rid }} --self-contained -o ${{env.DOTNET_ROOT}}/datahelper -p:PublishReadyToRun=true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
