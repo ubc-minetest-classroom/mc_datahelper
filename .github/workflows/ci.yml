@@ -9,7 +9,7 @@ jobs:
   build:
     strategy:
       matrix:
-        rid: [win-x64]
+        rid: [win-x64, linux-x64, osx-x64]
     runs-on: ubuntu-latest
     name: .NET 6 Build Application
     steps:
@@ -54,7 +54,20 @@ jobs:
     runs-on: ubuntu-latest
     name: upload
     steps:
-      - uses: actions/download-artifact@v3
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
 
       - name: Display structure of downloaded files
         run: ls -R
+
+      - name: Upload Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            artifacts/*
