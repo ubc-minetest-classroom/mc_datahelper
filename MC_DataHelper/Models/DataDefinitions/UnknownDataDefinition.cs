@@ -9,7 +9,7 @@ public class UnknownDataDefinition : IDataDefinition
 
     public dynamic Data { get; }
 
-    public string DataName
+    public string Name
     {
         get => Data.name;
         set => Data.name = value;

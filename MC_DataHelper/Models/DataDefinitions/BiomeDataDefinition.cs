@@ -57,7 +57,7 @@ public record BiomeDataDefinition : IDataDefinition
     public string? NodeDust { get; set; } = string.Empty;
 
     [JsonProperty("name", NullValueHandling = NullValueHandling.Include)]
-    public string DataName { get; set; } = "New Biome";
+    public string Name { get; set; } = "New Biome";
 
     [JsonProperty("_jsonType", NullValueHandling = NullValueHandling.Include)]
     public string JsonType => "biome";

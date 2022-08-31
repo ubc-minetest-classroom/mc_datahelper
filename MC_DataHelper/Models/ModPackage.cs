@@ -79,10 +79,14 @@ public class ModPackage
             var jsonType = jsonObject["_jsonType"]?.Value<string>();
             if (jsonType == null) continue;
 
+            //TODO: Auto Register Data Definitions
             switch (jsonType.ToLowerInvariant())
             {
                 case "biome":
                     dataDefinition = jsonObject.ToObject<BiomeDataDefinition>();
+                    break;
+                case "craftitem":
+                    dataDefinition = jsonObject.ToObject<CraftItemDataDefinition>();
                     break;
                 default:
                     dataDefinition = new UnknownDataDefinition(jsonObject.ToObject<dynamic>());
@@ -91,10 +95,10 @@ public class ModPackage
 
 
             if (dataDefinition == null) continue;
-            if (dataDefinition.DataName.Contains(':'))
+            if (dataDefinition.Name.Contains(':'))
             {
-                var splitString = dataDefinition.DataName.Split(':');
-                dataDefinition.DataName = splitString[splitString.GetUpperBound(0)];
+                var splitString = dataDefinition.Name.Split(':');
+                dataDefinition.Name = splitString[splitString.GetUpperBound(0)];
             }
 
             dataDefinitions.Add(dataDefinition);
@@ -128,13 +132,13 @@ public class ModPackage
 
         foreach (var dataDefinition in DataDefinitions)
         {
-            var oldName = dataDefinition.DataName;
+            var oldName = dataDefinition.Name;
 
             var folderName = dataDefinition.JsonType.ToLower();
             var filePath = $"{path}/data/{folderName}s";
             var filename = FileNameHelper.NextAvailableFilename($"{filePath}/{oldName}.json");
 
-            dataDefinition.DataName = $"{Config.Name}:{dataDefinition.DataName}";
+            dataDefinition.Name = $"{Config.Name}:{dataDefinition.Name}";
 
             Directory.CreateDirectory(filePath);
 
@@ -148,7 +152,7 @@ public class ModPackage
             var output = JsonConvert.SerializeObject(serializedObject, _jsonSettings);
             await File.WriteAllTextAsync(filename, output);
 
-            dataDefinition.DataName = oldName;
+            dataDefinition.Name = oldName;
         }
     }
 

@@ -35,10 +35,10 @@ public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
 
     public string? BiomeName
     {
-        get => _data.DataName;
+        get => _data.Name;
         set
         {
-            _data.DataName = value;
+            _data.Name = value;
             SelectedNode?.refreshLabel();
         }
     }

@@ -19,7 +19,7 @@ public class TreeViewDataNode : ReactiveObject, ITreeViewNode
     public IDataDefinition DataDefinition { get; }
 
 
-    public string Label => DataDefinition.DataName;
+    public string Label => DataDefinition.Name;
 
     public ObservableCollection<TreeViewDataNode> Children { get; init; }
 
