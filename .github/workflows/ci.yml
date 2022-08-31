@@ -46,8 +46,8 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: Build ${{ matrix.rid }}
-          path: ${{env.DOTNET_ROOT}}/publish/
+          name: ${{ matrix.rid }}
+          path: ${{env.DOTNET_ROOT}}/publish/MC_DataHelper.*
           if-no-files-found: warn
   upload:
     needs: build
