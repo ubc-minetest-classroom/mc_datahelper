@@ -40,12 +40,8 @@ jobs:
           path: /home/runner/work/mc_datahelper/mc_datahelper/ModelTests/TestResults/*.trx
           reporter: dotnet-trx
 
-      - name: Git Version
-        uses: codacy/git-version@2.5.4
-        id: version_string
-
       - name: Build application
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/publish --runtime ${{ matrix.rid }} /p:PublishReadyToRun=true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true /p:UseAppHost=true --self-contained true /p:Version=${{ steps.version_string.outputs.* }}
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/publish --runtime ${{ matrix.rid }} /p:PublishReadyToRun=true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true /p:UseAppHost=true --self-contained true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -65,10 +61,6 @@ jobs:
 
       - name: Display structure of downloaded files
         run: ls -R
-
-      - name: Git Version
-        uses: codacy/git-version@2.5.4
-        id: version_string
 
       - name: Zip Linux-X64
         uses: montudor/action-zip@v1
