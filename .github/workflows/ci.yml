@@ -41,13 +41,13 @@ jobs:
           reporter: dotnet-trx
 
       - name: Build application
-        run: dotnet publish -c Release -r ${{ matrix.rid }} --self-contained -o ${{env.DOTNET_ROOT}}/datahelper -p:PublishReadyToRun=true
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/publish --runtime ${{ matrix.rid }} /p:PublishReadyToRun=true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true /p:UseAppHost=true --self-contained true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: Build ${{ matrix.rid }}
-          path: ${{env.DOTNET_ROOT}}/datahelper/
+          path: ${{env.DOTNET_ROOT}}/publish/
           if-no-files-found: warn
   upload:
     needs: build
