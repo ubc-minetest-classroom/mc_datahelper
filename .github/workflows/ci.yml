@@ -36,9 +36,13 @@ jobs:
         uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
-          name: Tests
+          name: ${{ matrix.rid }} Tests
           path: /home/runner/work/mc_datahelper/mc_datahelper/ModelTests/TestResults/*.trx
           reporter: dotnet-trx
+
+      - name: Git Version
+        uses: codacy/git-version@2.5.4
+        id: version_string
 
       - name: Build application
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/publish --runtime ${{ matrix.rid }} /p:PublishReadyToRun=true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true /p:UseAppHost=true --self-contained true
@@ -47,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.rid }}
-          path: ${{env.DOTNET_ROOT}}/publish/MC_DataHelper.*
+          path: ${{env.DOTNET_ROOT}}/publish/MC_DataHelper*
           if-no-files-found: warn
   upload:
     needs: build
@@ -70,4 +74,6 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            artifacts/*
+            artifacts/linux-x64/*
+            artifacts/osx-x64/*
+            artifacts/win-x64/*
