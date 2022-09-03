@@ -5,17 +5,6 @@ namespace MC_DataHelper.ViewModels;
 
 public class BiomesDefinitionFormViewModel : DataDefinitionFormViewModelBase<BiomeDataDefinition>
 {
-    public string? BiomeName
-    {
-        get => Data.Name;
-        set
-        {
-            Data.Name = value ?? "";
-
-            MainWindowViewModel.SelectedNode?.refreshLabel();
-        }
-    }
-
     public string? NodeDust
     {
         get => Data.NodeDust;
@@ -141,7 +130,7 @@ public class BiomesDefinitionFormViewModel : DataDefinitionFormViewModelBase<Bio
 
     protected override void UpdateProperties()
     {
-        this.RaisePropertyChanged(nameof(BiomeName));
+        base.UpdateProperties();
         this.RaisePropertyChanged(nameof(NodeDust));
         this.RaisePropertyChanged(nameof(NodeTop));
         this.RaisePropertyChanged(nameof(DepthTop));

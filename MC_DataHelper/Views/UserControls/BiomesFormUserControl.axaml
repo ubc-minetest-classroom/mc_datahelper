@@ -13,7 +13,7 @@
     
     <ScrollViewer AllowAutoHide="True">
         <StackPanel>
-            <TextBox Text="{Binding BiomeName, Mode=TwoWay}"
+            <TextBox Text="{Binding Name, Mode=TwoWay}"
                      Watermark="Biome Name"
                      ToolTip.Tip="The name of the biome." Margin="8" />
             <TextBox Text="{Binding NodeDust, Mode=TwoWay}"

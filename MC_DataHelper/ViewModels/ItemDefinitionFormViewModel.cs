@@ -6,6 +6,7 @@ public class ItemDefinitionFormViewModel : DataDefinitionFormViewModelBase<Craft
 {
     protected override void UpdateProperties()
     {
+        base.UpdateProperties();
     }
 
     public ItemDefinitionFormViewModel() : base()

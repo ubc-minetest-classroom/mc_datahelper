@@ -13,6 +13,17 @@ public abstract class DataDefinitionFormViewModelBase<T> :  ViewModelBase where 
 
     public ReactiveCommand<Unit, Unit> SubmitFormCommand { get; }
     public ReactiveCommand<Unit, Unit> ClearFormCommand { get; }
+    
+    public string? Name
+    {
+        get => Data.Name;
+        set
+        {
+            Data.Name = value ?? "";
+
+            MainWindowViewModel.SelectedNode?.refreshLabel();
+        }
+    }
 
 
     public DataDefinitionFormViewModelBase()
@@ -50,5 +61,8 @@ public abstract class DataDefinitionFormViewModelBase<T> :  ViewModelBase where 
         UpdateProperties();
     }
     
-    protected abstract void UpdateProperties();
+    protected virtual void UpdateProperties()
+    {
+        this.RaisePropertyChanged(nameof(Name));
+    }
 }
