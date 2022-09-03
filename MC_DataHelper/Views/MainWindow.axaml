@@ -75,11 +75,14 @@
                 </TabItem>
 
                 <TabItem Header="Biomes">
-                    <uc:BiomesFormUserControl Name="BiomesFormUserControl" DataContext="{Binding BiomesFormViewModel}" />
+                    <uc:BiomesFormUserControl Name="BiomesFormUserControl" DataContext="{Binding BiomesDefinitionFormViewModel}" />
                 </TabItem>
 
 
-                <TabItem Header="Items" />
+                <TabItem Header="Items">
+                    <uc:ItemsFormUserControl Name="ItemsFormUserControl" DataContext="{Binding ItemsDefinitionFormViewModel}"></uc:ItemsFormUserControl>
+                </TabItem>
+                
                 <TabItem Header="Nodes" />
                 <TabItem Header="Recipes" />
                 <TabItem Header="Tools" />

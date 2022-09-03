@@ -7,7 +7,7 @@
              x:Class="MC_DataHelper.Views.UserControls.ItemsFormUserControl">
 
     <UserControl.DataContext>
-        <vm:ItemsFormViewModel />
+        <vm:ItemDefinitionFormViewModel />
     </UserControl.DataContext>
 
     <ScrollViewer AllowAutoHide="True">

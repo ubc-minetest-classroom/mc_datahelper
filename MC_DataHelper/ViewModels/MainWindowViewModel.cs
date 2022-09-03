@@ -36,7 +36,8 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
     // Initialize everything
     public MainWindowViewModel()
     {
-        BiomesFormViewModel = new BiomesFormViewModel(this);
+        BiomesDefinitionFormViewModel = new BiomesDefinitionFormViewModel(this);
+        ItemsDefinitionFormViewModel = new ItemDefinitionFormViewModel(this);
         ModConfigViewModel = new ModConfigViewModel();
 
         ShowBiomeCsvDialog = new Interaction<ModPackage, BiomeCsvImportWindowViewModel?>();
@@ -75,7 +76,8 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
         CreateTree();
     }
 
-    public BiomesFormViewModel BiomesFormViewModel { get; }
+    public BiomesDefinitionFormViewModel BiomesDefinitionFormViewModel { get; }
+    public ItemDefinitionFormViewModel ItemsDefinitionFormViewModel { get; }
     public ModConfigViewModel ModConfigViewModel { get; }
 
     private ModPackage? Package
@@ -119,7 +121,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
             }
         }
     }
-    
+
     private TreeViewDataNode? _selectedNode;
 
     public TreeViewDataNode? SelectedNode
@@ -191,7 +193,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
         switch (node.DataDefinition)
         {
             case BiomeDataDefinition biomeDataDefinition:
-                BiomesFormViewModel.UpdateDataSource(biomeDataDefinition, node);
+                BiomesDefinitionFormViewModel.UpdateDataSource(biomeDataDefinition, node);
                 SelectedTabIndex = 1;
                 break;
         }
