@@ -1,0 +1,33 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MC_DataHelper.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="MC_DataHelper.Views.UserControls.ModConfigUserControl">
+    
+    
+    <Design.DataContext>
+        <vm:ModConfigViewModel />
+    </Design.DataContext>
+    
+    <ScrollViewer AllowAutoHide="True">
+        <StackPanel>
+            <TextBox Watermark="Mod Name" ToolTip.Tip="The name of the mod." Margin="8"
+                     Text="{Binding ConfigName}" />
+            <TextBox Watermark="Mod Title" ToolTip.Tip="The user-visible title of the mod."
+                     Margin="8"
+                     Text="{Binding ConfigTitle}" />
+            <TextBox Watermark="Description" ToolTip.Tip="A brief description of the mod."
+                     Margin="8"
+                     Text="{Binding ConfigDescription}" />
+            <TextBox Watermark="Author" ToolTip.Tip="The author of the mod." Margin="8"
+                     Text="{Binding ConfigAuthor}" />
+            <TextBox Watermark="Dependencies" ToolTip.Tip="Mod dependencies." Margin="8"
+                     Text="{Binding ConfigDependencies}" />
+            <TextBox Watermark="Optional Dependencies" ToolTip.Tip="Optional Dependencies."
+                     Margin="8"
+                     Text="{Binding ConfigOptionalDependencies}" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

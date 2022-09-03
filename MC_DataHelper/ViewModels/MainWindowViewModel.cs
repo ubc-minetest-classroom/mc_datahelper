@@ -37,6 +37,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
     public MainWindowViewModel()
     {
         BiomesFormViewModel = new BiomesFormViewModel(this);
+        ModConfigViewModel = new ModConfigViewModel();
 
         ShowBiomeCsvDialog = new Interaction<ModPackage, BiomeCsvImportWindowViewModel?>();
         _isProjectOpen = false;
@@ -75,6 +76,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
     }
 
     public BiomesFormViewModel BiomesFormViewModel { get; }
+    public ModConfigViewModel ModConfigViewModel { get; }
 
     private ModPackage? Package
     {
@@ -82,15 +84,10 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _selectedPackage, value);
-            IsProjectOpen = value != null;
-
-            this.RaisePropertyChanged(nameof(ConfigName));
-            this.RaisePropertyChanged(nameof(ConfigDescription));
-            this.RaisePropertyChanged(nameof(ConfigDependencies));
-            this.RaisePropertyChanged(nameof(ConfigOptionalDependencies));
-            this.RaisePropertyChanged(nameof(ConfigAuthor));
-            this.RaisePropertyChanged(nameof(ConfigTitle));
             this.RaisePropertyChanged(nameof(FooterText));
+
+            ModConfigViewModel.Package = value;
+            IsProjectOpen = value != null;
         }
     }
 
@@ -101,21 +98,23 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
         get => _selectedTreeViewItem;
         set
         {
-            if (value is TreeViewFolderNode folder)
+            switch (value)
             {
-                this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, null);
-            }
-            else if (value is TreeViewDataNode dataNode)
-            {
-                this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, value);
+                case TreeViewFolderNode:
+                    this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, null);
+                    break;
+                case TreeViewDataNode dataNode:
+                {
+                    this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, value);
 
-                if (dataNode.DataDefinition is BiomeDataDefinition biomeDataDefinition)
-                {
-                    SelectedTabIndex = 1;
-                }
-                else
-                {
-                    SelectedTabIndex = 0;
+                    SelectedTabIndex = dataNode.DataDefinition switch
+                    {
+                        BiomeDataDefinition => 1,
+                        CraftItemDataDefinition => 2,
+                        _ => 0
+                    };
+
+                    break;
                 }
             }
         }
@@ -170,59 +169,6 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
         set => this.RaiseAndSetIfChanged(ref _selectedTabIndex, value);
     }
 
-    public string ConfigName
-    {
-        get => Package?.Config.Name ?? string.Empty;
-        set
-        {
-            if (Package != null) Package.Config.Name = value;
-        }
-    }
-
-    public string ConfigDescription
-    {
-        get => Package?.Config.Description ?? string.Empty;
-        set
-        {
-            if (Package != null) Package.Config.Description = value;
-        }
-    }
-
-    public string ConfigDependencies
-    {
-        get => Package?.Config.Dependencies ?? string.Empty;
-        set
-        {
-            if (Package != null) Package.Config.Dependencies = value;
-        }
-    }
-
-    public string ConfigOptionalDependencies
-    {
-        get => Package?.Config.OptionalDependencies ?? string.Empty;
-        set
-        {
-            if (Package != null) Package.Config.OptionalDependencies = value;
-        }
-    }
-
-    public string ConfigAuthor
-    {
-        get => Package?.Config.Author ?? string.Empty;
-        set
-        {
-            if (Package != null) Package.Config.Author = value;
-        }
-    }
-
-    public string ConfigTitle
-    {
-        get => Package?.Config.Title ?? string.Empty;
-        set
-        {
-            if (Package != null) Package.Config.Title = value;
-        }
-    }
 
     public ValidationContext ValidationContext { get; } = new();
 

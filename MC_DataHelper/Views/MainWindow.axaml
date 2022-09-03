@@ -16,7 +16,6 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -72,26 +71,9 @@
 
             <TabControl SelectedIndex="{Binding SelectedTabIndex}">
                 <TabItem Header="Overview">
-                    <ScrollViewer AllowAutoHide="True">
-                        <StackPanel>
-                            <TextBox Watermark="Mod Name" ToolTip.Tip="The name of the mod." Margin="8"
-                                     Text="{Binding ConfigName}" />
-                            <TextBox Watermark="Mod Title" ToolTip.Tip="The user-visible title of the mod."
-                                     Margin="8"
-                                     Text="{Binding ConfigTitle}" />
-                            <TextBox Watermark="Description" ToolTip.Tip="A brief description of the mod."
-                                     Margin="8"
-                                     Text="{Binding ConfigDescription}" />
-                            <TextBox Watermark="Author" ToolTip.Tip="The author of the mod." Margin="8"
-                                     Text="{Binding ConfigAuthor}" />
-                            <TextBox Watermark="Dependencies" ToolTip.Tip="Mod dependencies." Margin="8"
-                                     Text="{Binding ConfigDependencies}" />
-                            <TextBox Watermark="Optional Dependencies" ToolTip.Tip="Optional Dependencies."
-                                     Margin="8"
-                                     Text="{Binding ConfigOptionalDependencies}" />
-                        </StackPanel>
-                    </ScrollViewer>
+                    <uc:ModConfigUserControl Name="ModConfigUserControl" DataContext="{Binding ModConfigViewModel}" />
                 </TabItem>
+
                 <TabItem Header="Biomes">
                     <uc:BiomesFormUserControl Name="BiomesFormUserControl" DataContext="{Binding BiomesFormViewModel}" />
                 </TabItem>

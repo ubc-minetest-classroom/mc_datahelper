@@ -9,6 +9,7 @@
         <entry key="MC_DataHelper/Views/UserControls/BiomesFormUserControl.axaml" value="MC_DataHelper/MC_DataHelper.csproj" />
         <entry key="MC_DataHelper/Views/UserControls/BiomesUserControl.axaml" value="MC_DataHelper/MC_DataHelper.csproj" />
         <entry key="MC_DataHelper/Views/UserControls/ItemsFormUserControl.axaml" value="MC_DataHelper/MC_DataHelper.csproj" />
+        <entry key="MC_DataHelper/Views/UserControls/ModConfigUserControl.axaml" value="MC_DataHelper/MC_DataHelper.csproj" />
       </map>
     </option>
   </component>

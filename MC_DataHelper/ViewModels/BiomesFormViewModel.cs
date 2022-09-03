@@ -1,5 +1,4 @@
 ﻿using System.Reactive;
-using MC_DataHelper.Models;
 using MC_DataHelper.Models.DataDefinitions;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
@@ -13,6 +12,14 @@ public class BiomesFormViewModel : ViewModelBase, IValidatableViewModel
     private BiomeDataDefinition _data = new();
 
     private TreeViewDataNode? _selectedNode;
+
+    // Constructor for testing
+    public BiomesFormViewModel()
+    {
+        _mainWindowViewModel = new MainWindowViewModel();
+        SubmitFormCommand = ReactiveCommand.Create(SubmitForm);
+        ClearFormCommand = ReactiveCommand.Create(ClearForm);
+    }
 
     public BiomesFormViewModel(MainWindowViewModel mainWindowViewModel)
     {
@@ -38,7 +45,8 @@ public class BiomesFormViewModel : ViewModelBase, IValidatableViewModel
         get => _data.Name;
         set
         {
-            _data.Name = value;
+            _data.Name = value ?? "";
+
             SelectedNode?.refreshLabel();
         }
     }
