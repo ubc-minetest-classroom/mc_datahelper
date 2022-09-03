@@ -1,4 +1,5 @@
 ﻿using MC_DataHelper.Models.DataDefinitions;
+using ReactiveUI;
 
 namespace MC_DataHelper.ViewModels;
 
@@ -24,7 +25,7 @@ public class ItemDefinitionFormViewModel : DataDefinitionFormViewModelBase<Craft
             if (int.TryParse(value, out var number)) Data.StackMax = number;
         }
     }
-    
+
     public string? Range
     {
         get => Data.Range.ToString();
@@ -34,12 +35,45 @@ public class ItemDefinitionFormViewModel : DataDefinitionFormViewModelBase<Craft
         }
     }
 
+    public bool LiquidsPointable
+    {
+        get => Data.LiquidsPointable.HasValue && Data.LiquidsPointable.Value;
+        set => Data.LiquidsPointable = value;
+    }
+
+    public string? LightSource
+    {
+        get => Data.LightSource.ToString();
+        set
+        {
+            if (int.TryParse(value, out var number)) Data.LightSource = number;
+        }
+    }
+
+    public string? NodePlacementPrediction => Data.NodePlacementPrediction;
+    public string? NodeDigPrediction => Data.NodeDigPrediction;
+
+
     protected override void UpdateProperties()
     {
         base.UpdateProperties();
+        this.RaisePropertyChanged(nameof(Description));
+        this.RaisePropertyChanged(nameof(ShortDescription));
+        this.RaisePropertyChanged(nameof(InventoryImage));
+        this.RaisePropertyChanged(nameof(WieldImage));
+        this.RaisePropertyChanged(nameof(WieldOverlay));
+        this.RaisePropertyChanged(nameof(Palette));
+        this.RaisePropertyChanged(nameof(Color));
+        this.RaisePropertyChanged(nameof(WieldScale));
+        this.RaisePropertyChanged(nameof(StackMax));
+        this.RaisePropertyChanged(nameof(Range));
+        this.RaisePropertyChanged(nameof(LiquidsPointable));
+        this.RaisePropertyChanged(nameof(LightSource));
+        this.RaisePropertyChanged(nameof(NodePlacementPrediction));
+        this.RaisePropertyChanged(nameof(NodeDigPrediction));
     }
 
-    public ItemDefinitionFormViewModel() : base()
+    public ItemDefinitionFormViewModel()
     {
     }
 
