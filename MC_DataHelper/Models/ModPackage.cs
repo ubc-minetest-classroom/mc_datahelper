@@ -79,7 +79,6 @@ public class ModPackage
             var jsonType = jsonObject["_jsonType"]?.Value<string>();
             if (jsonType == null) continue;
 
-            //TODO: Auto Register Data Definitions
             switch (jsonType.ToLowerInvariant())
             {
                 case "biome":

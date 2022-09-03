@@ -7,14 +7,14 @@ using ReactiveUI.Validation.Contexts;
 
 namespace MC_DataHelper.ViewModels;
 
-public class BiomeFormViewModel : ViewModelBase, IValidatableViewModel
+public class BiomesFormViewModel : ViewModelBase, IValidatableViewModel
 {
     private readonly MainWindowViewModel _mainWindowViewModel;
     private BiomeDataDefinition _data = new();
 
     private TreeViewDataNode? _selectedNode;
 
-    public BiomeFormViewModel(MainWindowViewModel mainWindowViewModel)
+    public BiomesFormViewModel(MainWindowViewModel mainWindowViewModel)
     {
         _mainWindowViewModel = mainWindowViewModel;
 
