@@ -54,7 +54,7 @@
                                 Margin="8">
                         <Button Margin="4" Command="{Binding RefreshTreeItemsCommand}">Refresh Items</Button>
                         <Button Margin="4" Command="{Binding DeleteTreeItemCommand}">Delete Item</Button>
-                        <Button Margin="4" Command="{Binding EditTreeItemCommand}">Edit Item</Button>
+                        <Button Margin="4" Command="{Binding DeselectTreeItemCommand}">Deselect Item</Button>
                     </StackPanel>
 
                     <TreeView DockPanel.Dock="Top" Items="{Binding TreeViewItems}" SelectionMode="Single"

@@ -12,12 +12,10 @@ using MC_DataHelper.Models;
 using MC_DataHelper.Models.DataDefinitions;
 using MC_DataHelper.ViewModels.DataTreeView;
 using ReactiveUI;
-using ReactiveUI.Validation.Abstractions;
-using ReactiveUI.Validation.Contexts;
 
 namespace MC_DataHelper.ViewModels;
 
-public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
+public class MainWindowViewModel : ViewModelBase
 {
     private readonly Dictionary<string, TreeViewFolderNode> _folders = new();
 
@@ -30,51 +28,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
     private ModPackage? _selectedPackage;
 
     private int _selectedTabIndex;
-    private ITreeViewNode? _selectedTreeViewItem;
-
-    // Initialize everything
-    public MainWindowViewModel()
-    {
-        BiomesDefinitionFormViewModel = new BiomesDefinitionFormViewModel(this);
-        ItemsDefinitionFormViewModel = new ItemDefinitionFormViewModel(this);
-        ModConfigViewModel = new ModConfigViewModel();
-
-        ShowBiomeCsvDialog = new Interaction<ModPackage, BiomeCsvImportWindowViewModel?>();
-        _isProjectOpen = false;
-        ShowOpenFileDialog = new Interaction<OpenFileDialog, string?>();
-        ShowOpenFolderDialog = new Interaction<OpenFolderDialog, string?>();
-
-        NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectAsync);
-        OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectAsync);
-        SaveProjectCommand = ReactiveCommand.CreateFromTask(SaveProjectAsync);
-        SaveProjectAsCommand = ReactiveCommand.CreateFromTask(SaveProjectAsAsync);
-        ExitCommand = ReactiveCommand.Create(() =>
-        {
-            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-                desktop.Shutdown();
-        });
-
-        //TODO: Implement these commands
-        UndoCommand = ReactiveCommand.Create(() => { });
-        RedoCommand = ReactiveCommand.Create(() => { });
-        CopyCommand = ReactiveCommand.Create(() => { });
-        PasteCommand = ReactiveCommand.Create(() => { });
-
-
-        DeleteTreeItemCommand = ReactiveCommand.Create(DeleteTreeItem);
-        RefreshTreeItemsCommand = ReactiveCommand.Create(CreateTree);
-        EditTreeItemCommand = ReactiveCommand.Create(EditTreeItem);
-
-
-        BiomeCsvWindowCommand = ReactiveCommand.CreateFromTask(async () =>
-        {
-            if (Package != null) await ShowBiomeCsvDialog.Handle(Package);
-            CreateTree();
-        });
-
-        CreateTree();
-    }
-
+    private ITreeViewNode? _selectedTreeViewItem = null;
     public BiomesDefinitionFormViewModel BiomesDefinitionFormViewModel { get; }
     public ItemDefinitionFormViewModel ItemsDefinitionFormViewModel { get; }
     public ModConfigViewModel ModConfigViewModel { get; }
@@ -103,21 +57,16 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
             {
                 case TreeViewFolderNode:
                     this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, null);
-                    SelectedTabIndex = 0;
+                    DeselectTreeItem();
                     break;
-                case TreeViewDataNode dataNode:
-                {
+                case TreeViewDataNode:
                     this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, value);
-
-                    SelectedTabIndex = dataNode.DataDefinition switch
-                    {
-                        BiomeDataDefinition => 1,
-                        CraftItemDataDefinition => 2,
-                        _ => 0
-                    };
-
+                    EditTreeItem();
                     break;
-                }
+                case null:
+                    //     this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, null);
+                    DeselectTreeItem();
+                    break;
             }
         }
     }
@@ -153,7 +102,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
 
     public ReactiveCommand<Unit, Unit> DeleteTreeItemCommand { get; }
     public ReactiveCommand<Unit, Unit> RefreshTreeItemsCommand { get; }
-    public ReactiveCommand<Unit, Unit> EditTreeItemCommand { get; }
+    public ReactiveCommand<Unit, Unit> DeselectTreeItemCommand { get; }
 
     public Interaction<ModPackage, BiomeCsvImportWindowViewModel?> ShowBiomeCsvDialog { get; }
     public Interaction<OpenFileDialog, string?> ShowOpenFileDialog { get; }
@@ -177,43 +126,12 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
         set => this.RaiseAndSetIfChanged(ref _selectedTabIndex, value);
     }
 
-
-    public ValidationContext ValidationContext { get; } = new();
-
-    private void EditTreeItem()
-    {
-        if (SelectedTreeViewItem is not TreeViewDataNode node)
-        {
-            return;
-        }
-
-        switch (node.DataDefinition)
-        {
-            case BiomeDataDefinition biomeDataDefinition:
-                BiomesDefinitionFormViewModel.UpdateDataSource(biomeDataDefinition, node);
-                SelectedTabIndex = 1;
-                break;
-            case CraftItemDataDefinition craftItemDataDefinition:
-                ItemsDefinitionFormViewModel.UpdateDataSource(craftItemDataDefinition, node);
-                SelectedTabIndex = 2;
-                break;
-        }
-    }
-
-    public void AddDataDefinition(IDataDefinition dataDefinition)
-    {
-        if (Package == null) return;
-        Package.DataDefinitions.Add(dataDefinition);
-        AddTreeItem(dataDefinition);
-    }
-
     private void CreateTree()
     {
         TreeViewItems.Clear();
         _folders.Clear();
 
         if (Package?.DataDefinitions == null) return;
-
 
         foreach (var dataDefinition in Package.DataDefinitions) AddTreeItem(dataDefinition);
     }
@@ -230,6 +148,35 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
         folder.Children.Add(new TreeViewDataNode(folder, dataDefinition));
     }
 
+    private void EditTreeItem()
+    {
+        if (SelectedTreeViewItem is not TreeViewDataNode node)
+        {
+            return;
+        }
+
+        BiomesDefinitionFormViewModel.ClearForm();
+        ItemsDefinitionFormViewModel.ClearForm();
+
+        switch (node.DataDefinition)
+        {
+            case BiomeDataDefinition biomeDataDefinition:
+                BiomesDefinitionFormViewModel.UpdateDataSource(biomeDataDefinition, node);
+                SelectedTabIndex = 1;
+                break;
+            case CraftItemDataDefinition craftItemDataDefinition:
+                ItemsDefinitionFormViewModel.UpdateDataSource(craftItemDataDefinition, node);
+                SelectedTabIndex = 2;
+                break;
+        }
+    }
+
+    private void DeselectTreeItem()
+    {
+        SelectedTreeViewItem = null;
+        SelectedTabIndex = 0;
+    }
+
     private void DeleteTreeItem()
     {
         if (Package == null || SelectedTreeViewItem is not TreeViewDataNode node) return;
@@ -240,26 +187,16 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
             TreeViewItems.Remove((TreeViewFolderNode)node.ParentNode);
         }
 
-        SelectedTreeViewItem = null;
-        SelectedTabIndex = 0;
-    }
+        DeselectTreeItem();
 
-    private async Task SaveProjectAsync()
-    {
-        if (Package != null) await Package.SavePackageToDisk(Environment.CurrentDirectory);
-    }
-
-    private async Task SaveProjectAsAsync()
-    {
-        var directoryPath = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
+        switch (node.DataDefinition)
         {
-            Title = "Select a folder to save the project to.",
-            Directory = Environment.CurrentDirectory
-        });
-        if (directoryPath != null)
-        {
-            Environment.CurrentDirectory = directoryPath;
-            if (Package != null) await Package.SavePackageToDisk(directoryPath);
+            case BiomeDataDefinition biomeDataDefinition:
+                BiomesDefinitionFormViewModel.ClearForm();
+                break;
+            case CraftItemDataDefinition craftItemDataDefinition:
+                ItemsDefinitionFormViewModel.ClearForm();
+                break;
         }
     }
 
@@ -299,6 +236,75 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
         {
             Package = null;
         }
+
+        CreateTree();
+    }
+
+    private async Task SaveProjectAsync()
+    {
+        if (Package != null) await Package.SavePackageToDisk(Environment.CurrentDirectory);
+    }
+
+    private async Task SaveProjectAsAsync()
+    {
+        var directoryPath = await ShowOpenFolderDialog.Handle(new OpenFolderDialog
+        {
+            Title = "Select a folder to save the project to.",
+            Directory = Environment.CurrentDirectory
+        });
+        if (directoryPath != null)
+        {
+            Environment.CurrentDirectory = directoryPath;
+            if (Package != null) await Package.SavePackageToDisk(directoryPath);
+        }
+    }
+
+    public void AddDataDefinition(IDataDefinition dataDefinition)
+    {
+        if (Package == null) return;
+        Package.DataDefinitions.Add(dataDefinition);
+        AddTreeItem(dataDefinition);
+    }
+
+    // Initialize everything
+    public MainWindowViewModel()
+    {
+        BiomesDefinitionFormViewModel = new BiomesDefinitionFormViewModel(this);
+        ItemsDefinitionFormViewModel = new ItemDefinitionFormViewModel(this);
+        ModConfigViewModel = new ModConfigViewModel();
+
+        ShowBiomeCsvDialog = new Interaction<ModPackage, BiomeCsvImportWindowViewModel?>();
+        _isProjectOpen = false;
+        ShowOpenFileDialog = new Interaction<OpenFileDialog, string?>();
+        ShowOpenFolderDialog = new Interaction<OpenFolderDialog, string?>();
+
+        NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectAsync);
+        OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectAsync);
+        SaveProjectCommand = ReactiveCommand.CreateFromTask(SaveProjectAsync);
+        SaveProjectAsCommand = ReactiveCommand.CreateFromTask(SaveProjectAsAsync);
+        ExitCommand = ReactiveCommand.Create(() =>
+        {
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                desktop.Shutdown();
+        });
+
+        //TODO: Implement these commands
+        UndoCommand = ReactiveCommand.Create(() => { });
+        RedoCommand = ReactiveCommand.Create(() => { });
+        CopyCommand = ReactiveCommand.Create(() => { });
+        PasteCommand = ReactiveCommand.Create(() => { });
+
+
+        DeleteTreeItemCommand = ReactiveCommand.Create(DeleteTreeItem);
+        RefreshTreeItemsCommand = ReactiveCommand.Create(CreateTree);
+        DeselectTreeItemCommand = ReactiveCommand.Create(DeselectTreeItem);
+
+
+        BiomeCsvWindowCommand = ReactiveCommand.CreateFromTask(async () =>
+        {
+            if (Package != null) await ShowBiomeCsvDialog.Handle(Package);
+            CreateTree();
+        });
 
         CreateTree();
     }

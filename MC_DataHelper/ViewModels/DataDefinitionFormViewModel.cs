@@ -47,7 +47,7 @@ public abstract class DataDefinitionFormViewModelBase<T> :  ViewModelBase where 
         ClearForm();
     }
 
-    protected void ClearForm()
+    public void ClearForm()
     {
         MainWindowViewModel.SelectedNode = null;
         MainWindowViewModel.SelectedTreeViewItem = null;
