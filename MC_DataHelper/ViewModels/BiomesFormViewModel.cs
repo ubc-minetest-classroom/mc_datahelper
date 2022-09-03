@@ -11,8 +11,6 @@ public class BiomesFormViewModel : ViewModelBase, IValidatableViewModel
     private readonly MainWindowViewModel _mainWindowViewModel;
     private BiomeDataDefinition _data = new();
 
-    private TreeViewDataNode? _selectedNode;
-
     // Constructor for testing
     public BiomesFormViewModel()
     {
@@ -29,17 +27,6 @@ public class BiomesFormViewModel : ViewModelBase, IValidatableViewModel
         ClearFormCommand = ReactiveCommand.Create(ClearForm);
     }
 
-    private TreeViewDataNode? SelectedNode
-    {
-        get => _selectedNode;
-        set
-        {
-            _selectedNode = value;
-            _mainWindowViewModel.SelectedTreeViewItem = value;
-            _mainWindowViewModel.EditingExistingBiome = value != null;
-        }
-    }
-
     public string? BiomeName
     {
         get => _data.Name;
@@ -47,7 +34,7 @@ public class BiomesFormViewModel : ViewModelBase, IValidatableViewModel
         {
             _data.Name = value ?? "";
 
-            SelectedNode?.refreshLabel();
+            _mainWindowViewModel.SelectedNode?.refreshLabel();
         }
     }
 
@@ -175,7 +162,6 @@ public class BiomesFormViewModel : ViewModelBase, IValidatableViewModel
     }
 
     public ReactiveCommand<Unit, Unit> SubmitFormCommand { get; }
-
     public ReactiveCommand<Unit, Unit> ClearFormCommand { get; }
 
     public ValidationContext ValidationContext { get; } = new();
@@ -188,7 +174,7 @@ public class BiomesFormViewModel : ViewModelBase, IValidatableViewModel
 
     private void ClearForm()
     {
-        SelectedNode = null;
+        _mainWindowViewModel.SelectedNode = null;
         _mainWindowViewModel.SelectedTreeViewItem = null;
         _data = new BiomeDataDefinition();
         UpdateProperties();

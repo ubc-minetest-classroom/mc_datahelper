@@ -119,6 +119,19 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
             }
         }
     }
+    
+    private TreeViewDataNode? _selectedNode;
+
+    public TreeViewDataNode? SelectedNode
+    {
+        get => _selectedNode;
+        set
+        {
+            _selectedNode = value;
+            SelectedTreeViewItem = value;
+            EditingExistingBiome = value != null;
+        }
+    }
 
 
     public bool EditingExistingBiome
