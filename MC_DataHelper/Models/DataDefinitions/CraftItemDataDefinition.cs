@@ -31,7 +31,7 @@ public record CraftItemDataDefinition : IDataDefinition
 
     [JsonProperty("range")] public int? Range { get; set; }
 
-    [JsonProperty("liquids_pointable")] public bool? LiquidsPointable { get; set; }
+    [JsonProperty("liquids_pointable")] public bool LiquidsPointable { get; set; }
 
     [JsonProperty("light_source")] public int? LightSource { get; set; }
 

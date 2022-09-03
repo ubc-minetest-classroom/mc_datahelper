@@ -1,4 +1,5 @@
-﻿using MC_DataHelper.Models.DataDefinitions;
+﻿using Avalonia.Media;
+using MC_DataHelper.Models.DataDefinitions;
 using ReactiveUI;
 
 namespace MC_DataHelper.ViewModels;
@@ -15,7 +16,13 @@ public class ItemDefinitionFormViewModel : DataDefinitionFormViewModelBase<Craft
     public string? WieldImage => Data.WieldImage;
     public string? WieldOverlay => Data.WieldOverlay;
     public string? Palette => Data.Palette;
-    public string? Color => Data.Color;
+
+    public Color Color
+    {
+        get => Color.TryParse(Data.Color, out var color) ? color : Colors.White;
+        set => Data.Color = value.ToString();
+    }
+
     public string? WieldScale => Data.WieldScale;
 
     public string? StackMax
@@ -36,21 +43,9 @@ public class ItemDefinitionFormViewModel : DataDefinitionFormViewModelBase<Craft
         }
     }
 
-    public bool LiquidsPointable
-    {
-        get => Data.LiquidsPointable.HasValue && Data.LiquidsPointable.Value;
-        set => Data.LiquidsPointable = value;
-    }
+    public bool LiquidsPointable => Data.LiquidsPointable;
 
-    public string? LightSource
-    {
-        get => Data.LightSource.ToString();
-        set
-        {
-            if (int.TryParse(value, out var number)) Data.LightSource = number;
-        }
-    }
-
+    public int? LightSource => Data.LightSource;
     public string? NodePlacementPrediction => Data.NodePlacementPrediction;
     public string? NodeDigPrediction => Data.NodeDigPrediction;
 

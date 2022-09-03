@@ -19,13 +19,13 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
         this.WhenActivated(d => d(ViewModel!.ShowOpenFolderDialog.RegisterHandler(ShowOpenFolderDialog)));
     }
 
-    private async Task DoShowBiomeCsvDialogAsync(InteractionContext<ModPackage, BiomeCsvImportWindowViewModel> interaction)
+    private async Task DoShowBiomeCsvDialogAsync(InteractionContext<ModPackage, BiomeCsvImportWindowViewModel?> interaction)
     {
         var dialog = new BiomeCsvImportWindow
         {
             DataContext = new BiomeCsvImportWindowViewModel(interaction.Input)
         };
-        var result = await dialog.ShowDialog<BiomeCsvImportWindowViewModel?>(this);
+        var result = await dialog.ShowDialog<BiomeCsvImportWindowViewModel>(this);
         interaction.SetOutput(result);
     }
 

@@ -1,6 +1,7 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:MC_DataHelper.ViewModels"
+             xmlns:colorpicker="clr-namespace:AvaloniaColorPicker;assembly=AvaloniaColorPicker"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -24,53 +25,68 @@
 
             <TextBox Text="{Binding ShortDescription, Mode=TwoWay}"
                      Watermark="Short Item Description"
-                     ToolTip.Tip="The description shown in inventory list tooltips. Must not contain new lines." />
+                     ToolTip.Tip="The description shown in inventory list tooltips. Must not contain new lines."
+                     Margin="8" />
 
             <!-- TODO: Replace this image textbox with an autocomplete textbox filled with all valid game & mod textures-->
             <TextBox Text="{Binding InventoryImage, Mode=TwoWay}"
                      Watermark="Inventory Image"
-                     ToolTip.Tip="The name of the texture that will appear for this item in the inventory." />
+                     ToolTip.Tip="The name of the texture that will appear for this item in the inventory." Margin="8" />
 
             <!-- TODO: Replace this image textbox with an autocomplete textbox filled with all valid game & mod textures-->
             <TextBox Text="{Binding InventoryOverlay, Mode=TwoWay}"
                      Watermark="Inventory Overlay"
-                     ToolTip.Tip="An overlay which does not get colorized." />
+                     ToolTip.Tip="An overlay which does not get colorized." Margin="8" />
 
             <!-- TODO: Replace this image textbox with an autocomplete textbox filled with all valid game & mod textures-->
             <TextBox Text="{Binding WieldImage, Mode=TwoWay}"
                      Watermark="Wield Image"
-                     ToolTip.Tip="The name of the texture that will appear for this item when it is wielded.." />
+                     ToolTip.Tip="The name of the texture that will appear for this item when it is wielded.."
+                     Margin="8" />
 
             <!-- TODO: Replace this image textbox with an autocomplete textbox filled with all valid game & mod textures-->
             <TextBox Text="{Binding WieldOverlay, Mode=TwoWay}"
                      Watermark="Wield Overlay"
-                     ToolTip.Tip="An overlay which does not get colorized." />
+                     ToolTip.Tip="An overlay which does not get colorized." Margin="8" />
 
             <!-- TODO: Replace this image textbox with an autocomplete textbox filled with all valid game & mod textures-->
             <!-- TODO: Potential for a color palette generator-->
-            <TextBox Text="{Binding palette, Mode=TwoWay}"
+            <TextBox Text="{Binding Palette, Mode=TwoWay}"
                      Watermark="Palette"
-                     ToolTip.Tip="An image file containing the palette of a node." />
+                     ToolTip.Tip="An image file containing the palette of a node." Margin="8" />
 
-            <!-- TODO: Replace this with a color picker -->
-            <TextBox Text="{Binding Color, Mode=TwoWay}"
-                     Watermark="Color"
-                     ToolTip.Tip="The color of the item. The palette overrides this." />
+            <colorpicker:ColorButton Color="{Binding Color}" Margin="8"></colorpicker:ColorButton>
 
             <!-- TODO: Vector3 Wield Scale -->
 
             <TextBox Text="{Binding StackMax, Mode=TwoWay}"
                      Watermark="StackMax"
-                     ToolTip.Tip="The maximum stack size of this item." />
+                     ToolTip.Tip="Maximum amount of items that can be in a single stack." Margin="8" />
 
             <TextBox Text="{Binding Range, Mode=TwoWay}"
                      Watermark="Range"
-                     ToolTip.Tip="The interaction range for this item." />
+                     ToolTip.Tip="Range of node and object pointing that is possible with this item held." Margin="8" />
 
-            <Panel>
-                <TextBlock>Liquids Pointable:</TextBlock>
-                <CheckBox IsChecked="{Binding LiquidsPointable}"></CheckBox>
+            <Grid Margin="8" ToolTip.Tip="Whether or not this item can select liquids.." RowDefinitions="*,*">
+                <TextBlock Grid.Row="0">Liquids Pointable:</TextBlock>
+                <CheckBox Grid.Row="1" IsChecked="{Binding LiquidsPointable}"></CheckBox>
+            </Grid>
+
+            <Panel Margin="8" ToolTip.Tip="Defines texture glow when viewed as a dropped item">
+                <TextBlock>Light Source</TextBlock>
+                <Slider Value="{Binding LightSource, Mode=TwoWay}" Minimum="0"
+                        Maximum="14" TickFrequency="1" />
             </Panel>
+
+            <TextBox Text="{Binding NodePlacementPrediction, Mode=TwoWay}"
+                     Watermark="Node Placement Prediction"
+                     ToolTip.Tip="Should be name of node which the client immediately places on ground when the player places the item. Server will always update with actual result shortly."
+                     Margin="8" />
+
+            <TextBox Text="{Binding NodeDigPrediction, Mode=TwoWay}"
+                     Watermark="Node Dig Prediction"
+                     ToolTip.Tip="if ' ', no prediction is made. If 'air', node is removed. Otherwise this value should be name of node which the client immediately places upon digging. Server will always update with actual result shortly."
+                     Margin="8" />
 
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
