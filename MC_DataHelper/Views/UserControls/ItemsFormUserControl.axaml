@@ -16,7 +16,62 @@
             <TextBox Text="{Binding Name, Mode=TwoWay}"
                      Watermark="Item Name"
                      ToolTip.Tip="The name of the item." Margin="8" />
-            
+
+            <TextBox Text="{Binding Description, Mode=TwoWay}"
+                     Watermark="Item Description"
+                     ToolTip.Tip="The description shown in inventory list tooltips. Can contain new lines. '\n' has to be used as new line character."
+                     Margin="8" />
+
+            <TextBox Text="{Binding ShortDescription, Mode=TwoWay}"
+                     Watermark="Short Item Description"
+                     ToolTip.Tip="The description shown in inventory list tooltips. Must not contain new lines." />
+
+            <!-- TODO: Replace this image textbox with an autocomplete textbox filled with all valid game & mod textures-->
+            <TextBox Text="{Binding InventoryImage, Mode=TwoWay}"
+                     Watermark="Inventory Image"
+                     ToolTip.Tip="The name of the texture that will appear for this item in the inventory." />
+
+            <!-- TODO: Replace this image textbox with an autocomplete textbox filled with all valid game & mod textures-->
+            <TextBox Text="{Binding InventoryOverlay, Mode=TwoWay}"
+                     Watermark="Inventory Overlay"
+                     ToolTip.Tip="An overlay which does not get colorized." />
+
+            <!-- TODO: Replace this image textbox with an autocomplete textbox filled with all valid game & mod textures-->
+            <TextBox Text="{Binding WieldImage, Mode=TwoWay}"
+                     Watermark="Wield Image"
+                     ToolTip.Tip="The name of the texture that will appear for this item when it is wielded.." />
+
+            <!-- TODO: Replace this image textbox with an autocomplete textbox filled with all valid game & mod textures-->
+            <TextBox Text="{Binding WieldOverlay, Mode=TwoWay}"
+                     Watermark="Wield Overlay"
+                     ToolTip.Tip="An overlay which does not get colorized." />
+
+            <!-- TODO: Replace this image textbox with an autocomplete textbox filled with all valid game & mod textures-->
+            <!-- TODO: Potential for a color palette generator-->
+            <TextBox Text="{Binding palette, Mode=TwoWay}"
+                     Watermark="Palette"
+                     ToolTip.Tip="An image file containing the palette of a node." />
+
+            <!-- TODO: Replace this with a color picker -->
+            <TextBox Text="{Binding Color, Mode=TwoWay}"
+                     Watermark="Color"
+                     ToolTip.Tip="The color of the item. The palette overrides this." />
+
+            <!-- TODO: Vector3 Wield Scale -->
+
+            <TextBox Text="{Binding StackMax, Mode=TwoWay}"
+                     Watermark="StackMax"
+                     ToolTip.Tip="The maximum stack size of this item." />
+
+            <TextBox Text="{Binding Range, Mode=TwoWay}"
+                     Watermark="Range"
+                     ToolTip.Tip="The interaction range for this item." />
+
+            <Panel>
+                <TextBlock>Liquids Pointable:</TextBlock>
+                <CheckBox IsChecked="{Binding LiquidsPointable}"></CheckBox>
+            </Panel>
+
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Command="{Binding SubmitFormCommand }" Margin="8">

@@ -10,6 +10,7 @@ public class ItemDefinitionFormViewModel : DataDefinitionFormViewModelBase<Craft
     public string? ShortDescription => Data.ShortDescription;
 
     public string? InventoryImage => Data.InventoryImage;
+    public string? InventoryOverlay => Data.InventoryOverlay;
 
     public string? WieldImage => Data.WieldImage;
     public string? WieldOverlay => Data.WieldOverlay;

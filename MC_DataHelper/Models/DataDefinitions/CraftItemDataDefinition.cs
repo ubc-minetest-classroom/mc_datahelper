@@ -15,6 +15,8 @@ public record CraftItemDataDefinition : IDataDefinition
 
     [JsonProperty("inventory_image")] public string? InventoryImage { get; set; }
 
+    [JsonProperty("inventory_overlay")] public string? InventoryOverlay { get; set; }
+
     [JsonProperty("wield_image")] public string? WieldImage { get; set; }
 
     [JsonProperty("wield_overlay")] public string? WieldOverlay { get; set; }
