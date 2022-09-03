@@ -20,7 +20,6 @@ namespace MC_DataHelper.ViewModels;
 public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
 {
     private readonly Dictionary<string, TreeViewFolderNode> _folders = new();
-    private bool _editingExistingBiome;
 
     private string _footerText = "TIP: No project is open. Navigate to File -> New / Open to begin.";
 
@@ -104,6 +103,7 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
             {
                 case TreeViewFolderNode:
                     this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, null);
+                    SelectedTabIndex = 0;
                     break;
                 case TreeViewDataNode dataNode:
                 {
@@ -131,16 +131,9 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
         {
             _selectedNode = value;
             SelectedTreeViewItem = value;
-            EditingExistingBiome = value != null;
         }
     }
 
-
-    public bool EditingExistingBiome
-    {
-        get => _editingExistingBiome;
-        set => this.RaiseAndSetIfChanged(ref _editingExistingBiome, value);
-    }
 
     //File menu commands
     public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
@@ -189,12 +182,20 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
 
     private void EditTreeItem()
     {
-        if (SelectedTreeViewItem is not TreeViewDataNode node) return;
+        if (SelectedTreeViewItem is not TreeViewDataNode node)
+        {
+            return;
+        }
+
         switch (node.DataDefinition)
         {
             case BiomeDataDefinition biomeDataDefinition:
                 BiomesDefinitionFormViewModel.UpdateDataSource(biomeDataDefinition, node);
                 SelectedTabIndex = 1;
+                break;
+            case CraftItemDataDefinition craftItemDataDefinition:
+                ItemsDefinitionFormViewModel.UpdateDataSource(craftItemDataDefinition, node);
+                SelectedTabIndex = 2;
                 break;
         }
     }
@@ -234,6 +235,13 @@ public class MainWindowViewModel : ViewModelBase, IValidatableViewModel
         if (Package == null || SelectedTreeViewItem is not TreeViewDataNode node) return;
         Package.DataDefinitions.Remove(node.DataDefinition);
         node.ParentNode.Children.Remove(node);
+        if (node.ParentNode.Children.Count == 0)
+        {
+            TreeViewItems.Remove((TreeViewFolderNode)node.ParentNode);
+        }
+
+        SelectedTreeViewItem = null;
+        SelectedTabIndex = 0;
     }
 
     private async Task SaveProjectAsync()
