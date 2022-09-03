@@ -6,16 +6,47 @@ namespace MC_DataHelper.ViewModels;
 
 public class ItemDefinitionFormViewModel : DataDefinitionFormViewModelBase<CraftItemDataDefinition>
 {
-    public string? Description => Data.Description;
+    public string? Description
+    {
+        get => Data.Description;
+        set => Data.Description = value;
+    }
 
-    public string? ShortDescription => Data.ShortDescription;
+    public string? ShortDescription
+    {
+        get => Data.ShortDescription;
+        set => Data.ShortDescription = value;
+    }
 
-    public string? InventoryImage => Data.InventoryImage;
-    public string? InventoryOverlay => Data.InventoryOverlay;
+    public string? InventoryImage
+    {
+        get => Data.InventoryImage;
+        set => Data.InventoryImage = value;
+    }
 
-    public string? WieldImage => Data.WieldImage;
-    public string? WieldOverlay => Data.WieldOverlay;
-    public string? Palette => Data.Palette;
+    public string? InventoryOverlay
+    {
+        get => Data.InventoryOverlay;
+        set => Data.InventoryOverlay = value;
+    }
+
+    public string? WieldImage
+    {
+        get => Data.WieldImage;
+        set => Data.WieldImage = value;
+    }
+
+    public string? WieldOverlay
+    {
+        get => Data.WieldOverlay;
+        set => Data.WieldOverlay = value;
+    }
+
+    public string? Palette
+    {
+        get => Data.Palette;
+        set => Data.Palette = value;
+    }
 
     public Color Color
     {
@@ -23,7 +54,11 @@ public class ItemDefinitionFormViewModel : DataDefinitionFormViewModelBase<Craft
         set => Data.Color = value.ToString();
     }
 
-    public string? WieldScale => Data.WieldScale;
+    public string? WieldScale
+    {
+        get => Data.WieldScale;
+        set => Data.WieldScale = value;
+    }
 
     public string? StackMax
     {
@@ -43,11 +78,29 @@ public class ItemDefinitionFormViewModel : DataDefinitionFormViewModelBase<Craft
         }
     }
 
-    public bool LiquidsPointable => Data.LiquidsPointable;
+    public bool LiquidsPointable
+    {
+        get => Data.LiquidsPointable;
+        set => Data.LiquidsPointable = value;
+    }
 
-    public int? LightSource => Data.LightSource;
-    public string? NodePlacementPrediction => Data.NodePlacementPrediction;
-    public string? NodeDigPrediction => Data.NodeDigPrediction;
+    public int? LightSource
+    {
+        get => Data.LightSource;
+        set => Data.LightSource = value;
+    }
+
+    public string? NodePlacementPrediction
+    {
+        get => Data.NodePlacementPrediction;
+        set => Data.NodePlacementPrediction = value;
+    }
+
+    public string? NodeDigPrediction
+    {
+        get => Data.NodeDigPrediction;
+        set => Data.NodeDigPrediction = value;
+    }
 
 
     protected override void UpdateProperties()
@@ -56,6 +109,7 @@ public class ItemDefinitionFormViewModel : DataDefinitionFormViewModelBase<Craft
         this.RaisePropertyChanged(nameof(Description));
         this.RaisePropertyChanged(nameof(ShortDescription));
         this.RaisePropertyChanged(nameof(InventoryImage));
+        this.RaisePropertyChanged(nameof(InventoryOverlay));
         this.RaisePropertyChanged(nameof(WieldImage));
         this.RaisePropertyChanged(nameof(WieldOverlay));
         this.RaisePropertyChanged(nameof(Palette));
