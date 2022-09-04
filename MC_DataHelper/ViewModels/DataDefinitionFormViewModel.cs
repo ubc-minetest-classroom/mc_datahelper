@@ -24,13 +24,13 @@ public abstract class DataDefinitionFormViewModelBase<T> : ViewModelBase where T
     }
 
 
-    protected DataDefinitionFormViewModelBase()
+    public DataDefinitionFormViewModelBase()
     {
         _mainWindowViewModel = new MainWindowViewModel();
         AddItemCommand = ReactiveCommand.Create(AddItem);
     }
 
-    protected DataDefinitionFormViewModelBase(MainWindowViewModel mainWindowViewModel)
+    public DataDefinitionFormViewModelBase(MainWindowViewModel mainWindowViewModel)
     {
         _mainWindowViewModel = mainWindowViewModel;
         AddItemCommand = ReactiveCommand.Create(AddItem);

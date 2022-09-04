@@ -123,7 +123,7 @@ public class ItemDefinitionFormViewModel : DataDefinitionFormViewModelBase<Craft
         this.RaisePropertyChanged(nameof(NodeDigPrediction));
     }
 
-    public ItemDefinitionFormViewModel()
+    public ItemDefinitionFormViewModel() : base()
     {
     }
 
