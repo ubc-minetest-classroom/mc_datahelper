@@ -5,7 +5,7 @@ using ReactiveUI;
 
 namespace MC_DataHelper.ViewModels;
 
-public abstract class DataDefinitionFormViewModelBase<T> :  ViewModelBase where T : IDataDefinition, new()
+public abstract class DataDefinitionFormViewModelBase<T> : ViewModelBase where T : IDataDefinition, new()
 {
     protected readonly MainWindowViewModel MainWindowViewModel;
 
@@ -14,7 +14,7 @@ public abstract class DataDefinitionFormViewModelBase<T> :  ViewModelBase where 
 
     public ReactiveCommand<Unit, Unit> SubmitFormCommand { get; }
     public ReactiveCommand<Unit, Unit> ClearFormCommand { get; }
-    
+
     public string? Name
     {
         get => Data.Name;
@@ -54,13 +54,13 @@ public abstract class DataDefinitionFormViewModelBase<T> :  ViewModelBase where 
         Data = new T();
         UpdateProperties();
     }
-    
-    public void UpdateDataSource(T nodeDataDefinition, TreeViewDataNode treeViewDataNode)
+
+    public void UpdateDataSource(T nodeDataDefinition)
     {
         Data = nodeDataDefinition;
         UpdateProperties();
     }
-    
+
     protected virtual void UpdateProperties()
     {
         this.RaisePropertyChanged(nameof(Name));

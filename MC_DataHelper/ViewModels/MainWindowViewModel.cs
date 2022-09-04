@@ -63,6 +63,10 @@ public class MainWindowViewModel : ViewModelBase
                     this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, value);
                     EditTreeItem();
                     break;
+                default:
+                    this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, value);
+                    SelectedTabIndex = 0;
+                    break;
             }
         }
     }
@@ -83,10 +87,8 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> PasteCommand { get; }
 
     public ReactiveCommand<Unit, Unit> BiomeCsvWindowCommand { get; }
-
     public ReactiveCommand<Unit, Unit> DeleteTreeItemCommand { get; }
     public ReactiveCommand<Unit, Unit> RefreshTreeItemsCommand { get; }
-    public ReactiveCommand<Unit, Unit> DeselectTreeItemCommand { get; }
 
     public Interaction<ModPackage, BiomeCsvImportWindowViewModel?> ShowBiomeCsvDialog { get; }
     public Interaction<OpenFileDialog, string?> ShowOpenFileDialog { get; }
@@ -145,11 +147,11 @@ public class MainWindowViewModel : ViewModelBase
         switch (node.DataDefinition)
         {
             case BiomeDataDefinition biomeDataDefinition:
-                BiomesDefinitionFormViewModel.UpdateDataSource(biomeDataDefinition, node);
+                BiomesDefinitionFormViewModel.UpdateDataSource(biomeDataDefinition);
                 SelectedTabIndex = 1;
                 break;
             case CraftItemDataDefinition craftItemDataDefinition:
-                ItemsDefinitionFormViewModel.UpdateDataSource(craftItemDataDefinition, node);
+                ItemsDefinitionFormViewModel.UpdateDataSource(craftItemDataDefinition);
                 SelectedTabIndex = 2;
                 break;
         }
@@ -275,7 +277,6 @@ public class MainWindowViewModel : ViewModelBase
 
         DeleteTreeItemCommand = ReactiveCommand.Create(DeleteTreeItem);
         RefreshTreeItemsCommand = ReactiveCommand.Create(CreateTree);
-        DeselectTreeItemCommand = ReactiveCommand.Create(() => { SelectedTreeViewItem = null; });
 
 
         BiomeCsvWindowCommand = ReactiveCommand.CreateFromTask(async () =>

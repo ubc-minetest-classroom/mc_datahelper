@@ -80,7 +80,7 @@
             </Panel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Command="{Binding SubmitFormCommand }" Margin="8">
+                <Button Command="{Binding AddItemCommand }" Margin="8">
                     Add Biome
                 </Button>
                 <Button Command="{Binding ClearFormCommand }" Margin="8">New Biome</Button>

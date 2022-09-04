@@ -52,9 +52,16 @@
 
                     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center"
                                 Margin="8">
-                        <Button Margin="4" Command="{Binding RefreshTreeItemsCommand}">Refresh Items</Button>
-                        <Button Margin="4" Command="{Binding DeleteTreeItemCommand}">Delete Item</Button>
-                        <Button Margin="4" Command="{Binding DeselectTreeItemCommand}">Deselect Item</Button>
+
+                        <Menu>
+                            <MenuItem Header="Add">
+                                <MenuItem Header="Biomes" />
+                                <MenuItem Header="Items" />
+                            </MenuItem>
+                            <MenuItem Header="Refresh" Command="{Binding RefreshTreeItemsCommand}" />
+                            <MenuItem Header="Delete" Command="{Binding DeleteTreeItemCommand}" />
+                        </Menu>
+
                     </StackPanel>
 
                     <TreeView DockPanel.Dock="Top" Items="{Binding TreeViewItems}" SelectionMode="Single"
@@ -75,14 +82,17 @@
                 </TabItem>
 
                 <TabItem Header="Biomes">
-                    <uc:BiomesFormUserControl Name="BiomesFormUserControl" DataContext="{Binding BiomesDefinitionFormViewModel}" />
+                    <uc:BiomesFormUserControl Name="BiomesFormUserControl"
+                                              DataContext="{Binding BiomesDefinitionFormViewModel}" />
                 </TabItem>
 
 
                 <TabItem Header="Items">
-                    <uc:ItemsFormUserControl Name="ItemsFormUserControl" DataContext="{Binding ItemsDefinitionFormViewModel}"></uc:ItemsFormUserControl>
+                    <uc:ItemsFormUserControl Name="ItemsFormUserControl"
+                                             DataContext="{Binding ItemsDefinitionFormViewModel}">
+                    </uc:ItemsFormUserControl>
                 </TabItem>
-                
+
                 <TabItem Header="Nodes" />
                 <TabItem Header="Recipes" />
                 <TabItem Header="Tools" />
