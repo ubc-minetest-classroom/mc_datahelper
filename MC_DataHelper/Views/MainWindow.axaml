@@ -56,26 +56,27 @@
                         <Button Margin="4" Content="Add">
                             <Button.Flyout>
                                 <MenuFlyout>
-                                    <MenuItem Header="Biome" Command="{Binding BiomesDefinitionFormViewModel.AddItemCommand}" />
-                                    <MenuItem Header="Item" Command="{Binding ItemsDefinitionFormViewModel.AddItemCommand}" />
+
+                                    <MenuItem Header="Biome" Command="{Binding AddBiomeDefinitionCommand}" />
+                                    <MenuItem Header="Item" Command="{Binding AddItemDefinitionCommand}" />
                                 </MenuFlyout>
                             </Button.Flyout>
                         </Button>
 
 
-                        <Button Content="Add" Margin="4" Command="{Binding RefreshTreeItemsCommand}"></Button>
+                        <Button Content="Refresh" Margin="4" Command="{Binding RefreshTreeItemsCommand}"></Button>
                         <Button Content="Delete" Margin="4" Command="{Binding DeleteTreeItemCommand}"></Button>
 
 
                     </StackPanel>
 
                     <TreeView DockPanel.Dock="Top" Items="{Binding TreeViewItems}" SelectionMode="Single"
-                              SelectedItem="{Binding SelectedTreeViewItem}">
+                              SelectedItem="{Binding SelectedTreeViewItem}" AutoScrollToSelectedItem="True">
                         <TreeView.ItemTemplate>
-                            <TreeDataTemplate ItemsSource="{Binding Children}">
-                                <TextBlock Text="{Binding Label}" />
-                            </TreeDataTemplate>
-                        </TreeView.ItemTemplate>
+                                <TreeDataTemplate ItemsSource="{Binding Children}">
+                                    <TextBlock Text="{Binding Label}" />
+                                </TreeDataTemplate>
+                            </TreeView.ItemTemplate>
                     </TreeView>
                 </DockPanel>
             </SplitView.Pane>

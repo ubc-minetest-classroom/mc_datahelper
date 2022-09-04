@@ -11,7 +11,7 @@ public abstract class DataDefinitionFormViewModelBase<T> : ViewModelBase where T
 
     protected T Data = new T();
 
-    private ReactiveCommand<Unit, Unit> AddItemCommand { get; }
+    private ReactiveCommand<Unit, Unit> AddDataDefinitionCommand { get; }
 
     public string? Name
     {
@@ -24,20 +24,20 @@ public abstract class DataDefinitionFormViewModelBase<T> : ViewModelBase where T
     }
 
 
-    public DataDefinitionFormViewModelBase()
+    protected DataDefinitionFormViewModelBase()
     {
         _mainWindowViewModel = new MainWindowViewModel();
-        AddItemCommand = ReactiveCommand.Create(AddItem);
+        AddDataDefinitionCommand = ReactiveCommand.Create(AddDataDefinition);
     }
 
-    public DataDefinitionFormViewModelBase(MainWindowViewModel mainWindowViewModel)
+    protected DataDefinitionFormViewModelBase(MainWindowViewModel mainWindowViewModel)
     {
         _mainWindowViewModel = mainWindowViewModel;
-        AddItemCommand = ReactiveCommand.Create(AddItem);
+        AddDataDefinitionCommand = ReactiveCommand.Create(AddDataDefinition);
     }
 
 
-    protected void AddItem()
+    public void AddDataDefinition()
     {
         ClearForm();
         _mainWindowViewModel.AddDataDefinition(Data);

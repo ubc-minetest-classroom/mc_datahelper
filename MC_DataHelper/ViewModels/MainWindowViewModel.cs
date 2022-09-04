@@ -86,6 +86,9 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> DeleteTreeItemCommand { get; }
     public ReactiveCommand<Unit, Unit> RefreshTreeItemsCommand { get; }
 
+    public ReactiveCommand<Unit, Unit> AddBiomeDefinitionCommand { get; }
+    public ReactiveCommand<Unit, Unit> AddItemDefinitionCommand { get; }
+
     public Interaction<ModPackage, BiomeCsvImportWindowViewModel?> ShowBiomeCsvDialog { get; }
     public Interaction<OpenFileDialog, string?> ShowOpenFileDialog { get; }
     public Interaction<OpenFolderDialog, string?> ShowOpenFolderDialog { get; }
@@ -118,7 +121,7 @@ public class MainWindowViewModel : ViewModelBase
         foreach (var dataDefinition in Package.DataDefinitions) AddTreeItem(dataDefinition);
     }
 
-    private void AddTreeItem(IDataDefinition dataDefinition)
+    private TreeViewDataNode AddTreeItem(IDataDefinition dataDefinition)
     {
         if (!_folders.TryGetValue(dataDefinition.JsonType, out var folder))
         {
@@ -127,7 +130,10 @@ public class MainWindowViewModel : ViewModelBase
             TreeViewItems.Add(folder);
         }
 
-        folder.Children.Add(new TreeViewDataNode(folder, dataDefinition));
+        var dataNode = new TreeViewDataNode(folder, dataDefinition);
+        folder.Children.Add(dataNode);
+
+        return dataNode;
     }
 
     private void EditTreeItem()
@@ -238,7 +244,9 @@ public class MainWindowViewModel : ViewModelBase
     {
         if (Package == null) return;
         Package.DataDefinitions.Add(dataDefinition);
-        AddTreeItem(dataDefinition);
+        var treeItem = AddTreeItem(dataDefinition);
+
+        SelectedTreeViewItem = treeItem;
     }
 
     // Initialize everything
@@ -272,6 +280,11 @@ public class MainWindowViewModel : ViewModelBase
 
         DeleteTreeItemCommand = ReactiveCommand.Create(DeleteTreeItem);
         RefreshTreeItemsCommand = ReactiveCommand.Create(CreateTree);
+        
+        AddBiomeDefinitionCommand = ReactiveCommand.Create(BiomesDefinitionFormViewModel.AddDataDefinition);
+        AddItemDefinitionCommand = ReactiveCommand.Create(ItemsDefinitionFormViewModel.AddDataDefinition);
+        
+      
 
 
         BiomeCsvWindowCommand = ReactiveCommand.CreateFromTask(async () =>
