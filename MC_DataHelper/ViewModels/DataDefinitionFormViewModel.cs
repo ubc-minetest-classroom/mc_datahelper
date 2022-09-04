@@ -1,5 +1,6 @@
 ﻿using System.Reactive;
 using MC_DataHelper.Models.DataDefinitions;
+using MC_DataHelper.ViewModels.DataTreeView;
 using ReactiveUI;
 
 namespace MC_DataHelper.ViewModels;
@@ -21,7 +22,7 @@ public abstract class DataDefinitionFormViewModelBase<T> :  ViewModelBase where 
         {
             Data.Name = value ?? "";
 
-            MainWindowViewModel.SelectedNode?.refreshLabel();
+            MainWindowViewModel.SelectedTreeViewItem?.NotifyUpdate();
         }
     }
 
@@ -49,7 +50,6 @@ public abstract class DataDefinitionFormViewModelBase<T> :  ViewModelBase where 
 
     public void ClearForm()
     {
-        MainWindowViewModel.SelectedNode = null;
         MainWindowViewModel.SelectedTreeViewItem = null;
         Data = new T();
         UpdateProperties();

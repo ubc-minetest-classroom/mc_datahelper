@@ -1,10 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using DynamicData.Binding;
-using MC_DataHelper.Models;
 using MC_DataHelper.Models.DataDefinitions;
 using ReactiveUI;
 
-namespace MC_DataHelper.ViewModels;
+namespace MC_DataHelper.ViewModels.DataTreeView;
 
 public class TreeViewDataNode : ReactiveObject, ITreeViewNode
 {
@@ -22,15 +21,9 @@ public class TreeViewDataNode : ReactiveObject, ITreeViewNode
     public string Label => DataDefinition.Name;
 
     public ObservableCollection<TreeViewDataNode> Children { get; init; }
-
-    public void refresh()
-    {
-        this.RaisePropertyChanged(nameof(Label));
-        this.RaisePropertyChanged(nameof(Children));
-    }
-
-    public void refreshLabel()
+    public void NotifyUpdate()
     {
         this.RaisePropertyChanged(nameof(Label));
     }
+    
 }

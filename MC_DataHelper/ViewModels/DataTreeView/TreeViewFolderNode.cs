@@ -19,4 +19,8 @@ public class TreeViewFolderNode : ReactiveObject, ITreeViewNode
 
     public string Label { get; }
     public ObservableCollection<TreeViewDataNode> Children { get; }
+    public void NotifyUpdate()
+    {
+        this.RaisePropertyChanged(nameof(Label));
+    }
 }

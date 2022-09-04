@@ -28,7 +28,7 @@ public class MainWindowViewModel : ViewModelBase
     private ModPackage? _selectedPackage;
 
     private int _selectedTabIndex;
-    private ITreeViewNode? _selectedTreeViewItem = null;
+    private ITreeViewNode? _selectedTreeViewItem;
     public BiomesDefinitionFormViewModel BiomesDefinitionFormViewModel { get; }
     public ItemDefinitionFormViewModel ItemsDefinitionFormViewModel { get; }
     public ModConfigViewModel ModConfigViewModel { get; }
@@ -53,33 +53,24 @@ public class MainWindowViewModel : ViewModelBase
         get => _selectedTreeViewItem;
         set
         {
+            if (value == null)
+            {
+                this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, null);
+                SelectedTabIndex = 0;
+                return;
+            }
+
             switch (value)
             {
                 case TreeViewFolderNode:
                     this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, null);
-                    DeselectTreeItem();
+                    SelectedTabIndex = 0;
                     break;
                 case TreeViewDataNode:
                     this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, value);
                     EditTreeItem();
                     break;
-                case null:
-                    //     this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, null);
-                    DeselectTreeItem();
-                    break;
             }
-        }
-    }
-
-    private TreeViewDataNode? _selectedNode;
-
-    public TreeViewDataNode? SelectedNode
-    {
-        get => _selectedNode;
-        set
-        {
-            _selectedNode = value;
-            SelectedTreeViewItem = value;
         }
     }
 
@@ -171,12 +162,6 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    private void DeselectTreeItem()
-    {
-        SelectedTreeViewItem = null;
-        SelectedTabIndex = 0;
-    }
-
     private void DeleteTreeItem()
     {
         if (Package == null || SelectedTreeViewItem is not TreeViewDataNode node) return;
@@ -187,7 +172,7 @@ public class MainWindowViewModel : ViewModelBase
             TreeViewItems.Remove((TreeViewFolderNode)node.ParentNode);
         }
 
-        DeselectTreeItem();
+        SelectedTreeViewItem = null;
 
         switch (node.DataDefinition)
         {
@@ -297,7 +282,7 @@ public class MainWindowViewModel : ViewModelBase
 
         DeleteTreeItemCommand = ReactiveCommand.Create(DeleteTreeItem);
         RefreshTreeItemsCommand = ReactiveCommand.Create(CreateTree);
-        DeselectTreeItemCommand = ReactiveCommand.Create(DeselectTreeItem);
+        DeselectTreeItemCommand = ReactiveCommand.Create(() => { SelectedTreeViewItem = null; });
 
 
         BiomeCsvWindowCommand = ReactiveCommand.CreateFromTask(async () =>
