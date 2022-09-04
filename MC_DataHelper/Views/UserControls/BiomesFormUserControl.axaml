@@ -79,13 +79,6 @@
                         Maximum="100" TickFrequency="1" />
             </Panel>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Command="{Binding AddItemCommand }" Margin="8">
-                    Add Biome
-                </Button>
-                <Button Command="{Binding ClearFormCommand }" Margin="8">New Biome</Button>
-            </StackPanel>
-
         </StackPanel>
     </ScrollViewer>
 

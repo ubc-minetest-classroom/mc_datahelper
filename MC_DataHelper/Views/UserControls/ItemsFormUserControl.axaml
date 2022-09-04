@@ -88,13 +88,6 @@
                      ToolTip.Tip="if ' ', no prediction is made. If 'air', node is removed. Otherwise this value should be name of node which the client immediately places upon digging. Server will always update with actual result shortly."
                      Margin="8" />
 
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Command="{Binding AddItemCommand }" Margin="8">
-                    Add Item
-                </Button>
-                <Button Command="{Binding ClearFormCommand }" Margin="8">New Item</Button>
-            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 

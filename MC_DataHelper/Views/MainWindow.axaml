@@ -55,7 +55,7 @@
 
                         <Menu>
                             <MenuItem Header="Add">
-                                <MenuItem Header="Biomes" />
+                                <MenuItem Header="Biomes" Command="{Binding BiomesDefinitionFormViewModel.AddItem}"/>
                                 <MenuItem Header="Items" />
                             </MenuItem>
                             <MenuItem Header="Refresh" Command="{Binding RefreshTreeItemsCommand}" />

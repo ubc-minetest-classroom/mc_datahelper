@@ -63,10 +63,6 @@ public class MainWindowViewModel : ViewModelBase
                     this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, value);
                     EditTreeItem();
                     break;
-                default:
-                    this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, value);
-                    SelectedTabIndex = 0;
-                    break;
             }
         }
     }
@@ -171,10 +167,10 @@ public class MainWindowViewModel : ViewModelBase
 
         switch (node.DataDefinition)
         {
-            case BiomeDataDefinition biomeDataDefinition:
+            case BiomeDataDefinition:
                 BiomesDefinitionFormViewModel.ClearForm();
                 break;
-            case CraftItemDataDefinition craftItemDataDefinition:
+            case CraftItemDataDefinition:
                 ItemsDefinitionFormViewModel.ClearForm();
                 break;
         }
@@ -193,7 +189,6 @@ public class MainWindowViewModel : ViewModelBase
             Package = new ModPackage();
 
             FooterText = directoryPath;
-            // Package.SavePackageToDisk(fileName);
         }
 
         CreateTree();

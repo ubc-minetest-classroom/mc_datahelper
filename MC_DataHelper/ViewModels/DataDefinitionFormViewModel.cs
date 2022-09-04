@@ -1,19 +1,17 @@
 ﻿using System.Reactive;
 using MC_DataHelper.Models.DataDefinitions;
-using MC_DataHelper.ViewModels.DataTreeView;
 using ReactiveUI;
 
 namespace MC_DataHelper.ViewModels;
 
 public abstract class DataDefinitionFormViewModelBase<T> : ViewModelBase where T : IDataDefinition, new()
 {
-    protected readonly MainWindowViewModel MainWindowViewModel;
+    private readonly MainWindowViewModel _mainWindowViewModel;
 
 
     protected T Data = new T();
 
-    public ReactiveCommand<Unit, Unit> SubmitFormCommand { get; }
-    public ReactiveCommand<Unit, Unit> ClearFormCommand { get; }
+    private ReactiveCommand<Unit, Unit> AddItemCommand { get; }
 
     public string? Name
     {
@@ -21,38 +19,35 @@ public abstract class DataDefinitionFormViewModelBase<T> : ViewModelBase where T
         set
         {
             Data.Name = value ?? "";
-
-            MainWindowViewModel.SelectedTreeViewItem?.NotifyUpdate();
+            _mainWindowViewModel.SelectedTreeViewItem?.NotifyUpdate();
         }
     }
 
 
-    public DataDefinitionFormViewModelBase()
+    protected DataDefinitionFormViewModelBase()
     {
-        MainWindowViewModel = new MainWindowViewModel();
-        SubmitFormCommand = ReactiveCommand.Create(SubmitForm);
-        ClearFormCommand = ReactiveCommand.Create(ClearForm);
+        _mainWindowViewModel = new MainWindowViewModel();
+        AddItemCommand = ReactiveCommand.Create(AddItem);
     }
 
-    public DataDefinitionFormViewModelBase(MainWindowViewModel mainWindowViewModel)
+    protected DataDefinitionFormViewModelBase(MainWindowViewModel mainWindowViewModel)
     {
-        MainWindowViewModel = mainWindowViewModel;
-        SubmitFormCommand = ReactiveCommand.Create(SubmitForm);
-        ClearFormCommand = ReactiveCommand.Create(ClearForm);
+        _mainWindowViewModel = mainWindowViewModel;
+        AddItemCommand = ReactiveCommand.Create(AddItem);
     }
 
 
-    protected void SubmitForm()
+    protected void AddItem()
     {
-        MainWindowViewModel.AddDataDefinition(Data);
         ClearForm();
+        _mainWindowViewModel.AddDataDefinition(Data);
+        UpdateProperties();
     }
 
     public void ClearForm()
     {
-        MainWindowViewModel.SelectedTreeViewItem = null;
+        _mainWindowViewModel.SelectedTreeViewItem = null;
         Data = new T();
-        UpdateProperties();
     }
 
     public void UpdateDataSource(T nodeDataDefinition)
