@@ -53,13 +53,6 @@ public class MainWindowViewModel : ViewModelBase
         get => _selectedTreeViewItem;
         set
         {
-            if (value == null)
-            {
-                this.RaiseAndSetIfChanged(ref _selectedTreeViewItem, null);
-                SelectedTabIndex = 0;
-                return;
-            }
-
             switch (value)
             {
                 case TreeViewFolderNode:
